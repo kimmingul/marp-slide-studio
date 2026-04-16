@@ -1,0 +1,159 @@
+{
+  "$schema_version": "1",
+  "$readme": "Preset definitions for /slide-auto Express mode. Each preset carries ALL downstream decisions so the user only needs to pick a preset + length + memory sentence. When autopilot runs in Full mode, these presets serve as defaults that the user can override per field.",
+
+  "presets": {
+    "investor-pitch": {
+      "label": "Investor pitch",
+      "description": "설득형 기술 덱. Stripe 계열 미니멀 프리미엄, 단정한 톤, 증거 중심.",
+      "audience": "투자자·의사결정자",
+      "narrative_pattern": "problem-insight-solution-ask",
+      "tone": "단정·선언·설득",
+      "differentiation_against": "평범한 SaaS 랜딩처럼 읽히면 안 됨. 엔지니어링 정제 + 금융적 자신감.",
+      "track": "minimalist-premium",
+      "theme": "stripe",
+      "theme_customization": {
+        "accent_policy": "2-per-10 slides; hero + one metric callout",
+        "duotone_moment": "reserve 1 slide only"
+      },
+      "composition_hints": {
+        "opening_preference": "single-sentence problem statement",
+        "close_preference": "restate memory sentence + concrete ask",
+        "data_density": "moderate — 1-2 metric slides",
+        "avoid": ["3-column card mosaic", "hedged language", "agenda slide"]
+      },
+      "refine_iterations": 3,
+      "export": ["pdf", "pptx"],
+      "pptx_editable": true
+    },
+
+    "team-narrative": {
+      "label": "Team narrative",
+      "description": "팀 내부 공유·회고·미션 공유. Kinfolk-serif 에디토리얼, 서사 중심.",
+      "audience": "팀 내부 구성원",
+      "narrative_pattern": "five-beats",
+      "tone": "사려·서정·내부 공유",
+      "differentiation_against": "컨설팅 덱처럼 정중하고 담담한 톤",
+      "track": "editorial",
+      "theme": "kinfolk-serif",
+      "theme_customization": {
+        "accent_policy": "3-per-10 slides; use on pivot moments",
+        "drop_cap_allowed": true
+      },
+      "composition_hints": {
+        "opening_preference": "ordinary-world framing",
+        "close_preference": "new-world statement that restates memory sentence",
+        "data_density": "low — 0-1 metric slides",
+        "avoid": ["3-column card mosaic", "corporate bullet lists", "icon-heavy layouts"]
+      },
+      "refine_iterations": 2,
+      "export": ["pdf"],
+      "pptx_editable": false
+    },
+
+    "research-talk": {
+      "label": "Research talk",
+      "description": "학술·정책 브리핑. Arctic-serif, 증거·각주 중심.",
+      "audience": "학술 컨퍼런스·정책 회의",
+      "narrative_pattern": "question-exploration-answer",
+      "tone": "학술·증거 중심·정제",
+      "differentiation_against": "마케팅 브로슈어처럼 읽히면 안 됨. 증거와 방법론이 핵심.",
+      "track": "minimalist-premium",
+      "theme": "arctic-serif",
+      "theme_customization": {
+        "accent_policy": "3-per-10 slides; reserved for data callouts",
+        "footnote_rail_enabled": true
+      },
+      "composition_hints": {
+        "opening_preference": "the research question stated clearly",
+        "close_preference": "answer + implications, not 'thank you / questions'",
+        "data_density": "dense — tables and metrics OK",
+        "citation_style": "inline [1] → footnote rail",
+        "avoid": ["stock business illustrations", "gradients", "sans-serif display"]
+      },
+      "refine_iterations": 3,
+      "export": ["pdf", "pptx"],
+      "pptx_editable": true
+    },
+
+    "launch-keynote": {
+      "label": "Launch keynote",
+      "description": "컨퍼런스 키노트·제품 런치·트렌드 리포트. Wired-grid, 도발적·매체적.",
+      "audience": "컨퍼런스 청중·일반 대중",
+      "narrative_pattern": "five-beats",
+      "tone": "도발적·선언적·매체적",
+      "differentiation_against": "컨설팅 덱처럼 담담하거나 교과서처럼 설명적이면 안 됨",
+      "track": "editorial",
+      "theme": "wired-grid",
+      "theme_customization": {
+        "accent_policy": "2-per-10 slides; electric-orange punctuation only",
+        "mono_overline_enabled": true,
+        "black_inverse_rhythm": "every 4-5 slides"
+      },
+      "composition_hints": {
+        "opening_preference": "monumental-quote or hero full-bleed",
+        "close_preference": "single memorable sentence, never 'Thank You'",
+        "data_density": "moderate — one dominant metric per act",
+        "avoid": ["agenda slide", "5-step arrow diagram", "bullet-only slides"]
+      },
+      "refine_iterations": 4,
+      "export": ["pdf", "pptx"],
+      "pptx_editable": false
+    },
+
+    "executive-brief": {
+      "label": "Executive briefing",
+      "description": "임원·의사결정자 브리핑. Obsidian-mono, 조용한 권위.",
+      "audience": "임원·C-level",
+      "narrative_pattern": "situation-complication-resolution",
+      "tone": "정제·조용·자신감",
+      "differentiation_against": "마케팅·화려함 일체 배제. 엔지니어링 브리프 같은 밀도.",
+      "track": "minimalist-premium",
+      "theme": "obsidian-mono",
+      "theme_customization": {
+        "accent_policy": "2-per-10 slides; reserved for recommendation callout",
+        "header_chrome": "minimal — no logo, no page number on hero/divider"
+      },
+      "composition_hints": {
+        "opening_preference": "single-sentence situation statement",
+        "close_preference": "one concrete recommendation + owner",
+        "data_density": "moderate-high — tables permitted",
+        "avoid": ["stock icons", "emoji", "decorative flourishes"]
+      },
+      "refine_iterations": 3,
+      "export": ["pdf", "pptx"],
+      "pptx_editable": true
+    },
+
+    "product-launch": {
+      "label": "Product launch",
+      "description": "제품 발표·외부 런치. Apple 테마, 캐시드럴 미니멀 프리미엄.",
+      "audience": "일반 대중·고객",
+      "narrative_pattern": "hero-support-detail-proof-cta",
+      "tone": "단정·프리미엄·inevitable",
+      "differentiation_against": "SaaS 스타트업 랜딩 클리셰 일체 배제",
+      "track": "minimalist-premium",
+      "theme": "apple",
+      "theme_customization": {
+        "accent_policy": "monochrome discipline — accent collapses to fg",
+        "whitespace_target": "40% max pixel coverage",
+        "product_photography_dominance": true
+      },
+      "composition_hints": {
+        "opening_preference": "monumental single-word or single-sentence hero",
+        "close_preference": "cathedral-scale memory sentence",
+        "data_density": "low — one headline metric max",
+        "avoid": ["multiple accent colors", "rounded cards", "gradients"]
+      },
+      "refine_iterations": 3,
+      "export": ["pdf", "pptx"],
+      "pptx_editable": true
+    }
+  },
+
+  "length_profiles": {
+    "short":   { "slides": 7,  "label": "짧게 6–8 slides · 5-min talk" },
+    "standard":{ "slides": 12, "label": "표준 10–14 slides · 10-min talk" },
+    "long":    { "slides": 20, "label": "길게 18–24 slides · 20-min talk" }
+  }
+}

@@ -19,6 +19,11 @@ Close the AI feedback loop that pptx/keynote cannot. Render → capture → eval
 
 - `$1`: slug (auto-detect from `slides/` if single)
 - `$2`: iterations (default `3`; cap at `5` to limit compute)
+- `--silent`: suppress intermediate narration (used by `/slide-auto`). When set:
+  - Do NOT ask the user about Playwright install if missing — log warning and skip refine entirely
+  - Do NOT ask for confirmation between rounds
+  - Do NOT ask about deleting slides — never delete in silent mode
+  - Still write `.qa-log.md` normally (autopilot reads it for the final log)
 
 ### Step 2 — Dependency check
 
@@ -27,10 +32,11 @@ Verify Playwright is installed locally:
 test -d node_modules/playwright || test -d node_modules/@playwright/browser-chromium
 ```
 
-If missing, ask user:
-"Playwright이 설치되지 않았습니다. 설치할까요? (`npm i -D playwright && npx playwright install chromium`)"
+If missing, handling depends on mode:
+- Interactive: ask user "Playwright이 설치되지 않았습니다. 설치할까요? (`npm i -D playwright && npx playwright install chromium`)"
+- `--silent`: skip refine entirely, write a single warning line to `.qa-log.md` ("Playwright not installed — refine skipped. Install: npm i -D playwright && npx playwright install chromium"), exit with status 0 (successful no-op)
 
-If user declines, fall back to "evaluate without screenshots" mode: invoke agents with just the deck.md text. Note this reduces review quality.
+If user declines (interactive), fall back to "evaluate without screenshots" mode: invoke agents with just the deck.md text. Note this reduces review quality.
 
 ### Step 3 — Initial render
 

@@ -2,6 +2,8 @@
 
 **Build Marp decks that don't look AI-generated.** A Claude Code plugin that grounds slide generation in real brand design systems, Korean-first typography, and a Playwright-powered visual review loop.
 
+**v0.5.0** — `/slide-auto` autopilot: one command runs the full pipeline (brief → theme → compose → refine → export) with all decisions collected upfront. 6 presets (investor-pitch, team-narrative, research-talk, launch-keynote, executive-brief, product-launch) + Express mode (3 questions, ~30s) + Full mode (4 AskUserQuestion batches, all 16 fields).
+
 **v0.4.0** — Theme Gallery: 3-mode visual selection (Mood Match quiz / Full Gallery in browser / Personal Preview with your own deck). Filterable grid over all 63 themes, lazy render via `marp-cli --images png`, on-demand forge buttons for the 54 un-forged brands. Output to `~/.marp-slide-studio/gallery/`.
 
 **v0.3.0** — Theme-Foundry: 59-brand registry + on-demand theme generation via `theme-forger` skill/agent, 5 sample generated themes (Stripe, Linear, Apple, Notion, Tesla), transform spec (web→slide), theme validator, slide-theme-curator now routes 3-tier (curated → cached → on-demand).
@@ -11,6 +13,16 @@
 > Why this exists: PowerPoint and Keynote hand you a template and leave the design decisions to you. This plugin does the opposite — it injects opinionated design systems from awesome-design-md, enforces hard anti-patterns, and iteratively refines the output until it no longer smells of "generic AI."
 
 ## What you get
+
+### Hands-off mode (recommended)
+
+```
+/slide-auto "your topic here"
+```
+
+Express mode asks 3 questions (preset + length + memory sentence, ~30s), then runs the entire pipeline autonomously — brief, theme, compose, refine, export — without further user interaction. ~5-10 min total. Everything is logged to `.auto-log.md` for audit.
+
+### Step-by-step (when you want control)
 
 | Stage | Command | What happens |
 |---|---|---|

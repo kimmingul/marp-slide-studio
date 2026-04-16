@@ -13,6 +13,8 @@ Turn a brief + theme into actual Marp markdown. This is the step where quality i
 
 `./slides/<slug>/brief.md` and `./slides/<slug>/theme.css` both exist. User wants `deck.md`.
 
+Supports `--silent` flag (used by `/slide-auto`) — when set, skip intermediate narration and hand-off prompts. Still write deck.md, still run initial render, but end with a single one-line completion message instead of the multi-line hand-off menu.
+
 ## Procedure
 
 ### Step 1 — Locate and validate inputs

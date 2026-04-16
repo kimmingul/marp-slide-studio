@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.5.0 — 2026-04-17
+
+### Added — Autopilot pipeline (`/slide-auto`)
+
+- **Single-command end-to-end**: one invocation runs brief → theme → compose → refine → export without intermediate user prompts. Contract: after setup, zero interaction until the final report.
+- **Express mode (default, ~30s setup)**: 3 questions — preset + length + memory sentence. Preset fills all 16 downstream decisions (audience, narrative, tone, track, theme, accent policy, refine iterations, export formats, PPTX editable flag, …).
+- **Full mode (`--full`, ~2min setup)**: 4 batched AskUserQuestion calls covering all 16 fields. User overrides preset defaults field-by-field.
+- **6 presets** in `assets/autopilot-presets.json`:
+  - `investor-pitch` → stripe + problem-insight-solution-ask, 3 refine rounds, PDF+PPTX
+  - `team-narrative` → kinfolk-serif + five-beats, 2 refine rounds, PDF
+  - `research-talk` → arctic-serif + question-exploration-answer, 3 rounds, PDF+PPTX
+  - `launch-keynote` → wired-grid + five-beats (provocative), 4 rounds, PDF+PPTX
+  - `executive-brief` → obsidian-mono + situation-complication-resolution, 3 rounds, PDF+PPTX
+  - `product-launch` → apple + hero-support-detail-proof-cta, 3 rounds, PDF+PPTX
+- **Failure-safe degradation**: missing Playwright → skip refine; failed forge → fallback to curated Tier 2 theme; missing Chrome → HTML only; render error → preserve partial artifacts. Pipeline never blocks on a question mid-flight.
+- **Full audit log**: every decision captured in `./slides/<slug>/.auto-log.md` with source (preset / user Q1-Q3) and per-step timing/status.
+
+### Added — Helper scripts
+- `scripts/autopilot/resolve-config.mjs` — merges preset + user answers → final JSON config
+- `scripts/autopilot/log.mjs` — consistent `.auto-log.md` formatter (init / step / final)
+
+### Changed
+- `slide-composer` and `slide-visual-qa` skills now accept `--silent` flag for non-interactive invocation by autopilot. Manual/interactive use unchanged.
+- README moves `/slide-auto` to top of the "how to use" section; step-by-step remains for users who want control.
+
+### Notes
+- Autopilot does NOT invoke the interactive skills (`slide-brainstorming`, `slide-theme-curator`). It writes `brief.md` directly from the resolved config and resolves themes directly (cache lookup or theme-forger dispatch).
+- From-Prompt mode (parse natural-language config from a single user message) was deferred; Express + Full cover the designed use cases.
+
 ## 0.4.0 — 2026-04-16
 
 ### Added — Theme Gallery (3-mode visual selection)
