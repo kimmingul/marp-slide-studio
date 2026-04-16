@@ -62,13 +62,57 @@ The plugin also ships three layouts unique to CJK writing systems:
 
 ## Prerequisites
 
-- **Node.js ≥ 18** — for `npx @marp-team/marp-cli@latest`
-- **Google Chrome / Chromium** — marp CLI uses headless Chrome for PDF/PPTX export
-- **Playwright** (optional, enables the refine loop):
+Run the dependency check first — it prints a colored report and exits 0 when everything is in place:
+
+```bash
+bash scripts/check-deps.sh
+```
+
+Expected output when ready:
+
+```
+▸ marp-slide-studio dependency check
+────────────────────────────────────────
+
+Required
+  ✓ Node.js ≥ 18             v20.x.x
+  ✓ npx                      …/bin/npx
+  ✓ Chrome / Chromium        /Applications/Google Chrome.app/…
+  ✓ marp-cli                 cached via npx — instant first run
+  … (or ○ not cached — first run fetches ~30–60s, one-time)
+
+Optional
+  ⚠ Playwright               not installed — /slide-refine visual QA will be skipped
+    enable with: npm i -D playwright && npx playwright install chromium
+
+Status: READY
+```
+
+### Required
+
+- **Node.js ≥ 18** — install from [nodejs.org](https://nodejs.org) or use a version manager (`nvm`, `fnm`, `volta`). `npx` ships with it.
+- **Google Chrome or Chromium** — marp CLI uses headless Chrome for PDF/PPTX export.
+  - **macOS**: install from [google.com/chrome](https://www.google.com/chrome/) or `brew install --cask google-chrome`
+  - **Linux**: `sudo apt install google-chrome-stable` (Debian/Ubuntu) or `sudo apt install chromium-browser`
+  - **Windows**: install from [google.com/chrome](https://www.google.com/chrome/)
+  - Or set the `CHROME_PATH` env var to point at a custom Chrome/Chromium binary.
+
+### Installed automatically on first use
+
+- **marp-cli** — the plugin invokes it via `npx --yes @marp-team/marp-cli@latest`. No manual install needed; the first `/slide-compose` or `/slide-export` downloads it into npm's cache (~30–60 seconds), subsequent runs are instant. Override with `MARP_BIN=/your/path` if you prefer a pinned local install.
+
+### Optional (enable extra features)
+
+- **Playwright** — enables the `/slide-refine` visual QA loop (per-slide screenshots + AI aesthetic review). Without it, the refine loop is skipped silently and the rest of the pipeline continues.
   ```bash
   npm i -D playwright && npx playwright install chromium
   ```
-- **Internet at render time** — themes import Pretendard, Noto Sans JP/SC/TC, Inter, and editorial serifs via CDN. For offline/air-gapped use, run `bash scripts/fetch-fonts.sh` to bundle fonts locally.
+
+- **Offline font bundle** — by default fonts (Pretendard, Noto Sans JP/SC/TC, Inter, editorial serifs) load from CDN at render time. For air-gapped environments or reproducible team distribution, bundle them locally:
+  ```bash
+  bash scripts/fetch-fonts.sh
+  ```
+  This downloads ~8 MB into `assets/fonts/` and writes `assets/fonts/offline.css`. Swap theme `@import` lines to use it.
 
 ## Installation
 
