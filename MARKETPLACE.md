@@ -6,7 +6,7 @@ This repository is structured to act as either (a) a standalone plugin installed
 
 ```bash
 # Clone anywhere
-git clone https://github.com/your-org/marp-slide-studio.git
+git clone https://github.com/kimmingul/marp-slide-studio.git
 
 # Point Claude Code at it from a slide project
 claude --plugin-dir /absolute/path/to/marp-slide-studio
@@ -18,7 +18,7 @@ claude --plugin-dir /absolute/path/to/marp-slide-studio
 
 ```bash
 # In Claude Code
-/plugin marketplace add https://github.com/your-org/marp-slide-studio
+/plugin marketplace add https://github.com/kimmingul/marp-slide-studio
 /plugin install marp-slide-studio
 ```
 
@@ -34,7 +34,7 @@ If your team already maintains a marketplace repo (e.g. `our-team/claude-plugins
   "plugins": [
     {
       "name": "marp-slide-studio",
-      "source": "github:your-org/marp-slide-studio",
+      "source": "github:kimmingul/marp-slide-studio",
       "description": "...",
       "version": "0.2.0"
     }

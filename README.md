@@ -75,7 +75,7 @@ The plugin also ships three layouts unique to CJK writing systems:
 ### Option 1 — Standalone plugin directory
 
 ```bash
-git clone https://github.com/your-org/marp-slide-studio.git
+git clone https://github.com/kimmingul/marp-slide-studio.git
 claude --plugin-dir /absolute/path/to/marp-slide-studio
 ```
 
@@ -83,7 +83,7 @@ claude --plugin-dir /absolute/path/to/marp-slide-studio
 
 ```
 # In Claude Code
-/plugin marketplace add https://github.com/your-org/marp-slide-studio
+/plugin marketplace add https://github.com/kimmingul/marp-slide-studio
 /plugin install marp-slide-studio
 ```
 
@@ -96,7 +96,7 @@ Add to your existing team marketplace:
   "plugins": [
     {
       "name": "marp-slide-studio",
-      "source": "github:your-org/marp-slide-studio",
+      "source": "github:kimmingul/marp-slide-studio",
       "version": "0.6.0"
     }
   ]

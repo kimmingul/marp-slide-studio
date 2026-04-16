@@ -1,18 +1,25 @@
 {
   "name": "marp-slide-studio",
   "version": "0.6.0",
-  "description": "Build sophisticated Marp presentations with AI — grounded in real brand design systems, Korean-first typography, and a Playwright-powered visual review loop.",
+  "description": "Build sophisticated Marp presentations with AI — 63 themes grounded in real brand design systems, multilingual CJK + Latin typography (Korean, Japanese, Chinese, English), and a Playwright-powered visual review loop. Ships with an autopilot that runs brief → theme → compose → refine → export from a single command.",
   "author": {
     "name": "Marp Slide Studio Team"
   },
   "license": "MIT",
+  "homepage": "https://github.com/kimmingul/marp-slide-studio",
+  "repository": "https://github.com/kimmingul/marp-slide-studio",
   "keywords": [
     "marp",
     "slides",
     "presentation",
     "design-system",
-    "korean-typography",
+    "cjk-typography",
+    "korean",
+    "japanese",
+    "chinese",
+    "multilingual",
     "playwright",
-    "ai-design"
+    "ai-design",
+    "claude-code-plugin"
   ]
 }

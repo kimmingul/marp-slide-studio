@@ -1,16 +1,16 @@
 {
   "name": "marp-slide-studio",
-  "description": "Sophisticated Marp slide decks with AI — brand-grounded design systems, Korean-first typography, Playwright visual QA loop.",
+  "description": "Sophisticated Marp slide decks with AI — 63 brand-grounded design systems (4 curated + 59 on-demand), multilingual CJK + Latin typography, and a Playwright visual-QA loop. One-command autopilot from topic to PDF + PPTX.",
   "version": "0.6.0",
   "owner": {
     "name": "Marp Slide Studio Team",
-    "url": "https://github.com/your-org/marp-slide-studio"
+    "url": "https://github.com/kimmingul/marp-slide-studio"
   },
   "plugins": [
     {
       "name": "marp-slide-studio",
       "source": "./",
-      "description": "Build Marp presentations that don't look AI-generated. 8 skills, 3 agents, 59-brand theme registry with on-demand generation, Korean-first typography, visual refinement loop.",
+      "description": "Build Marp presentations that don't look AI-generated. 8 skills, 3 agents, 63 themes (Stripe/Apple/Linear/Notion/Tesla/Figma/Spotify/IBM/BMW/Ferrari and more), multilingual typography (Korean/Japanese/Chinese/English), 6 autopilot presets, Playwright visual refinement loop.",
       "version": "0.6.0",
       "author": "Marp Slide Studio Team",
       "category": "content-authoring",
@@ -19,9 +19,15 @@
         "slides",
         "presentation",
         "design-system",
-        "korean-typography",
+        "multilingual",
+        "cjk-typography",
+        "korean",
+        "japanese",
+        "chinese",
+        "english",
         "playwright",
         "visual-qa",
+        "autopilot",
         "pptx",
         "pdf"
       ],
