@@ -1,7 +1,7 @@
 ---
 name: slide-autopilot
 description: Use when the user says "/slide-auto", "자동으로 덱 만들어줘", "전체 자동 진행", "autopilot", or wants the full pipeline (brainstorm → theme → compose → refine → export) to run without stepwise intervention. Collects ALL decisions upfront in either Express mode (3 questions, preset-driven) or Full mode (4 AskUserQuestion batches covering 16 fields), then runs the entire pipeline autonomously with no further prompts. Preserves partial artifacts on failure.
-argument-hint: "[topic] [--full] [--preset <name>] [--no-refine]"
+argument-hint: "[topic] [--full] [--preset <name>] [--lang ko|en|ja|zh-Hans|zh-Hant] [--no-refine]"
 allowed-tools: Read, Write, Edit, Glob, Bash(node:*, bash:*, npx:*, mkdir:*, test:*, cp:*, open:*, ls:*), AskUserQuestion, Task
 ---
 
@@ -27,6 +27,7 @@ Critical contract: after setup questions are answered, **NO user interaction** u
 - `--preset <name>`: skip preset selection question in Express
 - `--no-refine`: disable refine loop
 - `--force-theme <slug>`: override preset's theme with specific brand
+- `--lang <code>`: override preset's default_language. Accepted: `ko`, `en`, `ja`, `zh-Hans`, `zh-Hant`, `es`, `fr`, `de`, `pt`, `it`. Affects typography (line-height, font family, italic discipline) via theme-foundation.css.
 
 If no topic given, ask once: "이번 덱의 한 문장 주제는?" (plain text).
 
@@ -146,7 +147,7 @@ Preset: <name>
 Read `${CLAUDE_PLUGIN_ROOT}/assets/narrative-patterns.md` to know the correct beat structure for the chosen narrative_pattern.
 
 Generate brief.md with:
-- YAML front matter (slug, title, audience, narrative_pattern, tone, length_target, differentiation_against, track_preference: from config.theme via registry, created date, theme block with track+name+customizations)
+- YAML front matter (slug, title, **language** from config.language, audience, narrative_pattern, tone, length_target, differentiation_against, track_preference: from config.theme via registry, created date, theme block with track+name+customizations)
 - `## One-sentence memory` with user's text
 - `## Reference inspirations` (from preset.composition_hints or blank)
 - `## Beats` table — this is the critical part. You must design N beats matching the narrative_pattern, where N = config.length. Each beat has `act`, `message` (1 sentence), `layout` (from core-7 layouts).

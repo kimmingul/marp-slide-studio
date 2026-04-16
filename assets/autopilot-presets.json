@@ -24,7 +24,8 @@
       },
       "refine_iterations": 3,
       "export": ["pdf", "pptx"],
-      "pptx_editable": true
+      "pptx_editable": true,
+      "default_language": "en"
     },
 
     "team-narrative": {
@@ -48,7 +49,8 @@
       },
       "refine_iterations": 2,
       "export": ["pdf"],
-      "pptx_editable": false
+      "pptx_editable": false,
+      "default_language": "ko"
     },
 
     "research-talk": {
@@ -73,7 +75,8 @@
       },
       "refine_iterations": 3,
       "export": ["pdf", "pptx"],
-      "pptx_editable": true
+      "pptx_editable": true,
+      "default_language": "en"
     },
 
     "launch-keynote": {
@@ -98,7 +101,8 @@
       },
       "refine_iterations": 4,
       "export": ["pdf", "pptx"],
-      "pptx_editable": false
+      "pptx_editable": false,
+      "default_language": "en"
     },
 
     "executive-brief": {
@@ -122,7 +126,8 @@
       },
       "refine_iterations": 3,
       "export": ["pdf", "pptx"],
-      "pptx_editable": true
+      "pptx_editable": true,
+      "default_language": "en"
     },
 
     "product-launch": {
@@ -147,7 +152,8 @@
       },
       "refine_iterations": 3,
       "export": ["pdf", "pptx"],
-      "pptx_editable": true
+      "pptx_editable": true,
+      "default_language": "en"
     }
   },
 

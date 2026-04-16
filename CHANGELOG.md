@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.6.0 — 2026-04-17
+
+### Added — multi-language support (KR / JA / ZH-Hans / ZH-Hant / Latin)
+
+- **Shared `theme-foundation.css`**: new file imported by every theme. Provides Pretendard + Noto Sans JP/SC/TC + Inter CDN imports, per-language CSS variables, `:lang()` cascades for line-height / font family / italic discipline, numeral feature-settings for data contexts, Latin ligature settings for English/Latin decks.
+- **Typography references**:
+  - `assets/typography/cjk-scale.md` — unified Korean / Japanese / Chinese / Traditional Chinese scale with per-language font stacks and line-height calibration
+  - `assets/typography/latin-scale.md` — English and Latin-script calibration (Inter-based, ligatures, smart quotes, hyphenation)
+  - `assets/typography/mixed-language.md` — expanded to cover all CJK + Latin mixing patterns (Pretendard for KR+Latin, Noto Sans JP for JP+Latin, etc., plus `unicode-range` technique for editorial serif pairs)
+- **Layout generalization**:
+  - `assets/layouts/vertical-writing.md` — now covers Korean 세로쓰기, Japanese 縦書き, Chinese 竖排
+  - `assets/layouts/ruby-annotation.md` (renamed from `hanja-ruby.md`) — covers Hanja, Furigana, Pinyin with Japanese and Chinese markdown examples
+  - `assets/layouts/banner-caption.md` — 방주 / 傍注 / 夹注 with Hanja or native labels
+- **Autopilot multilingualism**:
+  - `default_language` field added to all 6 presets (5 English defaults, 1 Korean for `team-narrative`)
+  - `--lang <code>` CLI flag on `/slide-auto` — accepts ko, en, ja, zh-Hans, zh-Hant, es, fr, de, pt, it
+  - `resolve-config.mjs` threads the language into the final config JSON
+- **slide-composer** emits `lang: <code>` in Marp front matter; themes auto-apply typography per `<html lang="…">`.
+- **English README.md** — full GitHub-ready rewrite. Highlights multi-language support up front, shows usage examples in four languages (`ko`, `en`, `ja`, `zh-Hans`), covers installation, the 63-theme catalog, gallery, autopilot presets, CI integration, extending, licenses and credits.
+
+### Changed
+- `skills/korean-typography/` renamed to `skills/cjk-typography/`. Description and trigger phrases now cover Korean, Japanese, Chinese, and English/Latin.
+- `assets/transform-prompt.md` Rule 3 rewritten: themes now import `theme-foundation.css` instead of hand-writing Pretendard imports. Previous Korean-first contract generalized to multi-language.
+- `assets/typography/korean-scale.md` is now a stub pointing at `cjk-scale.md` (backward compatible).
+- The 4 curated theme CSS files (`obsidian-mono`, `arctic-serif`, `kinfolk-serif`, `wired-grid`) refactored to import `theme-foundation.css` and use `var(--font-body-ko)` style references. They validate cleanly.
+- `scripts/validate-theme.mjs` made more robust: strips comments before brace-matching (handles `{ko,ja,zh-Hans,zh-Hant}` literals in comments), accepts either direct CJK font reference OR `theme-foundation.css` import.
+
+### Notes on scope
+- The 5 previously-generated Tier 3 themes (stripe, linear-app, apple, notion, tesla) retain their original explicit Pretendard stacks. They still validate. Regenerating them via `/slide-theme <brand> --force` adopts the new foundation pattern.
+- Registry entry mood descriptions and Korean-language copy remain in mixed language — they describe brand aesthetics neutrally and work across locales.
+
 ## 0.5.0 — 2026-04-17
 
 ### Added — Autopilot pipeline (`/slide-auto`)

@@ -1,8 +1,9 @@
 /* @theme obsidian-mono */
 /* Marp Slide Studio — Minimalist Premium Track */
-/* Requires: Pretendard Variable (loaded via CDN below) */
+/* Multi-language: KR / JA / ZH-Hans / ZH-Hant / EN + other Latin scripts.
+   Declare deck language via front-matter `lang:` (e.g. lang: ja). */
 
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('../../theme-foundation.css');
 
 :root {
   /* Color tokens */
@@ -15,11 +16,11 @@
   --accent: #C75B12;
   --accent-ink: #FFFFFF;
 
-  /* Typography */
-  --font-body: 'Pretendard Variable', 'Pretendard', -apple-system,
-               BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-  --font-display: 'Pretendard Variable', 'Pretendard', sans-serif;
-  --font-mono: 'D2Coding', 'JetBrains Mono', ui-monospace, monospace;
+  /* Typography — theme-foundation.css provides per-language font family variables.
+     The --font-body below is the fallback when no lang is declared. */
+  --font-body: var(--font-body-ko);
+  --font-display: var(--font-body-ko);
+  --font-mono: 'JetBrains Mono', 'D2Coding', ui-monospace, monospace;
 
   --fs-display: clamp(120px, 10vw, 220px);
   --fs-headline: clamp(48px, 4.5vw, 80px);

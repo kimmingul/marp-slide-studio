@@ -1,9 +1,10 @@
 /* @theme kinfolk-serif */
 /* Marp Slide Studio — Editorial Track */
-/* Requires: Pretendard Variable + Noto Serif KR (loaded via CDN below) */
+/* Multi-language: KR / JA / ZH-Hans / ZH-Hant / EN.
+   Serif display: Noto Serif KR/JP/SC/TC depending on lang. */
 
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500;600;700&display=swap');
+@import url('../../theme-foundation.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500;600;700&family=Noto+Serif+JP:wght@300;500;600;700&family=Noto+Serif+SC:wght@300;500;600;700&family=Noto+Serif+TC:wght@300;500;600;700&display=swap');
 
 :root {
   /* Color tokens */
@@ -16,11 +17,11 @@
   --accent: #6E0F1E;
   --accent-ink: #EFE9DC;
 
-  /* Fonts */
-  --font-body: 'Pretendard Variable', 'Pretendard', -apple-system,
-               BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-  --font-display: 'Noto Serif KR', 'Pretendard Variable', serif;
-  --font-mono: 'D2Coding', 'JetBrains Mono', ui-monospace, monospace;
+  /* Fonts — body inherits from theme-foundation per :lang().
+     Display uses the matching language-specific serif. */
+  --font-body: var(--font-body-ko);
+  --font-display: 'Noto Serif KR', var(--font-body-ko), serif;
+  --font-mono: 'JetBrains Mono', 'D2Coding', ui-monospace, monospace;
 
   /* Scale */
   --fs-display: clamp(140px, 12vw, 220px);
@@ -411,4 +412,13 @@ section.enumerated .enum p {
   text-transform: uppercase;
   font-weight: 600;
   color: var(--muted);
+}
+
+/* Per-language serif display override */
+section:lang(ja) h1, section:lang(ja) h2.display { font-family: 'Noto Serif JP', serif; }
+section:lang(zh-Hans) h1, section:lang(zh-Hans) h2.display { font-family: 'Noto Serif SC', serif; }
+section:lang(zh-Hant) h1, section:lang(zh-Hant) h2.display { font-family: 'Noto Serif TC', serif; }
+section:lang(en) h1, section:lang(en) h2.display,
+section:lang(es) h1, section:lang(fr) h1, section:lang(de) h1 {
+  font-family: 'Lyon Text', 'Playfair Display', 'GT Super', Georgia, serif;
 }

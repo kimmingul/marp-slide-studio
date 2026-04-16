@@ -76,6 +76,9 @@ const config = {
   export: preset.export.slice(),
   pptx_editable: !!preset.pptx_editable,
 
+  // Language — CLI --lang overrides preset default
+  language: args.lang || preset.default_language || 'en',
+
   created: new Date().toISOString(),
 };
 

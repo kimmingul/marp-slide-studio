@@ -47,6 +47,7 @@ Deck opens with Marp front matter:
 ---
 marp: true
 theme: <theme-name>          # MUST match @theme directive in theme.css
+lang: <language-code>        # ko | en | ja | zh-Hans | zh-Hant | es | fr | de | ...
 paginate: true
 size: 16:9
 header: ""
@@ -58,6 +59,12 @@ style: |
 ```
 
 Extract `<theme-name>` from the first line of `theme.css` (`/* @theme xxx */`).
+
+The `lang:` field is critical for multi-language support — it drives `:lang()` CSS selectors that swap font family, line-height, and italic discipline per language. Source:
+1. `language` field in `brief.md` YAML front matter if present
+2. Otherwise default to `ko` for back-compat (original plugin design)
+
+Marp emits `<html lang="…">` which cascades to every section. Themes use `section:lang(ko)`, `section:lang(ja)`, etc. to apply the right typography.
 
 ### Step 4 — Generate slides, one beat at a time
 

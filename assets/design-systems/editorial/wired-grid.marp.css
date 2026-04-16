@@ -1,8 +1,9 @@
 /* @theme wired-grid */
 /* Marp Slide Studio — Editorial Track, variant 2 */
-/* Requires: Pretendard Variable + JetBrains Mono */
+/* Multi-language: KR / JA / ZH-Hans / ZH-Hant / EN.
+   High-contrast monochrome; weight-900 display in the primary language. */
 
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('../../theme-foundation.css');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
@@ -15,9 +16,8 @@
   --accent: #FF4500;
   --accent-ink: #FFFFFF;
 
-  --font-body: 'Pretendard Variable', 'Pretendard', -apple-system,
-               BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-  --font-display: 'Pretendard Variable', 'Pretendard', sans-serif;
+  --font-body: var(--font-body-ko);
+  --font-display: var(--font-body-ko);
   --font-mono: 'JetBrains Mono', 'D2Coding', ui-monospace, monospace;
 
   --fs-display: clamp(160px, 14vw, 280px);

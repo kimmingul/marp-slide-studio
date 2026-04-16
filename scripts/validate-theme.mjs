@@ -48,11 +48,13 @@ if (!themeMatch) {
 }
 
 // 2. Required tokens in :root
-const rootBlockMatch = css.match(/:root\s*\{([\s\S]*?)\}/);
+// Strip /* ... */ comments so braces inside them don't break brace matching
+const cssNoComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
+const rootBlockMatch = extractBalancedBlock(cssNoComments, /:root\s*\{/);
 if (!rootBlockMatch) {
   errors.push('No :root block found — tokens must be declared in :root');
 } else {
-  const rootBlock = rootBlockMatch[1];
+  const rootBlock = rootBlockMatch;
   for (const token of [...REQUIRED_COLOR_TOKENS, ...REQUIRED_FONT_TOKENS, ...REQUIRED_SCALE_TOKENS, ...REQUIRED_LH_TOKENS]) {
     const re = new RegExp(`${token.replace(/-/g, '\\-')}\\s*:`);
     if (!re.test(rootBlock)) {
@@ -90,16 +92,18 @@ if (sectionRule && /text-transform\s*:\s*uppercase/.test(sectionRule[0])) {
   errors.push('`section { text-transform: uppercase }` applied globally — breaks Korean text');
 }
 
-// 5b. Pretendard should appear somewhere in the font stack
-if (!/Pretendard/i.test(css)) {
-  errors.push('Pretendard not referenced anywhere — Korean-first requirement violated');
+// 5b. CJK font requirement — either direct Pretendard/Noto reference OR theme-foundation import
+const hasFoundation = /@import\s+url\(['"][^'"]*theme-foundation\.css['"]/i.test(css);
+const hasCjkFont = /Pretendard|Noto Sans (JP|SC|TC|KR)/i.test(css);
+if (!hasFoundation && !hasCjkFont) {
+  errors.push('No CJK font reference — either import theme-foundation.css or declare Pretendard/Noto Sans JP/SC/TC/KR directly');
 }
 
-// 5c. Should have at least one font-loading directive (CDN @import or @font-face)
+// 5c. Should have at least one font-loading directive — CDN @import, @font-face, offline bundle, or theme-foundation
 const hasImport = /@import\s+url\(['"]?https?:/.test(css);
 const hasFontFace = /@font-face/.test(css);
 const hasLocalImport = /@import\s+url\(['"]?\.\.\/\.\.\/fonts\/offline/.test(css);
-if (!hasImport && !hasFontFace && !hasLocalImport) {
+if (!hasImport && !hasFontFace && !hasLocalImport && !hasFoundation) {
   warnings.push('No @import or @font-face — fonts will not load unless theme relies on system fallback');
 }
 
@@ -128,3 +132,20 @@ if (warnings.length) {
 }
 console.log('');
 process.exit(ok ? 0 : 1);
+
+// ── Helpers ────────────────────────────────────────────────────
+function extractBalancedBlock(text, openingRegex) {
+  const m = text.match(openingRegex);
+  if (!m) return null;
+  let i = m.index + m[0].length;
+  let depth = 1;
+  const start = i;
+  while (i < text.length && depth > 0) {
+    const ch = text[i];
+    if (ch === '{') depth++;
+    else if (ch === '}') depth--;
+    i++;
+  }
+  if (depth !== 0) return null;
+  return text.substring(start, i - 1);
+}

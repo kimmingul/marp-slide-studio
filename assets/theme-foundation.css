@@ -1,0 +1,110 @@
+/* Marp Slide Studio — Multi-language Theme Foundation */
+/* Imported by every theme to provide per-language font stacks,
+   line-height calibration, and italic/uppercase safeguards. */
+
+/* ── Font imports (CDN) ────────────────────────────────────── */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Editorial / serif display fonts imported per-theme as needed:
+   - Noto Serif KR, Noto Serif JP, Noto Serif SC, Noto Serif TC
+   - Lyon, GT Super, Canela, etc.
+   Themes add these to their own @import blocks. */
+
+/* ── Per-language font families ────────────────────────────── */
+
+:root {
+  --font-body-ko: 'Pretendard Variable', 'Pretendard',
+                  -apple-system, BlinkMacSystemFont,
+                  'Apple SD Gothic Neo', sans-serif;
+  --font-body-ja: 'Noto Sans JP', 'Hiragino Sans',
+                  'Hiragino Kaku Gothic ProN', 'Yu Gothic',
+                  'Meiryo', sans-serif;
+  --font-body-zh-hans: 'Noto Sans SC', 'PingFang SC',
+                       'Microsoft YaHei', 'Source Han Sans SC',
+                       sans-serif;
+  --font-body-zh-hant: 'Noto Sans TC', 'PingFang TC',
+                       'Microsoft JhengHei', sans-serif;
+  --font-body-latin: 'Inter', -apple-system, BlinkMacSystemFont,
+                     sans-serif;
+}
+
+/* ── Language-aware typography cascades ────────────────────── */
+
+/* Default (Latin calibration) */
+section {
+  --lh-body: 1.55;
+  --lh-headline: 1.1;
+  --fs-body-floor: 20px;
+}
+
+/* CJK gets denser leading + larger floor */
+section:lang(ko),
+section:lang(ja),
+section:lang(zh-Hans),
+section:lang(zh-Hant) {
+  --lh-body: 1.7;
+  --lh-headline: 1.15;
+  --fs-body-floor: 22px;
+}
+
+/* Language-specific font family (applies AFTER theme's base font-family) */
+section:lang(ko) { font-family: var(--font-body-ko); }
+section:lang(ja) { font-family: var(--font-body-ja); }
+section:lang(zh-Hans) { font-family: var(--font-body-zh-hans); }
+section:lang(zh-Hant) { font-family: var(--font-body-zh-hant); }
+section:lang(en),
+section:lang(es),
+section:lang(fr),
+section:lang(de),
+section:lang(pt),
+section:lang(it) { font-family: var(--font-body-latin); }
+
+/* ── Italic discipline ──────────────────────────────────────── */
+
+/* Latin-script: italic as designed */
+section em { font-style: italic; }
+
+/* CJK-native script: italic is synthesized-slanted and almost always broken.
+   Use weight 500 as the emphasis fallback. */
+section:lang(ko) em,
+section:lang(ja) em,
+section:lang(zh-Hans) em,
+section:lang(zh-Hant) em {
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* ── Numeral alignment for data contexts ───────────────────── */
+
+section.metric,
+section.data,
+section table,
+section .metric-value,
+section .divider-number {
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* ── Latin ligatures (only for Latin-primary decks) ─────────── */
+
+section:lang(en),
+section:lang(es),
+section:lang(fr),
+section:lang(de),
+section:lang(pt),
+section:lang(it) {
+  font-feature-settings: "liga" 1, "calt" 1, "kern" 1;
+}
+
+/* ── Helper classes ─────────────────────────────────────────── */
+
+/* Mark Latin fragments inside CJK body for kerning */
+.en {
+  letter-spacing: 0.02em;
+  padding: 0 0.15em;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Explicitly override italic on a fragment (e.g., a non-Latin word accidentally wrapped in em) */
+.no-italic { font-style: normal !important; }

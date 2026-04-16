@@ -1,111 +1,109 @@
 # marp-slide-studio
 
-**Build Marp decks that don't look AI-generated.** A Claude Code plugin that grounds slide generation in real brand design systems, Korean-first typography, and a Playwright-powered visual review loop.
+**Build Marp decks that don't look AI-generated.**
 
-**v0.5.0** — `/slide-auto` autopilot: one command runs the full pipeline (brief → theme → compose → refine → export) with all decisions collected upfront. 6 presets (investor-pitch, team-narrative, research-talk, launch-keynote, executive-brief, product-launch) + Express mode (3 questions, ~30s) + Full mode (4 AskUserQuestion batches, all 16 fields).
+A Claude Code plugin that grounds slide generation in real brand design systems, multilingual CJK + Latin typography, and a Playwright-powered visual review loop. Ships with 63 themes — 4 hand-crafted, plus on-demand generation for 59 brands from a curated registry (Stripe, Apple, Linear, Notion, Tesla, Figma, Spotify, IBM, BMW, Ferrari, and more).
 
-**v0.4.0** — Theme Gallery: 3-mode visual selection (Mood Match quiz / Full Gallery in browser / Personal Preview with your own deck). Filterable grid over all 63 themes, lazy render via `marp-cli --images png`, on-demand forge buttons for the 54 un-forged brands. Output to `~/.marp-slide-studio/gallery/`.
+## Why this exists
 
-**v0.3.0** — Theme-Foundry: 59-brand registry + on-demand theme generation via `theme-forger` skill/agent, 5 sample generated themes (Stripe, Linear, Apple, Notion, Tesla), transform spec (web→slide), theme validator, slide-theme-curator now routes 3-tier (curated → cached → on-demand).
+Slide tools have not meaningfully changed in 20 years. PowerPoint (1987) and Keynote (2003) hand you a template and leave the design decisions to you. Modern AI slide generators produce decks that are pixel-perfect but look identical — purple gradients, three-column card mosaics, stock icons, generic sans-serif everything.
 
-**v0.2.0** — 4 curated themes (2 per track), 3 Korean-specific layouts (세로쓰기 · 한자 병기 · 방주), offline font bundle, GitHub Actions CI with per-slide screenshot diffs, marketplace manifest, second worked example.
+`marp-slide-studio` takes a different approach:
 
-> Why this exists: PowerPoint and Keynote hand you a template and leave the design decisions to you. This plugin does the opposite — it injects opinionated design systems from awesome-design-md, enforces hard anti-patterns, and iteratively refines the output until it no longer smells of "generic AI."
+1. **Design systems, not templates.** Each theme ships with a documented point of view (mood, palette logic, typography rules, do's and don'ts). The composer reads these before generating.
+2. **Hard anti-patterns encoded.** 18 specific things the composer refuses to produce — three-column card mosaic, purple-on-white gradients, stock icons, "Thank You / Questions?" finale.
+3. **Narrative-first composition.** Every slide must declare a one-sentence message. No beat, no slide.
+4. **Visual review loop.** Playwright captures each slide; two specialist agents (structural + aesthetic) critique and auto-edit. PowerPoint has no such loop.
+5. **Multilingual typography baked in.** Korean, Japanese, Chinese (Simplified + Traditional), and English all get language-aware line-height, font stacks, and italic discipline via CSS `:lang()` selectors.
+6. **Force choices over options.** One accent color. Two typefaces max. Three bullets max. Constraint produces style.
 
-## What you get
+## Key features
 
-### Hands-off mode (recommended)
+- **One-command pipeline** (`/slide-auto`) — brief → theme → compose → refine → export, no mid-flight prompts
+- **63 themes** — 4 hand-crafted + 59 brand registry with on-demand generation
+- **Multi-language support** — KR / JP / ZH-Hans / ZH-Hant / EN + other Latin scripts
+- **Interactive gallery** (`/slide-gallery`) — browser-based visual selection with filters
+- **Mood Match quiz** — 3 questions → 5–8 theme recommendations
+- **Playwright refine loop** — N rounds of auto-critique and diff application
+- **PDF + PPTX export** — editable PowerPoint mode optional
+- **GitHub Actions CI** — auto-render changed decks on PR with pixel-diff screenshots
 
-```
-/slide-auto "your topic here"
-```
+## Supported languages
 
-Express mode asks 3 questions (preset + length + memory sentence, ~30s), then runs the entire pipeline autonomously — brief, theme, compose, refine, export — without further user interaction. ~5-10 min total. Everything is logged to `.auto-log.md` for audit.
+The plugin supports five writing systems with dedicated typography calibration:
 
-### Step-by-step (when you want control)
+| Language | Code | Primary body font | Italic discipline | Line-height (body) |
+|---|---|---|---|---|
+| Korean | `ko` | Pretendard Variable | Weight 500 as emphasis (no italic) | 1.7 |
+| Japanese | `ja` | Noto Sans JP, Hiragino Sans | Weight 500 as emphasis (no italic) | 1.7 |
+| Chinese (Simplified) | `zh-Hans` | Noto Sans SC, PingFang SC | Weight 500 as emphasis (no italic) | 1.7 |
+| Chinese (Traditional) | `zh-Hant` | Noto Sans TC, PingFang TC | Weight 500 as emphasis (no italic) | 1.7 |
+| English + Latin scripts | `en`, `es`, `fr`, `de`, `pt`, `it` | Inter | Italic as designed | 1.55 |
 
-| Stage | Command | What happens |
-|---|---|---|
-| 1. Brief | `/slide-new [topic]` | 5 focused questions → `./slides/<slug>/brief.md` |
-| 2. Theme | `/slide-theme [slug]` | Pick from curated design systems → `theme.css` |
-| 3. Compose | `/slide-compose [slug]` | Brief + theme → `deck.md` + initial HTML preview |
-| 4. Refine | `/slide-refine [slug] [iter]` | Playwright screenshots + AI critic loop (N rounds) |
-| 5. Export | `/slide-export [slug] [pdf\|pptx\|both]` | Final PDF + PPTX |
+Declare your deck's language in Marp front matter:
 
-All commands are skills under `skills/`. Invoke with `/marp-slide-studio:<skill-name>`.
+```markdown
+---
+marp: true
+theme: obsidian-mono
+lang: ja
+---
 
-## Design systems
-
-### Tier 2 — Hand-crafted (quality ceiling)
-
-**Minimalist Premium track**
-- **Obsidian Mono** — quiet confidence, cream + deep-ink + terracotta accent. Executive briefings, architecture talks.
-- **Arctic Serif** — cool gray + navy, Noto Serif KR display, footnote rail. Research, policy, academic defenses.
-
-**Editorial track**
-- **Kinfolk Serif** — Noto Serif KR display + Pretendard body, cream paper + burgundy. Brand narratives, cultural talks.
-- **Wired Grid** — monochrome + electric orange, Pretendard 900 + JetBrains Mono, visible grid. Keynotes, trend reports.
-
-### Tier 3 — 59-brand registry (on-demand generation)
-
-Every brand listed in [`assets/design-systems/registry.json`](assets/design-systems/registry.json) — 59 total across AI/LLM, dev tools, backend, productivity, design, fintech, automotive, media, commerce.
-
-```bash
-# See everything available
-node scripts/forge-theme.mjs list
-
-# Generate any brand on first request — e.g.
-/slide-theme stripe        # on-demand forge → cached for next time
-/slide-theme linear.app
-/slide-theme tesla
+# 新しい始まり
 ```
 
-Generated themes:
-- Land in `assets/design-systems/generated/<slug>.{design.md,marp.css}`
-- Pass the same validator as hand-crafted themes
-- Load Pretendard by default (Korean-ready)
-- Include brand attribution disclaimers
-- Regenerable — delete cache + re-request, or edit `registry.json` to tune
+Themes automatically swap font family, line-height, ligatures, and emphasis styling via CSS `:lang()` selectors — no manual per-slide fiddling.
 
-Sample output already shipped: `stripe`, `linear-app`, `apple`, `notion`, `tesla` — rendered and validated end-to-end as proof of pipeline.
+The plugin also ships three layouts unique to CJK writing systems:
 
-### Adding your own brand
-- Curated (Tier 2): copy an existing theme pattern, edit tokens, move to `<track>/`
-- Registry (Tier 3): add an entry to `registry.json`, then `/slide-theme <your-brand>`
-- One-off custom: `theme-forger --custom <path-to-brand.json>`
-
-## Korean-specific layouts (optional)
-
-Beyond the 7 core layouts, three layouts exist for Korean-first typographic moments:
-- **vertical-writing** (세로쓰기) — reverent, for classical quotations
-- **hanja-ruby** (한자 병기) — `<ruby>` annotations for academic terminology
-- **banner-caption** (방주/협주) — main claim + side commentary on one slide
-
-These require the current theme to style the class (check `theme.css`). The core themes don't implement them by default — copy the CSS block from the layout doc into your theme as needed.
+- **Vertical writing** (세로쓰기 / 縦書き / 竖排) — ceremonial orientation for classical quotations
+- **Ruby annotation** (한자 병기 / 振り仮名 / 拼音) — phonetic overlay using HTML `<ruby>`
+- **Banner-caption** (방주 / 傍注 / 夹注) — main claim + side commentary
 
 ## Prerequisites
 
-- **Node.js ≥ 18**, npm or pnpm — for `npx @marp-team/marp-cli@latest`
-- **Google Chrome / Chromium** — marp CLI uses headless Chrome for PDF/PPTX
-- **Playwright** (optional, for `/slide-refine`):
+- **Node.js ≥ 18** — for `npx @marp-team/marp-cli@latest`
+- **Google Chrome / Chromium** — marp CLI uses headless Chrome for PDF/PPTX export
+- **Playwright** (optional, enables the refine loop):
   ```bash
   npm i -D playwright && npx playwright install chromium
   ```
-- **Internet at render time** — themes import Pretendard and Noto Serif KR via CDN. For offline use, swap the `@import` lines for local `@font-face` declarations.
+- **Internet at render time** — themes import Pretendard, Noto Sans JP/SC/TC, Inter, and editorial serifs via CDN. For offline/air-gapped use, run `bash scripts/fetch-fonts.sh` to bundle fonts locally.
 
 ## Installation
 
-### As a Claude Code plugin
+### Option 1 — Standalone plugin directory
 
-Point Claude Code at this directory:
 ```bash
-# From any project where you want to create slides
-claude --plugin-dir /path/to/marp-slide-studio
+git clone https://github.com/your-org/marp-slide-studio.git
+claude --plugin-dir /absolute/path/to/marp-slide-studio
 ```
 
-Or copy into a team marketplace and enable via `/plugin`.
+### Option 2 — Single-plugin marketplace
 
-### Team setup (optional)
+```
+# In Claude Code
+/plugin marketplace add https://github.com/your-org/marp-slide-studio
+/plugin install marp-slide-studio
+```
+
+### Option 3 — Team marketplace entry
+
+Add to your existing team marketplace:
+
+```json
+{
+  "plugins": [
+    {
+      "name": "marp-slide-studio",
+      "source": "github:your-org/marp-slide-studio",
+      "version": "0.6.0"
+    }
+  ]
+}
+```
+
+### Team settings (optional)
 
 Create `.claude/marp-slide-studio.local.md` in your project root:
 
@@ -114,108 +112,241 @@ Create `.claude/marp-slide-studio.local.md` in your project root:
 team_brand_primary: "#0A0A0A"
 team_brand_accent: "#FF5B13"
 default_track: "minimalist-premium"
+default_language: "en"
 author_default: "Our Team"
-logo_path: "./brand/logo.svg"
 ---
 ```
 
-These defaults pre-fill the brief and theme customization steps.
-
 ## Quick start
 
-```
-/slide-new  "한글 슬라이드 타이포를 망치지 않는 법"
-```
-Answer 5 questions. Receive `./slides/hangul-typography/brief.md`.
+### Autopilot (recommended)
 
 ```
-/slide-theme hangul-typography
+/slide-auto "Rethinking cloud billing for AI workloads"
 ```
-Pick Obsidian Mono or Kinfolk Serif. Optionally customize accent color.
+
+Claude asks 3 questions (preset, length, memory sentence), then runs the full pipeline autonomously. 5–10 minutes total.
 
 ```
-/slide-compose hangul-typography
+/slide-auto "スライドの未来について" --preset launch-keynote --lang ja
+/slide-auto "产品发布" --preset product-launch --lang zh-Hans
+/slide-auto "한글 슬라이드 타이포" --preset research-talk --lang ko
 ```
-Get `deck.md` + `out/deck.html` (open in a browser to preview).
+
+### Step-by-step (when you want control)
+
+| Stage | Command | What happens |
+|---|---|---|
+| 1. Brief | `/slide-new [topic]` | 5 questions → `./slides/<slug>/brief.md` |
+| 2. Theme | `/slide-theme [slug]` | Pick from curated + registry themes → `theme.css` |
+| 3. Compose | `/slide-compose [slug]` | Brief + theme → `deck.md` + HTML preview |
+| 4. Refine | `/slide-refine [slug] [iter]` | Playwright screenshots + AI critic loop |
+| 5. Export | `/slide-export [slug] [pdf\|pptx\|both]` | Final PDF + PPTX |
+
+### Gallery
 
 ```
-/slide-refine hangul-typography 3
+/slide-gallery
 ```
-3 rounds of Playwright capture → slide-director + marp-design-critic review → auto-edits.
 
+Opens a browser-based filterable grid of all 63 themes. Click any card to see all 7 sampler slides rendered in that theme. Copy the `/slide-theme <slug>` command back into Claude to apply.
+
+Three gallery modes:
+- **Mood Match** (default, ~30s) — 3 quiz questions → 5–8 recommendations
+- **Full Gallery** (browser) — all 63 themes
+- **Personal Preview** — your own deck rendered against 5 candidate themes
+
+## Design systems
+
+### Hand-crafted themes (Tier 2, quality ceiling)
+
+**Minimalist Premium track**
+- **Obsidian Mono** — quiet confidence, cream + deep ink + terracotta. Executive briefings, architecture talks.
+- **Arctic Serif** — cool gray + navy, Noto Serif display, built-in footnote rail. Research, policy, academic.
+
+**Editorial track**
+- **Kinfolk Serif** — cream paper + burgundy, serif display + sans body. Brand narratives, cultural talks.
+- **Wired Grid** — monochrome + electric orange, visible grid decoration, mono overlines. Keynotes, trend reports.
+
+### Brand registry (Tier 3, 59 themes on-demand)
+
+Every brand listed in [`assets/design-systems/registry.json`](assets/design-systems/registry.json). Categories:
+
+- **AI & LLM** — Claude, Cohere, ElevenLabs, Mistral, Ollama, Replicate, RunwayML, Together, VoltAgent, x.ai, MiniMax
+- **Dev tools** — Cursor, Expo, Lovable, Raycast, Superhuman, Vercel, Warp, Opencode
+- **Backend / DevOps** — ClickHouse, Composio, HashiCorp, MongoDB, PostHog, Sanity, Sentry, Supabase
+- **Productivity** — Cal, Intercom, Linear, Mintlify, Notion, Resend, Semrush, Zapier
+- **Design & creative** — Airtable, Clay, Figma, Framer, Miro, Webflow
+- **Fintech** — Coinbase, Kraken, Revolut, Stripe, Wise
+- **Automotive** — BMW, Ferrari, Lamborghini, Renault, Tesla
+- **Media & consumer** — Apple, IBM, NVIDIA, Pinterest, SpaceX, Spotify, Uber
+- **Travel / commerce** — Airbnb
+
+```bash
+# See everything available
+node scripts/forge-theme.mjs list
+
+# Generate any brand on first request
+/slide-theme stripe           # on-demand forge → cached
+/slide-theme linear.app
+/slide-theme tesla --force    # regenerate even if cached
 ```
-/slide-export hangul-typography both
+
+Generated themes:
+- Land in `assets/design-systems/generated/<slug>.{design.md,marp.css}`
+- Pass the same structural validator as hand-crafted themes
+- Load Pretendard + all CJK + Inter via `theme-foundation.css`
+- Include "Inspired by <brand>. Not affiliated." disclaimers
+- Regenerable — delete cache and re-request to pick up upstream changes
+
+Acknowledgement: brand metadata is synthesized from publicly visible aesthetics, inspired by [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) (MIT) and [getdesign.md](https://getdesign.md). No proprietary content is redistributed.
+
+## Autopilot presets
+
+Six presets cover 80% of deck types. Each pins all 16 downstream decisions (audience, narrative pattern, tone, track, theme, accent policy, refine count, export formats, language, composition hints).
+
+| Preset | Theme | Narrative pattern | Default language | Refine | Export |
+|---|---|---|---|---|---|
+| `investor-pitch` | stripe | problem-insight-solution-ask | en | 3 | PDF + editable PPTX |
+| `team-narrative` | kinfolk-serif | five-beats | ko | 2 | PDF |
+| `research-talk` | arctic-serif | question-exploration-answer | en | 3 | PDF + editable PPTX |
+| `launch-keynote` | wired-grid | five-beats (provocative) | en | 4 | PDF + PPTX |
+| `executive-brief` | obsidian-mono | situation-complication-resolution | en | 3 | PDF + editable PPTX |
+| `product-launch` | apple | hero-support-detail-proof-cta | en | 3 | PDF + editable PPTX |
+
+Override any field at invocation:
+
+```bash
+/slide-auto "Topic" --preset investor-pitch --lang ja --force-theme notion
 ```
-Get `deck.pdf` + `deck.pptx`.
 
 ## Project output structure
 
 ```
 your-project/
 ├── .claude/
-│   └── marp-slide-studio.local.md    # team defaults (optional)
+│   └── marp-slide-studio.local.md      # optional team defaults
 └── slides/
-    └── <slug>/
-        ├── brief.md                   # narrative brief
-        ├── theme.css                  # copied + customized
-        ├── deck.md                    # Marp markdown
+    └── <deck-slug>/
+        ├── brief.md                     # narrative brief
+        ├── theme.css                    # applied theme (copied / customized)
+        ├── deck.md                      # Marp markdown source
         ├── out/
-        │   ├── deck.html
+        │   ├── deck.html                # preview
         │   ├── deck.pdf
         │   ├── deck.pptx
-        │   └── screenshots/
-        └── .qa-log.md                 # refine loop history
+        │   └── screenshots/             # per-slide PNGs for refine loop
+        ├── .qa-log.md                   # refine-loop iteration log
+        └── .auto-log.md                 # autopilot decision audit trail
 ```
 
-Add to your `.gitignore`:
+Recommended `.gitignore`:
+
 ```
 slides/*/out/
 slides/*/.qa-log.md
+slides/*/.auto-log.md
+.claude/*.local.md
 ```
 
-## What makes slides better than pptx/keynote?
+## Typography
 
-1. **Injected design systems, not templates.** The AI reads `DESIGN.md` (philosophy, do's/don'ts, token roles) before generating. Templates give you CSS; design systems give you a point of view.
-2. **Hard anti-patterns encoded.** 18 specific things the composer refuses to produce (three-column card mosaic, purple gradients, stock icons, "Thank You / Questions?" finale, …). See `assets/anti-patterns.md`.
-3. **Narrative-first composition.** Every slide must declare its one-sentence message. No beat, no slide. See `assets/narrative-patterns.md`.
-4. **Visual review loop.** Playwright captures each slide, two specialist agents evaluate structure and aesthetics, edits apply automatically. pptx has no such loop.
-5. **Korean-first typography.** Pretendard baked in. Line-height 1.7 for body. No italicized Hangul. See `skills/korean-typography/`.
-6. **Force choices over options.** One accent color. Two typefaces max. Three bullets max. Monumental or hero, not both. Constraint produces style.
+Two authoritative references:
+
+- [`assets/typography/cjk-scale.md`](assets/typography/cjk-scale.md) — unified Korean / Japanese / Chinese scale, per-language font stacks, line-height calibration, mixed-script handling
+- [`assets/typography/latin-scale.md`](assets/typography/latin-scale.md) — English and other Latin-script calibration, ligatures, hyphenation, smart quotes
+
+Every theme imports [`assets/theme-foundation.css`](assets/theme-foundation.css), which provides:
+
+- Pretendard Variable + Noto Sans JP/SC/TC + Inter (CDN)
+- Per-language CSS variables (`--font-body-ko`, `--font-body-ja`, etc.)
+- `:lang()` cascade rules for line-height, font family, italic discipline
+- Numeral feature-settings for data contexts (tabular figures)
+- Latin ligature settings for English/Latin decks
+
+## CI integration
+
+`.github/workflows/slide-ci.yml` automatically renders changed decks on pull request:
+
+1. Detects changed files under `slides/*/deck.md` and `slides/*/theme.css`
+2. Renders each deck with marp-cli
+3. Captures per-slide 1920×1080 PNG screenshots with Playwright
+4. Diffs against the base branch screenshots using pixelmatch
+5. Posts a markdown table on the PR with per-slide change percentages
+6. Uploads HTML + PDF + PPTX + PNG as workflow artifacts
+
+Security: all user-controllable inputs (`inputs.slug`, git-discovered directory names) are validated against `[a-zA-Z0-9._-]{1,64}` and routed through `env:` blocks to prevent workflow injection.
 
 ## Extending
 
-### Adding a new theme
+### Add a new theme (hand-crafted, Tier 2)
 
-1. `cp assets/design-systems/minimalist-premium/obsidian-mono.{design.md,marp.css} assets/design-systems/<track>/<new-name>.{design.md,marp.css}`
-2. Edit the `@theme` line in the CSS.
-3. Redefine tokens in `:root`.
-4. Ensure all 7 required layout classes still render correctly. See `skills/marp-theme-engineer/SKILL.md` for the checklist.
-5. Rewrite `DESIGN.md` to match.
+```bash
+cp assets/design-systems/minimalist-premium/obsidian-mono.{design.md,marp.css} \
+   assets/design-systems/<track>/<new-theme>.{design.md,marp.css}
+```
 
-### Adding a new layout
+Edit the `@theme` line, redefine tokens in `:root`, ensure all 7 required layout classes (hero, monumental, split, metric, divider, quote, enumerated) still render, update the DESIGN.md philosophy section. See [`skills/marp-theme-engineer/SKILL.md`](skills/marp-theme-engineer/SKILL.md) for the checklist.
 
-1. Create `assets/layouts/<name>.md` with the markdown template + required CSS.
-2. Add the `section.<name>` rule to every theme CSS.
-3. Update `assets/layouts/README.md` index.
-4. Update `skills/slide-composer/SKILL.md` layout-class mapping.
+### Add a new brand to the registry (Tier 3)
 
-### Adding a new narrative pattern
+Edit [`assets/design-systems/registry.json`](assets/design-systems/registry.json) and add an entry matching the schema. Then:
 
-Edit `assets/narrative-patterns.md` — add the pattern with act structure. It becomes available automatically to `/slide-new`.
+```
+/slide-theme <your-brand>
+```
+
+The theme-forger agent reads [`assets/transform-prompt.md`](assets/transform-prompt.md), synthesizes a complete `.design.md` + `.marp.css` pair, and validates via `scripts/validate-theme.mjs`.
+
+### Add a new layout
+
+1. Create `assets/layouts/<layout-name>.md` with markdown template + CSS requirements
+2. Add a `section.<layout-name>` rule to every theme CSS (required for all hand-crafted; optional for Korean-only layouts like `vertical-writing`, `ruby`, `banner-caption`)
+3. Update [`assets/layouts/README.md`](assets/layouts/README.md) layout index
+4. Update [`skills/slide-composer/SKILL.md`](skills/slide-composer/SKILL.md) layout-class mapping
+
+### Add a new narrative pattern
+
+Edit [`assets/narrative-patterns.md`](assets/narrative-patterns.md) with the new pattern's act structure. Available immediately to `/slide-new` and `/slide-auto`.
 
 ## Components reference
 
-- **Skills** (7): `slide-brainstorming`, `slide-theme-curator`, `slide-composer`, `slide-visual-qa`, `slide-export`, `marp-theme-engineer`, `korean-typography`
-- **Agents** (2): `slide-director` (structural review), `marp-design-critic` (aesthetic review)
-- **Assets**: 18 anti-patterns, 5 narrative patterns, 7 layouts, 2 typography guides, 2 design systems
+| Component | Count | Files |
+|---|---|---|
+| **User-invoked skills** | 6 | `slide-autopilot`, `slide-brainstorming`, `slide-theme-curator`, `slide-theme-gallery`, `slide-composer`, `slide-visual-qa`, `slide-export`, `theme-forger` |
+| **Reference skills** | 2 | `marp-theme-engineer`, `cjk-typography` |
+| **Agents** | 3 | `slide-director`, `marp-design-critic`, `theme-forger` |
+| **Design systems** | 63 | 4 curated + 59 registry-driven |
+| **Layouts** | 10 | 7 core + 3 CJK-specific (vertical-writing, ruby-annotation, banner-caption) |
+| **Typography guides** | 3 | `cjk-scale.md`, `latin-scale.md`, `mixed-language.md` |
+| **Anti-patterns** | 18 | Documented in [`assets/anti-patterns.md`](assets/anti-patterns.md) |
+| **Narrative patterns** | 5 | Documented in [`assets/narrative-patterns.md`](assets/narrative-patterns.md) |
+| **Autopilot presets** | 6 | `investor-pitch`, `team-narrative`, `research-talk`, `launch-keynote`, `executive-brief`, `product-launch` |
 
 ## Limitations
 
-- PPTX export in non-editable mode renders slides as images. Editable mode preserves text but sacrifices some CSS fidelity. Decide per deck.
-- Fonts require internet at render time unless you bundle locally.
-- The refine loop currently runs at 1920×1080 only; responsive/mobile decks are out of scope.
-- Korean-first; pure English decks work but the typography tuning is over-engineered for them.
+- **PPTX non-editable mode renders as images.** Editable mode preserves text but sacrifices some CSS fidelity. Decide per deck.
+- **Fonts require internet at render time** unless you bundle locally via `scripts/fetch-fonts.sh`.
+- **Refine loop currently runs at 1920×1080 only.** Responsive / mobile decks are out of scope.
+- **Generated themes are ~80–90% of hand-crafted quality.** For production-critical decks, always run `/slide-refine` after composing, and consider promoting heavily-used generated themes to Tier 2 by hand-editing.
+- **Brand attribution is aesthetic-only.** Registry metadata synthesizes publicly visible brand aesthetics. Themes carry "Inspired by <brand>. Not affiliated." disclaimers. For production decks representing a brand, consult that brand's official guidelines.
 
 ## License
 
-MIT. Design-system files reference their original brand inspirations; the CSS implementations are original work.
+MIT. See [LICENSE](LICENSE).
+
+Design-system references acknowledge:
+- [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) (MIT) — inspiration for the registry format
+- [getdesign.md](https://getdesign.md) — inspiration for the brand catalog
+
+Fonts bundled via CDN are licensed under SIL Open Font License 1.1:
+- [Pretendard](https://github.com/orioncactus/pretendard)
+- [Noto Sans JP / SC / TC / KR](https://fonts.google.com/noto)
+- [Inter](https://rsms.me/inter/)
+- [JetBrains Mono](https://www.jetbrains.com/lp/mono/)
+
+## Credits
+
+Built on [Marp](https://marp.app) — the markdown presentation ecosystem by the Marp team. This plugin adds a Claude Code workflow layer on top of marp-cli, marp-core, and Marpit.
+
+Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) (if present) or open an issue.

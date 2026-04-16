@@ -1,6 +1,11 @@
-# Layout: Vertical Writing (세로쓰기)
+# Layout: Vertical Writing (세로쓰기 · 縦書き · 竖排)
 
-Korean vertical writing for editorial or ceremonial effect. Rare in modern slides but powerful for cultural/historical topics, quotations from classical sources, or when the deck needs a moment of reverence.
+CJK vertical writing for editorial or ceremonial effect. Rare in modern slides but powerful for:
+- **Korean (세로쓰기)**: classical literature, humanities, cultural reverence
+- **Japanese (縦書き)**: still common in print media; formal/traditional contexts
+- **Chinese (竖排)**: classical poetry, traditional documents
+
+Uses CSS `writing-mode: vertical-rl` (right-to-left column order, traditional CJK). Works with any CJK language via `:lang()` selectors.
 
 ## Markdown
 

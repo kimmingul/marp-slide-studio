@@ -58,15 +58,17 @@ How to collapse:
 - Inverse (the brand's "dark mode" base or black/near-black) → `--bg-inv`
 - If the brand has multiple signature colors (e.g., Figma's multi-color), pick the ONE most recognizable and note the rest in the DESIGN.md prose but do not put them in tokens. Scarcity makes accent powerful.
 
-### Rule 3 — Korean-first typography injection
+### Rule 3 — Multi-language typography injection
 
 Every generated theme MUST:
-- Import Pretendard Variable as primary body font (via CDN `@import` at top)
-- Include Pretendard as a fallback even if the brand uses a Latin-only font
-- Set `--lh-body: 1.7` or higher (Korean body floor)
-- Set body `font-size` floor at clamp(22px, …, 26px)
-- Block `text-transform: uppercase` from being applied globally on `section`
-- Add `:lang(ko) em { font-style: normal; font-weight: 500; }` to prevent italicized Hangul
+- Import `assets/theme-foundation.css` at the top via `@import url('../../theme-foundation.css');`
+  - This provides Pretendard + Noto Sans JP/SC/TC + Inter CDN imports
+  - Provides `:lang()` cascades for line-height, font family, italic discipline across KR/JA/ZH-Hans/ZH-Hant/Latin
+- Set `--font-body: var(--font-body-ko)` (or `ja`, `zh-hans`, `zh-hant`, `latin` per theme's primary language) — themes declare their AUTHORED language; `:lang()` in the foundation swaps fonts for other languages
+- Set `--lh-body: 1.7` or higher for CJK-primary themes; `1.55` for Latin-primary themes
+- Set body `font-size` floor at clamp(22px, …, 26px) for CJK; clamp(20px, …, 24px) for Latin
+- Never apply `text-transform: uppercase` on plain `section` selector (breaks CJK)
+- The foundation automatically handles italic overrides via `:lang(ko) em`, `:lang(ja) em`, etc.
 
 Mapping for brand fonts:
 
