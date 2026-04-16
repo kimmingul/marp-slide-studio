@@ -217,10 +217,20 @@ html, body {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 120ms ease, color 120ms ease;
 }
 .card .actions button:hover { background: rgba(255, 255, 255, 0.03); }
 .card .actions button + button { border-left: 1px solid var(--rule); }
-.card .actions .primary { color: var(--accent); }
+.card .actions .primary { color: var(--accent); font-weight: 600; }
+.card .actions .primary.copied {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent-ink);
+  background-color: var(--accent);
+  letter-spacing: 0.04em;
+}
 
 .empty-state {
   grid-column: 1 / -1;

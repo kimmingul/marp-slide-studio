@@ -149,17 +149,26 @@
     const desc = el('div', { class: 'desc', text: t.mood || '' });
 
     // Actions
+    // Primary  : Use (cached) or Forge (on-demand) — copies /slide-theme <slug> to clipboard
+    // Secondary: Details — opens modal with 7 sampler slides (cached) or palette+meta (on-demand)
     const actions = el('div', { class: 'actions' });
+    const isOnDemand = t.tier === 'on-demand';
     const primary = el('button', {
       type: 'button',
       class: 'primary',
-      'data-act': t.tier === 'on-demand' ? 'forge' : 'use',
-      text: t.tier === 'on-demand' ? '⚡ Forge' : 'Use',
+      'data-act': isOnDemand ? 'forge' : 'use',
+      title: isOnDemand
+        ? 'Copy /slide-theme ' + t.slug + ' — paste in Claude Code to generate'
+        : 'Copy /slide-theme ' + t.slug + ' — paste in Claude Code to apply',
+      text: isOnDemand ? '⚡ Forge' : 'Use',
     });
     const secondary = el('button', {
       type: 'button',
-      'data-act': 'info',
-      text: t.tier === 'on-demand' ? 'Meta' : 'View',
+      'data-act': 'details',
+      title: isOnDemand
+        ? 'Open details (palette, mood, hallmarks)'
+        : 'Open details (all 7 sampler slides)',
+      text: 'Details',
     });
     actions.appendChild(primary);
     actions.appendChild(secondary);
@@ -169,11 +178,36 @@
     );
 
     card.addEventListener('click', (e) => {
-      const act = e.target.closest('[data-act]')?.dataset.act;
-      if (act === 'forge') { forgeInstructions(t); return; }
+      const btn = e.target.closest('[data-act]');
+      const act = btn?.dataset.act;
+      if (act === 'use' || act === 'forge') {
+        e.stopPropagation();
+        copySlideCommand(t, btn);
+        return;
+      }
+      // 'details' button OR click on card background → open modal
       openModal(t);
     });
     return card;
+  }
+
+  function copySlideCommand(theme, btn) {
+    const cmd = `/slide-theme ${theme.slug}`;
+    navigator.clipboard.writeText(cmd).then(
+      () => flashCopied(btn, theme),
+      () => { btn.textContent = '✗ Copy failed'; }
+    );
+  }
+
+  function flashCopied(btn, theme) {
+    const isForge = btn.dataset.act === 'forge';
+    const original = isForge ? '⚡ Forge' : 'Use';
+    btn.textContent = isForge ? 'Copied · paste to forge' : 'Copied · paste to apply';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 2200);
   }
 
   function openModal(t) {
