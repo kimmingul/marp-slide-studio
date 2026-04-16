@@ -1,0 +1,414 @@
+/* @theme kinfolk-serif */
+/* Marp Slide Studio — Editorial Track */
+/* Requires: Pretendard Variable + Noto Serif KR (loaded via CDN below) */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500;600;700&display=swap');
+
+:root {
+  /* Color tokens */
+  --bg: #EFE9DC;
+  --bg-inv: #1A1814;
+  --fg: #1A1814;
+  --fg-inv: #EFE9DC;
+  --muted: #6B6257;
+  --rule: #C8BFA9;
+  --accent: #6E0F1E;
+  --accent-ink: #EFE9DC;
+
+  /* Fonts */
+  --font-body: 'Pretendard Variable', 'Pretendard', -apple-system,
+               BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  --font-display: 'Noto Serif KR', 'Pretendard Variable', serif;
+  --font-mono: 'D2Coding', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Scale */
+  --fs-display: clamp(140px, 12vw, 220px);
+  --fs-headline: clamp(52px, 5vw, 80px);
+  --fs-subhead: clamp(28px, 2.2vw, 40px);
+  --fs-body-l: clamp(26px, 1.8vw, 32px);
+  --fs-body: clamp(22px, 1.5vw, 26px);
+  --fs-caption: clamp(14px, 0.9vw, 16px);
+
+  --lh-display: 0.98;
+  --lh-headline: 1.2;
+  --lh-body: 1.75;
+
+  --ls-display: -0.025em;
+  --ls-headline: -0.015em;
+  --ls-overline: 0.14em;
+}
+
+/* ── Base section ─────────────────────────────────────────────── */
+
+section {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  padding: 5rem 6rem;
+  font-feature-settings: "tnum" 1, "kern" 1;
+}
+
+section h1, section h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--ls-headline);
+  margin: 0 0 1.5rem;
+}
+
+section h1 {
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+}
+section h2 {
+  font-size: var(--fs-subhead);
+  line-height: 1.25;
+  font-weight: 500;
+  font-family: var(--font-body); /* subheads in sans */
+  letter-spacing: -0.01em;
+}
+section h3 {
+  font-size: calc(var(--fs-subhead) * 0.78);
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+section p {
+  max-width: 30ch;
+  margin: 0 0 1rem;
+}
+section p + p { text-indent: 1.5em; }  /* editorial paragraph flow */
+section p:first-of-type { text-indent: 0; }
+
+section strong { font-weight: 600; }
+section em { font-style: italic; }
+section a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+
+section code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: #E3DCCB;
+  padding: 0.1em 0.35em;
+}
+section pre {
+  background: #E3DCCB;
+  padding: 1.5rem;
+  font-size: calc(var(--fs-body) * 0.8);
+  line-height: 1.5;
+  overflow: auto;
+}
+
+section blockquote {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+}
+
+section hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2rem 0;
+}
+
+/* Images: cream border for printed feel */
+section img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+}
+section figure { margin: 0; }
+section figcaption {
+  font-size: var(--fs-caption);
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+section figcaption::before { content: "— "; }
+
+/* Tables */
+section table { border-collapse: collapse; width: 100%; font-feature-settings: "tnum" 1; }
+section th, section td { padding: 0.75rem 0.5rem; text-align: left; border-bottom: 1px solid var(--rule); }
+section th {
+  font-weight: 600;
+  border-top: 1.5px solid var(--fg);
+  border-bottom: 1.5px solid var(--fg);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+
+/* Pagination: editorial page numbers */
+section::after {
+  position: absolute;
+  right: 2.5rem;
+  bottom: 2rem;
+  font-size: var(--fs-caption);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+}
+
+/* ── Layout: hero ─────────────────────────────────────────────── */
+
+section.hero {
+  background: var(--bg-inv);
+  color: var(--fg-inv);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 5rem 6rem;
+}
+section.hero::after { display: none; }
+section.hero .overline {
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.7;
+}
+section.hero h1 {
+  align-self: center;
+  font-family: var(--font-display);
+  font-size: clamp(88px, 7.5vw, 160px);
+  line-height: 0.98;
+  letter-spacing: var(--ls-display);
+  font-weight: 500;
+  max-width: 20ch;
+}
+section.hero .support {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-l);
+  max-width: 48ch;
+  opacity: 0.85;
+  font-style: italic;
+}
+
+/* ── Layout: monumental ────────────────────────────────────────── */
+
+section.monumental {
+  display: grid;
+  place-content: center start;
+  padding: 6rem;
+}
+section.monumental::after { display: none; }
+section.monumental h1 {
+  font-family: var(--font-display);
+  font-size: clamp(72px, 6.5vw, 128px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  max-width: 20ch;
+  font-style: normal;
+}
+
+/* ── Layout: split ────────────────────────────────────────────── */
+
+section.split {
+  display: grid;
+  gap: 3rem;
+  align-items: start;
+  padding: 4rem 6rem;
+}
+section.split-60-40 { grid-template-columns: 3fr 2fr; }
+section.split-55-45 { grid-template-columns: 11fr 9fr; }
+section.split-40-60 { grid-template-columns: 2fr 3fr; }
+section.split .col-main h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+  font-weight: 600;
+  letter-spacing: var(--ls-headline);
+  margin-bottom: 1.5rem;
+}
+section.split .col-main p { max-width: 28ch; }
+
+/* ── Layout: metric ───────────────────────────────────────────── */
+
+section.metric {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 4rem 5rem;
+}
+section.metric .metric-label {
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+}
+section.metric .metric-value {
+  font-family: var(--font-display);
+  font-size: clamp(200px, 18vw, 380px);
+  line-height: 0.9;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  align-self: center;
+  color: var(--accent);
+}
+section.metric .metric-value .unit {
+  font-size: 0.4em;
+  font-weight: 400;
+  vertical-align: 0.8em;
+  opacity: 0.8;
+  font-style: italic;
+}
+section.metric .metric-caption {
+  font-size: var(--fs-body-l);
+  line-height: 1.6;
+  max-width: 42ch;
+}
+
+/* ── Layout: divider ──────────────────────────────────────────── */
+
+section.divider {
+  display: grid;
+  grid-template-rows: 1fr auto auto 1fr;
+  padding: 5rem 6rem;
+}
+section.divider::after { display: none; }
+section.divider .divider-number {
+  grid-row: 2;
+  font-family: var(--font-display);
+  font-size: clamp(140px, 12vw, 240px);
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "onum" 1; /* old-style numerals */
+}
+section.divider .divider-title {
+  grid-row: 3;
+  font-family: var(--font-display);
+  font-size: clamp(40px, 3.8vw, 60px);
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+section.divider .divider-subtitle {
+  grid-row: 4;
+  align-self: end;
+  font-size: var(--fs-body-l);
+  font-style: italic;
+  color: var(--muted);
+  max-width: 50ch;
+}
+
+/* ── Layout: quote ────────────────────────────────────────────── */
+
+section.quote {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 6rem 7rem;
+  gap: 3rem;
+}
+section.quote blockquote {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 3.8vw, 72px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+  font-style: italic;
+  margin: 0;
+  max-width: 24ch;
+  align-self: center;
+  text-indent: -0.4em;
+}
+section.quote blockquote::before {
+  content: "\201C";
+  color: var(--accent);
+  font-weight: 600;
+  font-style: normal;
+}
+section.quote blockquote::after { content: "\201D"; font-style: normal; }
+section.quote .attribution {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--fs-body);
+}
+section.quote .attribution::before {
+  content: "";
+  width: 2rem;
+  height: 1px;
+  background: var(--fg);
+  opacity: 0.5;
+}
+section.quote .attribution .name { font-weight: 600; }
+section.quote .attribution .role { color: var(--muted); font-style: italic; }
+
+/* ── Layout: enumerated ───────────────────────────────────────── */
+
+section.enumerated {
+  padding: 4rem 6rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
+}
+section.enumerated h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+  letter-spacing: var(--ls-headline);
+  max-width: 22ch;
+  font-weight: 600;
+}
+section.enumerated .enum {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  align-content: start;
+}
+section.enumerated .enum li {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  padding-top: 1rem;
+  border-top: 1px solid var(--fg);
+}
+section.enumerated .enum .num {
+  font-family: var(--font-display);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-overline);
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+section.enumerated .enum h3 {
+  font-size: var(--fs-subhead);
+  line-height: 1.25;
+  font-weight: 600;
+  margin: 0;
+}
+section.enumerated .enum p {
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Drop cap utility */
+.drop-cap::first-letter {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 4.5em;
+  float: left;
+  line-height: 0.9;
+  padding: 0.1em 0.15em 0 0;
+  color: var(--accent);
+}
+
+.overline {
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-overline);
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+}

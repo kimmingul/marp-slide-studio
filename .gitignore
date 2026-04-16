@@ -1,0 +1,14 @@
+# Local team overrides
+.claude/*.local.md
+
+# Generated artifacts
+slides/*/out/
+slides/*/.qa-log.md
+
+# Node
+node_modules/
+.npm/
+
+# OS
+.DS_Store
+Thumbs.db
