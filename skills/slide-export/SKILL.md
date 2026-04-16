@@ -1,6 +1,6 @@
 ---
 name: slide-export
-description: Use when the user says "/slide-export", "PDF 내보내기", "PPTX 만들어줘", or needs final deliverables from a Marp deck. Runs marp CLI via npx to produce deck.pdf and/or deck.pptx in ./slides/<slug>/out/.
+description: Use when the user says "/slide-export", "PDF 내보내기", "PPTX 만들어줘", or needs final deliverables from a Marp deck. Runs marp CLI via npx to produce deck.pdf and/or deck.pptx inside each deck's slides output directory.
 argument-hint: "[slug] [pdf|pptx|both] [--editable]"
 allowed-tools: Read, Glob, Bash(bash:*, npx:*)
 ---

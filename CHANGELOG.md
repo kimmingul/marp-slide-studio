@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.6.2 — 2026-04-17
+
+### Fixed — Claude Desktop plugin validator compatibility
+
+Claude Desktop (organization-level plugin installer) rejects `.difypkg`-style ZIP uploads that contain SKILL.md frontmatter fields with angle-bracket placeholders — its validator reads `<xxx>` as XML tags and blocks the plugin. Six offending frontmatter fields renamed to uppercase placeholders (shell-style) or rewritten in natural language.
+
+**Affected files** (frontmatter `description` or `argument-hint`):
+- `skills/slide-brainstorming/SKILL.md` — description: `./slides/<slug>/brief.md` → "a brief.md file inside the deck's slides directory"
+- `skills/slide-export/SKILL.md` — description: `./slides/<slug>/out/` → "inside each deck's slides output directory"
+- `skills/slide-theme-curator/SKILL.md` — description: `./slides/<slug>/theme.css` → "the deck's theme.css"
+- `skills/slide-autopilot/SKILL.md` — argument-hint: `--preset <name>` → `--preset PRESET`
+- `skills/slide-theme-gallery/SKILL.md` — argument-hint: `--preview <slug>` → `--preview SLUG`
+- `skills/theme-forger/SKILL.md` — argument-hint: `--to <path>` → `--to PATH`
+
+Body content of SKILL.md files (outside YAML frontmatter) still uses `<slug>` freely — that's pedagogically clearer and not validated.
+
+### Released as
+- GitHub release `v0.6.2` with `marp-slide-studio-v0.6.2.zip` asset — uploads cleanly into Claude Desktop organization plugin installer.
+
 ## 0.6.1 — 2026-04-17
 
 ### Added

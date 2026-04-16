@@ -1,6 +1,6 @@
 ---
 name: slide-brainstorming
-description: Use when starting a new Marp slide deck or when the user says "/slide-new", "새 슬라이드", "덱 시작", "슬라이드 브리프". Extracts a narrative brief from the user via 5 questions and writes it to ./slides/<slug>/brief.md before any composing happens.
+description: Use when starting a new Marp slide deck or when the user says "/slide-new", "새 슬라이드", "덱 시작", "슬라이드 브리프". Extracts a narrative brief from the user via 5 questions and writes it to a brief.md file inside the deck's slides directory before any composing happens.
 argument-hint: "[topic description]"
 allowed-tools: Read, Write, Glob, AskUserQuestion, Bash(mkdir:*, test:*)
 ---

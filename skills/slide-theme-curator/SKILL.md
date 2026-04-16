@@ -1,6 +1,6 @@
 ---
 name: slide-theme-curator
-description: Use when the user says "/slide-theme", "테마 선택", "테마 정해줘", "Stripe처럼", "Linear 스타일로", or names any of the 59 registry brands. Routes across a 3-tier catalog — curated themes (Tier 2), previously-generated themes (Tier 3 cache), and on-demand generation (Tier 3 fresh via theme-forger). Reads brief.md, proposes candidates, copies/generates the chosen theme into ./slides/<slug>/theme.css, and optionally customizes tokens.
+description: Use when the user says "/slide-theme", "테마 선택", "테마 정해줘", "Stripe처럼", "Linear 스타일로", or names any of the 59 registry brands. Routes across a 3-tier catalog — curated themes (Tier 2), previously-generated themes (Tier 3 cache), and on-demand generation (Tier 3 fresh via theme-forger). Reads brief.md, proposes candidates, copies or generates the chosen theme into the deck's theme.css, and optionally customizes tokens.
 argument-hint: "[slug] [track_or_brand]"
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash(cp:*, ls:*, node:*), Task
 ---

@@ -1,7 +1,7 @@
 ---
 name: theme-forger
 description: Use when a user requests a slide theme for a specific brand from the 59-brand registry — e.g. "Stripe처럼 테마 만들어줘", "Make a theme for Linear", "/slide-theme tesla". Also invoked automatically by slide-theme-curator when a requested brand is not in the curated (Tier 2) catalog. Orchestrates the Theme-Foundry pipeline — loads registry metadata, dispatches the theme-forger agent to generate DESIGN.md + Marpit CSS following assets/transform-prompt.md, validates output, caches result.
-argument-hint: "[brand-slug] [--to <path>]"
+argument-hint: "[brand-slug] [--to PATH]"
 allowed-tools: Read, Write, Edit, Glob, Bash(node:*, bash:*, test:*), Task
 ---
 

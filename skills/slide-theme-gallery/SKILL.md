@@ -1,7 +1,7 @@
 ---
 name: slide-theme-gallery
 description: Use when the user says "/slide-gallery", "테마 갤러리", "테마 비교해서 고르고 싶어", "테마 미리보기", or wants to browse themes visually before picking. Offers three modes — Mood Match quiz (3 questions → 5–8 recommendations), Full Gallery (browser opens with 63 themes grid), and Personal Preview (render the user's own deck against 5 candidate themes side-by-side).
-argument-hint: "[--mood|--full|--preview <slug>] [--refresh|--forge-all]"
+argument-hint: "[--mood|--full|--preview SLUG] [--refresh|--forge-all]"
 allowed-tools: Read, Write, Glob, AskUserQuestion, Bash(node:*, bash:*, open:*, test:*, mkdir:*, cp:*), Task
 ---
 

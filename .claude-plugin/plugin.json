@@ -1,6 +1,6 @@
 {
   "name": "marp-slide-studio",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Build sophisticated Marp presentations with AI — 63 themes grounded in real brand design systems, multilingual CJK + Latin typography (Korean, Japanese, Chinese, English), and a Playwright-powered visual review loop. Ships with an autopilot that runs brief → theme → compose → refine → export from a single command.",
   "author": {
     "name": "Min-Gul Kim"

@@ -1,7 +1,7 @@
 ---
 name: slide-autopilot
 description: Use when the user says "/slide-auto", "자동으로 덱 만들어줘", "전체 자동 진행", "autopilot", or wants the full pipeline (brainstorm → theme → compose → refine → export) to run without stepwise intervention. Collects ALL decisions upfront in either Express mode (3 questions, preset-driven) or Full mode (4 AskUserQuestion batches covering 16 fields), then runs the entire pipeline autonomously with no further prompts. Preserves partial artifacts on failure.
-argument-hint: "[topic] [--full] [--preset <name>] [--lang ko|en|ja|zh-Hans|zh-Hant] [--no-refine]"
+argument-hint: "[topic] [--full] [--preset PRESET] [--lang ko|en|ja|zh-Hans|zh-Hant] [--no-refine]"
 allowed-tools: Read, Write, Edit, Glob, Bash(node:*, bash:*, npx:*, mkdir:*, test:*, cp:*, open:*, ls:*), AskUserQuestion, Task
 ---
 
