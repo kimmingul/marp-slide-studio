@@ -1,0 +1,724 @@
+{
+  "$schema_version": "1",
+  "$readme": "Signature metadata for brands available via the theme-forger pipeline. Approximate brand colors and typography directions synthesized from publicly visible aesthetics. Inspired by VoltAgent/awesome-design-md (MIT) and getdesign.md. Not officially affiliated with any listed brand.",
+  "$generated_themes": "Stored in assets/design-systems/generated/<brand>.{design.md,marp.css}; regenerable via scripts/forge-theme.mjs",
+
+  "brands": {
+    "claude": {
+      "category": "ai-llm",
+      "suggested_track": "editorial",
+      "mood": "warm, thoughtful, literary",
+      "signature": {
+        "palette": ["#F4F1EA", "#1F1E1D", "#D97706", "#BC5A18"],
+        "accent_behavior": "warm terracotta accent on editorial cream; serif headlines",
+        "typography_direction": "Tiempos / Copernicus-style serif display + humanist sans body",
+        "density": "moderate",
+        "hallmarks": ["cream paper surface", "handwriting-adjacent serif", "terracotta warmth", "generous margins"]
+      }
+    },
+    "cohere": {
+      "category": "ai-llm",
+      "suggested_track": "editorial",
+      "mood": "vibrant, optimistic, tonally warm",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A0A0A", "#FF7557", "#39594D"],
+        "accent_behavior": "coral/salmon warmth against clean white; gradient backgrounds in hero moments",
+        "typography_direction": "geometric sans with slightly rounded terminals",
+        "density": "moderate",
+        "hallmarks": ["coral gradient washes", "generous whitespace", "rounded friendly geometry"]
+      }
+    },
+    "elevenlabs": {
+      "category": "ai-llm",
+      "suggested_track": "minimalist-premium",
+      "mood": "cinematic, audio-first, dark",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#0F172A", "#EAB308"],
+        "accent_behavior": "near-black base with subtle gold accent for product highlights",
+        "typography_direction": "neutral grotesque sans (Inter-family)",
+        "density": "sparse",
+        "hallmarks": ["waveform graphics", "black backdrop", "subtle gold/amber highlight"]
+      }
+    },
+    "minimax": {
+      "category": "ai-llm",
+      "suggested_track": "minimalist-premium",
+      "mood": "technical, controlled, monochrome",
+      "signature": {
+        "palette": ["#FAFAFA", "#0A0A0A", "#18181B", "#3B82F6"],
+        "accent_behavior": "monochrome surface + restrained blue accent for data",
+        "typography_direction": "neutral sans (Inter-family), tabular",
+        "density": "moderate",
+        "hallmarks": ["hairline rules", "data-forward layouts", "neutral palette"]
+      }
+    },
+    "mistral.ai": {
+      "category": "ai-llm",
+      "suggested_track": "minimalist-premium",
+      "mood": "crisp, scientific, orange-charged",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A0A0A", "#FA500F", "#FFB800"],
+        "accent_behavior": "signature orange accent (often paired with yellow) on white",
+        "typography_direction": "Inter-style neutral sans",
+        "density": "moderate",
+        "hallmarks": ["orange flame mark", "high-contrast white", "technical clarity"]
+      }
+    },
+    "ollama": {
+      "category": "ai-llm",
+      "suggested_track": "minimalist-premium",
+      "mood": "friendly, approachable, open-source",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#F5F5F5", "#0070F3"],
+        "accent_behavior": "near-monochrome with utilitarian blue link color",
+        "typography_direction": "neutral sans",
+        "density": "sparse",
+        "hallmarks": ["llama mascot illustration", "docs-first aesthetic", "high whitespace"]
+      }
+    },
+    "replicate": {
+      "category": "ai-llm",
+      "suggested_track": "minimalist-premium",
+      "mood": "developer-focused, restrained, functional",
+      "signature": {
+        "palette": ["#FFFFFF", "#0F0F0F", "#F4F4F5", "#000000"],
+        "accent_behavior": "pure monochrome; no chromatic accent; black-on-white brutalist simplicity",
+        "typography_direction": "Basis Grotesque or similar geometric sans + monospace for code",
+        "density": "sparse",
+        "hallmarks": ["monochrome-only", "model gallery grid", "code prominence"]
+      }
+    },
+    "runwayml": {
+      "category": "ai-llm",
+      "suggested_track": "editorial",
+      "mood": "cinematic, avant-garde, artist-facing",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#0F0F0F", "#E5E5E5"],
+        "accent_behavior": "near-monochrome with full-bleed video/image dominance; accent comes from content, not UI",
+        "typography_direction": "bold condensed sans display + neutral body",
+        "density": "sparse",
+        "hallmarks": ["full-bleed media", "bold condensed headlines", "cinematic black"]
+      }
+    },
+    "together.ai": {
+      "category": "ai-llm",
+      "suggested_track": "minimalist-premium",
+      "mood": "technical, research-oriented, collaborative",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A0A0A", "#1F2937", "#0EA5E9"],
+        "accent_behavior": "cool sky-blue accent on white",
+        "typography_direction": "neutral sans",
+        "density": "moderate",
+        "hallmarks": ["grid-dense data layouts", "light hairlines", "cool blue"]
+      }
+    },
+    "voltagent": {
+      "category": "ai-llm",
+      "suggested_track": "minimalist-premium",
+      "mood": "void-dark, premium, electric",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#0C0C0C", "#10B981"],
+        "accent_behavior": "void-black surface with emerald pulse accent",
+        "typography_direction": "geometric sans, slightly condensed",
+        "density": "moderate",
+        "hallmarks": ["near-pure-black", "emerald accent", "dot-grid backgrounds"]
+      }
+    },
+    "x.ai": {
+      "category": "ai-llm",
+      "suggested_track": "minimalist-premium",
+      "mood": "austere, black-void, monolithic",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#1C1C1C", "#999999"],
+        "accent_behavior": "pure monochrome; no color accent; grayscale hierarchy",
+        "typography_direction": "neutral sans, all-caps overlines",
+        "density": "sparse",
+        "hallmarks": ["pure black backdrop", "single X mark", "extreme minimalism"]
+      }
+    },
+
+    "cursor": {
+      "category": "dev-tools",
+      "suggested_track": "minimalist-premium",
+      "mood": "dark, fast, developer-native",
+      "signature": {
+        "palette": ["#0F0F10", "#FFFFFF", "#18181B", "#6366F1"],
+        "accent_behavior": "near-black base with indigo/purple accent",
+        "typography_direction": "Inter-family sans + JetBrains Mono for code",
+        "density": "moderate",
+        "hallmarks": ["dark IDE aesthetic", "indigo highlights", "code-forward"]
+      }
+    },
+    "expo": {
+      "category": "dev-tools",
+      "suggested_track": "minimalist-premium",
+      "mood": "friendly, pragmatic, mobile-first",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#F8F9FA", "#4630EB"],
+        "accent_behavior": "indigo/purple accent on clean white",
+        "typography_direction": "Inter-family sans",
+        "density": "moderate",
+        "hallmarks": ["documentation-grade clarity", "indigo accents", "mobile preview frames"]
+      }
+    },
+    "lovable": {
+      "category": "dev-tools",
+      "suggested_track": "editorial",
+      "mood": "warm, approachable, optimistic",
+      "signature": {
+        "palette": ["#FFFFFF", "#1A1A1A", "#FFE4EC", "#FF4088"],
+        "accent_behavior": "warm pink accent with soft pink tints",
+        "typography_direction": "humanist sans with rounded terminals",
+        "density": "moderate",
+        "hallmarks": ["pink gradient washes", "rounded shapes", "emoji-adjacent warmth"]
+      }
+    },
+    "opencode.ai": {
+      "category": "dev-tools",
+      "suggested_track": "minimalist-premium",
+      "mood": "technical, open, terminal-adjacent",
+      "signature": {
+        "palette": ["#0A0A0A", "#FFFFFF", "#1C1C1C", "#00DC82"],
+        "accent_behavior": "terminal-green accent on deep black",
+        "typography_direction": "monospace prominence + neutral sans",
+        "density": "moderate",
+        "hallmarks": ["terminal aesthetic", "green accent", "code-first"]
+      }
+    },
+    "raycast": {
+      "category": "dev-tools",
+      "suggested_track": "minimalist-premium",
+      "mood": "precise, polished, power-user",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A0A0A", "#F5F5F7", "#FF6363"],
+        "accent_behavior": "warm coral/red accent on near-white",
+        "typography_direction": "neutral sans, monospace for shortcuts",
+        "density": "moderate",
+        "hallmarks": ["keyboard shortcut chips", "coral accent", "command-palette UI"]
+      }
+    },
+    "superhuman": {
+      "category": "dev-tools",
+      "suggested_track": "minimalist-premium",
+      "mood": "premium dark, speed-obsessed",
+      "signature": {
+        "palette": ["#0E0F12", "#FFFFFF", "#1A1B1F", "#A78BFA"],
+        "accent_behavior": "dark surface with purple glow accent",
+        "typography_direction": "neutral sans with tight letter-spacing",
+        "density": "moderate",
+        "hallmarks": ["dark-native UI", "purple glow", "keyboard-driven"]
+      }
+    },
+    "vercel": {
+      "category": "dev-tools",
+      "suggested_track": "minimalist-premium",
+      "mood": "monolithic, pure, black-and-white",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#0A0A0A", "#FAFAFA"],
+        "accent_behavior": "pure monochrome; no chromatic accent; gradient-capable",
+        "typography_direction": "Geist Sans + Geist Mono",
+        "density": "sparse",
+        "hallmarks": ["Vercel triangle", "stark black/white", "Geist typography"]
+      }
+    },
+    "warp": {
+      "category": "dev-tools",
+      "suggested_track": "minimalist-premium",
+      "mood": "terminal-modern, precise, dark",
+      "signature": {
+        "palette": ["#0A0A0A", "#FFFFFF", "#171717", "#00E09E"],
+        "accent_behavior": "deep black with terminal-green accent",
+        "typography_direction": "JetBrains Mono prominence + Inter body",
+        "density": "moderate",
+        "hallmarks": ["terminal panes", "green accent", "syntax-highlighted type"]
+      }
+    },
+
+    "clickhouse": {
+      "category": "backend",
+      "suggested_track": "minimalist-premium",
+      "mood": "technical, data-forward, yellow-charged",
+      "signature": {
+        "palette": ["#FFFFFF", "#1A1A1A", "#FFCC33", "#FAFAFA"],
+        "accent_behavior": "signature yellow accent on clean white",
+        "typography_direction": "neutral sans",
+        "density": "dense",
+        "hallmarks": ["benchmark charts", "yellow highlight", "dense tables"]
+      }
+    },
+    "composio": {
+      "category": "backend",
+      "suggested_track": "minimalist-premium",
+      "mood": "developer-focused, integration-oriented",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A0A0A", "#F5F5F5", "#7C3AED"],
+        "accent_behavior": "violet accent on white",
+        "typography_direction": "neutral sans + monospace",
+        "density": "moderate",
+        "hallmarks": ["integration logos grid", "violet highlights", "docs-style"]
+      }
+    },
+    "hashicorp": {
+      "category": "backend",
+      "suggested_track": "minimalist-premium",
+      "mood": "enterprise, trustworthy, infrastructure",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#F2F2F3", "#1563FF"],
+        "accent_behavior": "corporate blue accent; multiple product sub-colors",
+        "typography_direction": "Klavika or similar geometric sans",
+        "density": "moderate",
+        "hallmarks": ["product color coding (Terraform purple, Vault gold)", "clean corporate"]
+      }
+    },
+    "mongodb": {
+      "category": "backend",
+      "suggested_track": "minimalist-premium",
+      "mood": "mature, technical, leaf-green",
+      "signature": {
+        "palette": ["#FFFFFF", "#001E2B", "#F5F5F5", "#00ED64"],
+        "accent_behavior": "bright green accent paired with deep teal-black",
+        "typography_direction": "Euclid Circular or similar geometric sans",
+        "density": "moderate",
+        "hallmarks": ["leaf-green highlights", "deep navy foundation", "docs-rich"]
+      }
+    },
+    "posthog": {
+      "category": "backend",
+      "suggested_track": "editorial",
+      "mood": "playful, irreverent, open-source",
+      "signature": {
+        "palette": ["#FFFFFF", "#1D4AFF", "#F9BD2B", "#000000"],
+        "accent_behavior": "blue + yellow + black trio — vibrant playful",
+        "typography_direction": "Matter-style geometric sans",
+        "density": "moderate",
+        "hallmarks": ["hedgehog mascot energy", "blue/yellow duotone", "chart-dense"]
+      }
+    },
+    "sanity": {
+      "category": "backend",
+      "suggested_track": "editorial",
+      "mood": "editorial, content-first, warm",
+      "signature": {
+        "palette": ["#F2F2EE", "#101112", "#F03E2F", "#E1E1DC"],
+        "accent_behavior": "signature red/coral accent on warm cream",
+        "typography_direction": "Inter-family body + potential serif for editorial moments",
+        "density": "moderate",
+        "hallmarks": ["warm cream canvas", "red accent", "content studio framing"]
+      }
+    },
+    "sentry": {
+      "category": "backend",
+      "suggested_track": "minimalist-premium",
+      "mood": "technical, dashboard-dense, alert",
+      "signature": {
+        "palette": ["#0F0C29", "#FFFFFF", "#302A65", "#FF45A8"],
+        "accent_behavior": "pink-purple accent on deep purple-black",
+        "typography_direction": "Rubik-style geometric sans",
+        "density": "dense",
+        "hallmarks": ["deep purple backdrop", "pink accent", "error dashboard aesthetic"]
+      }
+    },
+    "supabase": {
+      "category": "backend",
+      "suggested_track": "minimalist-premium",
+      "mood": "open-source, developer-native, green",
+      "signature": {
+        "palette": ["#1C1C1C", "#FFFFFF", "#171717", "#3ECF8E"],
+        "accent_behavior": "emerald accent on near-black",
+        "typography_direction": "Custom Supabase Display sans + JetBrains Mono",
+        "density": "moderate",
+        "hallmarks": ["emerald green", "dark-native", "SQL prominence"]
+      }
+    },
+
+    "cal": {
+      "category": "productivity",
+      "suggested_track": "minimalist-premium",
+      "mood": "calm, scheduling-focused, clean",
+      "signature": {
+        "palette": ["#FFFFFF", "#111111", "#F3F4F6", "#111111"],
+        "accent_behavior": "pure monochrome; minimal chromatic accent",
+        "typography_direction": "Inter-family sans",
+        "density": "sparse",
+        "hallmarks": ["time-slot grids", "flush-left minimalism", "no chrome"]
+      }
+    },
+    "intercom": {
+      "category": "productivity",
+      "suggested_track": "editorial",
+      "mood": "conversational, warm-corporate, approachable",
+      "signature": {
+        "palette": ["#FFFFFF", "#0F172A", "#F9FAFB", "#2563EB"],
+        "accent_behavior": "friendly blue accent on white; warm tints",
+        "typography_direction": "Söhne-family or Inter sans",
+        "density": "moderate",
+        "hallmarks": ["speech-bubble motifs", "warm blue", "illustration-rich"]
+      }
+    },
+    "linear.app": {
+      "category": "productivity",
+      "suggested_track": "minimalist-premium",
+      "mood": "precise, software-native, dark-elegant",
+      "signature": {
+        "palette": ["#08090A", "#FFFFFF", "#1C1D20", "#5E6AD2"],
+        "accent_behavior": "near-black surface with ghost-purple accent",
+        "typography_direction": "Inter with tight spacing and condensed headlines",
+        "density": "moderate",
+        "hallmarks": ["near-pure-black", "soft purple", "micro-interactions feel (static in slides)"]
+      }
+    },
+    "mintlify": {
+      "category": "productivity",
+      "suggested_track": "minimalist-premium",
+      "mood": "documentation-first, clear, mint",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A0A0A", "#F5F5F5", "#13A68F"],
+        "accent_behavior": "mint-green accent on white",
+        "typography_direction": "neutral sans + monospace",
+        "density": "moderate",
+        "hallmarks": ["docs-grade typography", "mint highlights", "sidebar navigation feel"]
+      }
+    },
+    "notion": {
+      "category": "productivity",
+      "suggested_track": "editorial",
+      "mood": "warm-minimal, thoughtful, page-like",
+      "signature": {
+        "palette": ["#FFFFFF", "#37352F", "#F7F6F3", "#D9480F"],
+        "accent_behavior": "warm-orange accent on off-white; small-scale color tags",
+        "typography_direction": "Inter + Lyon Text (serif) for headings option",
+        "density": "moderate",
+        "hallmarks": ["warm off-white paper", "serif headline option", "flat/unadorned"]
+      }
+    },
+    "resend": {
+      "category": "productivity",
+      "suggested_track": "minimalist-premium",
+      "mood": "developer-native, restrained, dark",
+      "signature": {
+        "palette": ["#0A0A0A", "#FFFFFF", "#171717", "#FFFFFF"],
+        "accent_behavior": "monochrome dark; occasional subtle gradient",
+        "typography_direction": "Inter sans",
+        "density": "sparse",
+        "hallmarks": ["pure monochrome", "email-product clarity", "docs-pro feel"]
+      }
+    },
+    "semrush": {
+      "category": "productivity",
+      "suggested_track": "minimalist-premium",
+      "mood": "data-dense, orange-marketing",
+      "signature": {
+        "palette": ["#FFFFFF", "#1F1F1F", "#FF642D", "#F5F7FA"],
+        "accent_behavior": "brand orange on white; chart-heavy",
+        "typography_direction": "neutral sans",
+        "density": "dense",
+        "hallmarks": ["dashboard-heavy", "orange accent", "SEO data tables"]
+      }
+    },
+    "zapier": {
+      "category": "productivity",
+      "suggested_track": "minimalist-premium",
+      "mood": "friendly, automation, orange-warm",
+      "signature": {
+        "palette": ["#FFFFFF", "#1C1D1C", "#F5F5F1", "#FF4A00"],
+        "accent_behavior": "signature orange accent on warm off-white",
+        "typography_direction": "neutral sans with rounded character",
+        "density": "moderate",
+        "hallmarks": ["workflow arrows", "orange accent", "integration logos"]
+      }
+    },
+
+    "airtable": {
+      "category": "design-creative",
+      "suggested_track": "editorial",
+      "mood": "playful-corporate, colorful, data-happy",
+      "signature": {
+        "palette": ["#FFFFFF", "#0F2B46", "#F4C95D", "#FF6F61"],
+        "accent_behavior": "multi-color (yellow/red/blue) celebration; pick yellow as --accent for slides",
+        "typography_direction": "geometric sans",
+        "density": "moderate",
+        "hallmarks": ["color cells", "sunny yellow", "spreadsheet-grid echoes"]
+      }
+    },
+    "clay": {
+      "category": "design-creative",
+      "suggested_track": "editorial",
+      "mood": "warm-boutique, illustration-rich",
+      "signature": {
+        "palette": ["#FFF8EE", "#1D1D1D", "#FF7A59", "#E8D9BE"],
+        "accent_behavior": "warm coral accent on cream; illustrated motifs",
+        "typography_direction": "friendly geometric sans + occasional serif",
+        "density": "moderate",
+        "hallmarks": ["cream canvas", "illustration-heavy", "warm coral"]
+      }
+    },
+    "figma": {
+      "category": "design-creative",
+      "suggested_track": "editorial",
+      "mood": "vibrant, multi-color, designer-festive",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#F24E1E", "#A259FF"],
+        "accent_behavior": "multi-color brand (orange/purple/green/red/blue) — pick orange as --accent for slides",
+        "typography_direction": "Inter-family + custom display for brand moments",
+        "density": "moderate",
+        "hallmarks": ["four-color icon", "frame-preview aesthetic", "vibrant orange-pink"]
+      }
+    },
+    "framer": {
+      "category": "design-creative",
+      "suggested_track": "editorial",
+      "mood": "motion-focused, gradient-rich, designer-premium",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A0A0A", "#0099FF", "#FFAA00"],
+        "accent_behavior": "blue primary + warm amber secondary; gradient-capable",
+        "typography_direction": "Inter + optional serif display",
+        "density": "moderate",
+        "hallmarks": ["gradients", "motion hints (static in slides via layout dynamism)", "designer-forward"]
+      }
+    },
+    "miro": {
+      "category": "design-creative",
+      "suggested_track": "editorial",
+      "mood": "collaborative, whiteboard-energetic, yellow",
+      "signature": {
+        "palette": ["#FFFFFF", "#050038", "#FFDD33", "#FEF2D1"],
+        "accent_behavior": "signature yellow accent on off-white; deep navy text",
+        "typography_direction": "geometric sans with friendly terminals",
+        "density": "moderate",
+        "hallmarks": ["sticky-note yellow", "whiteboard energy", "navy ink"]
+      }
+    },
+    "webflow": {
+      "category": "design-creative",
+      "suggested_track": "minimalist-premium",
+      "mood": "designer-pro, polished, blue-purple",
+      "signature": {
+        "palette": ["#FFFFFF", "#080808", "#4353FF", "#F4F5F7"],
+        "accent_behavior": "royal-blue accent on clean white",
+        "typography_direction": "Inter-family sans",
+        "density": "moderate",
+        "hallmarks": ["royal blue", "designer tooling prominence", "clean corporate"]
+      }
+    },
+
+    "coinbase": {
+      "category": "fintech",
+      "suggested_track": "minimalist-premium",
+      "mood": "trustworthy, blue-crypto, clean",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A0B0D", "#0052FF", "#F5F8FF"],
+        "accent_behavior": "deep corporate blue accent on white",
+        "typography_direction": "neutral sans + tabular for prices",
+        "density": "moderate",
+        "hallmarks": ["corporate blue", "price tickers", "trust-signals"]
+      }
+    },
+    "kraken": {
+      "category": "fintech",
+      "suggested_track": "minimalist-premium",
+      "mood": "institutional, purple-dark",
+      "signature": {
+        "palette": ["#FFFFFF", "#141517", "#7132F5", "#F1F1F4"],
+        "accent_behavior": "purple accent; dark institutional surfaces in product",
+        "typography_direction": "neutral sans",
+        "density": "dense",
+        "hallmarks": ["purple branding", "institutional gravitas", "trading data"]
+      }
+    },
+    "revolut": {
+      "category": "fintech",
+      "suggested_track": "minimalist-premium",
+      "mood": "dark-premium, black-card, global-finance",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#191C1F", "#0666EB"],
+        "accent_behavior": "deep black base + electric blue accent",
+        "typography_direction": "geometric sans with tight spacing",
+        "density": "moderate",
+        "hallmarks": ["black-card aesthetic", "electric blue", "international money"]
+      }
+    },
+    "stripe": {
+      "category": "fintech",
+      "suggested_track": "minimalist-premium",
+      "mood": "confident, technical-premium, developer-facing",
+      "signature": {
+        "palette": ["#FFFFFF", "#0A2540", "#635BFF", "#00D4FF"],
+        "accent_behavior": "signature purple + cyan duotone; gradient hero; monochrome body",
+        "typography_direction": "Sohne or Inter-family sans",
+        "density": "sparse",
+        "hallmarks": ["large-type hero", "purple-cyan duotone gradients", "tabular data", "deep navy dark surfaces"]
+      }
+    },
+    "wise": {
+      "category": "fintech",
+      "suggested_track": "minimalist-premium",
+      "mood": "approachable, green, trustworthy",
+      "signature": {
+        "palette": ["#FFFFFF", "#0E0F0C", "#9FE870", "#163300"],
+        "accent_behavior": "signature lime-green accent on white",
+        "typography_direction": "neutral sans",
+        "density": "moderate",
+        "hallmarks": ["lime green", "flag-based illustrations", "friendly corporate"]
+      }
+    },
+
+    "airbnb": {
+      "category": "travel-commerce",
+      "suggested_track": "editorial",
+      "mood": "warm, belonging, hospitality",
+      "signature": {
+        "palette": ["#FFFFFF", "#222222", "#FF385C", "#F7F7F7"],
+        "accent_behavior": "signature coral/pink accent on white",
+        "typography_direction": "Cereal (custom) or Circular-style sans",
+        "density": "moderate",
+        "hallmarks": ["coral accent", "photo-rich", "warm rounded corners (omit in slides)"]
+      }
+    },
+
+    "apple": {
+      "category": "media-consumer",
+      "suggested_track": "minimalist-premium",
+      "mood": "cathedral-minimal, premium, inevitable",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#F5F5F7", "#1D1D1F"],
+        "accent_behavior": "essentially monochrome; occasional product-specific accent (never in brand slides)",
+        "typography_direction": "SF Pro Display + SF Pro Text",
+        "density": "sparse",
+        "hallmarks": ["extreme whitespace", "cathedral scale typography", "monochrome discipline", "product photography on white"]
+      }
+    },
+    "ibm": {
+      "category": "media-consumer",
+      "suggested_track": "minimalist-premium",
+      "mood": "institutional, plex-typographic, navy",
+      "signature": {
+        "palette": ["#FFFFFF", "#161616", "#0F62FE", "#F4F4F4"],
+        "accent_behavior": "IBM-blue accent; carbon design language",
+        "typography_direction": "IBM Plex Sans + IBM Plex Mono",
+        "density": "moderate",
+        "hallmarks": ["IBM blue", "Plex type", "carbon grid", "institutional gravitas"]
+      }
+    },
+    "nvidia": {
+      "category": "media-consumer",
+      "suggested_track": "minimalist-premium",
+      "mood": "technical, compute-heavy, green",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#76B900", "#1A1A1A"],
+        "accent_behavior": "signature Nvidia-green accent on black or white",
+        "typography_direction": "neutral sans",
+        "density": "moderate",
+        "hallmarks": ["Nvidia green", "chip renderings", "benchmark charts"]
+      }
+    },
+    "pinterest": {
+      "category": "media-consumer",
+      "suggested_track": "editorial",
+      "mood": "inspirational, red-pin, visual-first",
+      "signature": {
+        "palette": ["#FFFFFF", "#111111", "#E60023", "#F7F7F7"],
+        "accent_behavior": "signature Pinterest-red accent on white",
+        "typography_direction": "neutral sans with rounded character",
+        "density": "moderate",
+        "hallmarks": ["Pinterest red", "masonry imagery", "discovery mood"]
+      }
+    },
+    "spacex": {
+      "category": "media-consumer",
+      "suggested_track": "editorial",
+      "mood": "cinematic-industrial, black-sky",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#0A0A0A", "#808080"],
+        "accent_behavior": "pure monochrome; dramatic imagery carries color",
+        "typography_direction": "D-DIN Condensed or similar engineering sans",
+        "density": "sparse",
+        "hallmarks": ["cinematic black", "engineering DIN type", "rocket imagery dominance"]
+      }
+    },
+    "spotify": {
+      "category": "media-consumer",
+      "suggested_track": "editorial",
+      "mood": "vibrant, music-green, cinematic-dark",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#1DB954", "#121212"],
+        "accent_behavior": "signature Spotify-green accent on black",
+        "typography_direction": "Spotify Circular or geometric sans",
+        "density": "moderate",
+        "hallmarks": ["Spotify green", "cinematic black", "album art prominence"]
+      }
+    },
+    "uber": {
+      "category": "media-consumer",
+      "suggested_track": "minimalist-premium",
+      "mood": "global-platform, monochrome-precise",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#F6F6F6", "#276EF1"],
+        "accent_behavior": "near-monochrome with occasional blue accent",
+        "typography_direction": "Uber Move or custom neutral sans",
+        "density": "moderate",
+        "hallmarks": ["global platform clarity", "black-white dominance", "blue links"]
+      }
+    },
+
+    "bmw": {
+      "category": "automotive",
+      "suggested_track": "minimalist-premium",
+      "mood": "engineering-premium, blue-navy",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#1C69D4", "#0166B1"],
+        "accent_behavior": "BMW blue accent; M-stripe (blue/violet/red) reserved for performance moments",
+        "typography_direction": "BMW TypeNext or geometric sans",
+        "density": "moderate",
+        "hallmarks": ["BMW blue", "precision engineering tone", "M-stripe heritage"]
+      }
+    },
+    "ferrari": {
+      "category": "automotive",
+      "suggested_track": "editorial",
+      "mood": "iconic-red, prestige, speed",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#FF2800", "#1A1A1A"],
+        "accent_behavior": "signature Ferrari red; used with conviction",
+        "typography_direction": "custom Ferrari Sans or geometric display",
+        "density": "moderate",
+        "hallmarks": ["Rosso Corsa red", "prancing horse", "cinematic dark"]
+      }
+    },
+    "lamborghini": {
+      "category": "automotive",
+      "suggested_track": "editorial",
+      "mood": "aggressive, yellow-charged, exotic",
+      "signature": {
+        "palette": ["#000000", "#FFFFFF", "#FFD700", "#1C1C1C"],
+        "accent_behavior": "gold-yellow accent on dramatic black",
+        "typography_direction": "angular geometric display",
+        "density": "sparse",
+        "hallmarks": ["Lamborghini yellow", "hexagonal motifs", "dramatic angles"]
+      }
+    },
+    "renault": {
+      "category": "automotive",
+      "suggested_track": "minimalist-premium",
+      "mood": "french-modern, diamond-mark, yellow",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#FFCB00", "#F4F4F4"],
+        "accent_behavior": "Renault yellow accent; diamond geometry",
+        "typography_direction": "Nouvel-R custom or geometric sans",
+        "density": "moderate",
+        "hallmarks": ["diamond mark", "yellow accent", "French automotive modernism"]
+      }
+    },
+    "tesla": {
+      "category": "automotive",
+      "suggested_track": "minimalist-premium",
+      "mood": "industrial-minimal, engineering-future",
+      "signature": {
+        "palette": ["#FFFFFF", "#000000", "#CC0000", "#171A20"],
+        "accent_behavior": "near-monochrome with restrained Tesla-red accent",
+        "typography_direction": "Gotham-family or custom Tesla Sans",
+        "density": "sparse",
+        "hallmarks": ["industrial minimalism", "red brake-light accent", "product photography dominance"]
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 ---
 name: slide-theme-curator
-description: Use when the user says "/slide-theme", "테마 선택", "테마 정해줘", or needs to pick/customize a visual theme for a Marp deck. Reads brief.md, shows up to 3 design system candidates from assets/design-systems/, copies the chosen theme into ./slides/<slug>/theme.css, and optionally customizes color tokens.
-argument-hint: "[slug] [track=minimalist-premium|editorial|auto]"
-allowed-tools: Read, Write, Glob, AskUserQuestion, Bash(cp:*, ls:*)
+description: Use when the user says "/slide-theme", "테마 선택", "테마 정해줘", "Stripe처럼", "Linear 스타일로", or names any of the 59 registry brands. Routes across a 3-tier catalog — curated themes (Tier 2), previously-generated themes (Tier 3 cache), and on-demand generation (Tier 3 fresh via theme-forger). Reads brief.md, proposes candidates, copies/generates the chosen theme into ./slides/<slug>/theme.css, and optionally customizes tokens.
+argument-hint: "[slug] [track_or_brand]"
+allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash(cp:*, ls:*, node:*), Task
 ---
 
 # Slide Theme Curator
@@ -32,15 +32,56 @@ Read `./slides/<slug>/brief.md` and extract:
 
 Abort with message if brief.md is missing.
 
-### Step 3 — Determine track
+### Step 3 — Classify the request: track-based or brand-based?
 
-Precedence for track (`minimalist-premium` | `editorial`):
-1. `$2` CLI argument if given
+The `$2` argument (or the user's message) can be:
+
+**Track-based** (pick from curated):
+- `minimalist-premium`, `editorial`, `auto` → standard curator flow (Tier 2)
+
+**Brand-based** (specific brand from 59-registry):
+- `stripe`, `linear`, `apple`, `tesla`, `notion`, etc. → route to theme-forger (Tier 3)
+
+Classification algorithm:
+1. If `$2` matches one of `minimalist-premium | editorial | auto` → TRACK mode
+2. If `$2` exists as a key in `registry.json` → BRAND mode
+3. If user's free-text message contains a brand name from registry (case-insensitive) → BRAND mode, extract it
+4. Otherwise → ask via AskUserQuestion
+
+Check registry:
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/scripts/forge-theme.mjs check "$2"
+```
+Exit 0 means brand exists.
+
+### Step 3a — BRAND mode
+
+If the request is brand-specific:
+
+1. Check cache first:
+   Look for `${CLAUDE_PLUGIN_ROOT}/assets/design-systems/generated/<brand>.marp.css`. If exists, proceed to Step 6 with that CSS.
+
+2. Not cached: delegate to theme-forger:
+   ```
+   Use Task tool to invoke the theme-forger skill:
+   - Pass brand slug
+   - Expect generation into assets/design-systems/generated/<slug>.{design.md, marp.css}
+   - Wait for completion
+   ```
+
+3. When theme-forger returns success, proceed to Step 6.
+
+Skip Steps 4–5 (which are for track-based curated selection).
+
+### Step 3b — TRACK mode
+
+Precedence for track:
+1. `$2` CLI argument if it's `minimalist-premium | editorial | auto`
 2. `track_preference` from brief.md (if not `auto`)
 3. Team default from `.claude/marp-slide-studio.local.md` if exists
 4. Inferred from tone: 단정/정제 → `minimalist-premium`; 사려/서사 → `editorial`
 
-If still ambiguous, ask user via AskUserQuestion with both tracks + short descriptions.
+If still ambiguous, ask user via AskUserQuestion with both tracks + short descriptions, and offer a "특정 브랜드로 생성 (예: Stripe, Linear, Tesla...)" option that pivots to BRAND mode.
 
 ### Step 4 — List candidates
 
@@ -74,10 +115,19 @@ Only show themes in the chosen track. If track has only one theme, skip selectio
 
 ### Step 6 — Copy theme CSS
 
-```bash
-cp ${CLAUDE_PLUGIN_ROOT}/assets/design-systems/<track>/<theme>.marp.css \
-   ./slides/<slug>/theme.css
-```
+Source path depends on mode:
+
+- TRACK mode (Tier 2 curated):
+  ```bash
+  cp ${CLAUDE_PLUGIN_ROOT}/assets/design-systems/<track>/<theme>.marp.css \
+     ./slides/<slug>/theme.css
+  ```
+
+- BRAND mode (Tier 3, generated or cached):
+  ```bash
+  cp ${CLAUDE_PLUGIN_ROOT}/assets/design-systems/generated/<brand>.marp.css \
+     ./slides/<slug>/theme.css
+  ```
 
 ### Step 7 — Offer brand token customization
 
@@ -120,13 +170,33 @@ Use Edit to add this to the YAML frontmatter or as a new section; choose whichev
 
 ## Custom theme request
 
-If the user says "새 테마 만들어줘" or describes a look not covered by any existing theme:
+If the user describes a look NOT in the curated catalog AND NOT in the 59-registry:
 
-1. Ask: "기존 테마 중 가장 가까운 것은?" (Obsidian Mono / Kinfolk Serif / 없음)
-2. Describe the brief in 3 properties: palette direction / font direction / layout tendency
-3. Direct user to invoke the `marp-theme-engineer` skill (or delegate to `slide-director` agent) for a full theme build
+1. Ask: "가장 가까운 기존 브랜드는?" — suggest 2–3 from registry based on the description
+2. If user picks one → BRAND mode
+3. If user wants a truly custom theme (their own company brand) → they provide a custom spec JSON matching the registry schema, then invoke `theme-forger --custom <path>`
 
-Do NOT attempt to write a full new DESIGN.md + CSS from scratch inside this skill — it's out of scope. Redirect.
+Do NOT attempt to write a new DESIGN.md + CSS from scratch inside this skill. Always delegate to `theme-forger`.
+
+## Brand extraction from natural language
+
+When the user says things like "Stripe처럼 만들어줘" or "like Apple's design", extract the brand name:
+
+```
+node ${CLAUDE_PLUGIN_ROOT}/scripts/forge-theme.mjs list | grep -iE "\b(stripe|apple|linear|...)\b"
+```
+
+Or more simply, iterate `registry.json` keys and do case-insensitive substring match. If multiple matches, ask which one.
+
+Common name aliases to handle:
+- "Linear" → `linear.app`
+- "Mistral" → `mistral.ai`
+- "Twitter/X" → `x.ai`
+- "together" (the AI brand) → `together.ai`
+- "opencode" → `opencode.ai`
+
+If the user says a brand NOT in registry (e.g., "Slack", "Google"), respond:
+"[brand]는 현재 registry에 없습니다. 가장 유사한 것: <suggest 2 similar mood brands>. 아니면 `theme-forger --custom`로 사용자 정의 브랜드를 추가할 수 있습니다."
 
 ## Reference files
 

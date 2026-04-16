@@ -2,7 +2,9 @@
 
 **Build Marp decks that don't look AI-generated.** A Claude Code plugin that grounds slide generation in real brand design systems, Korean-first typography, and a Playwright-powered visual review loop.
 
-**v0.2.0** — 4 themes (2 per track), 3 Korean-specific layouts (세로쓰기 · 한자 병기 · 방주), offline font bundle, GitHub Actions CI with per-slide screenshot diffs, marketplace manifest, second worked example.
+**v0.3.0** — Theme-Foundry: 59-brand registry + on-demand theme generation via `theme-forger` skill/agent, 5 sample generated themes (Stripe, Linear, Apple, Notion, Tesla), transform spec (web→slide), theme validator, slide-theme-curator now routes 3-tier (curated → cached → on-demand).
+
+**v0.2.0** — 4 curated themes (2 per track), 3 Korean-specific layouts (세로쓰기 · 한자 병기 · 방주), offline font bundle, GitHub Actions CI with per-slide screenshot diffs, marketplace manifest, second worked example.
 
 > Why this exists: PowerPoint and Keynote hand you a template and leave the design decisions to you. This plugin does the opposite — it injects opinionated design systems from awesome-design-md, enforces hard anti-patterns, and iteratively refines the output until it no longer smells of "generic AI."
 
@@ -18,17 +20,45 @@
 
 All commands are skills under `skills/`. Invoke with `/marp-slide-studio:<skill-name>`.
 
-## Design systems included
+## Design systems
 
-### Track 1 — Minimalist Premium
-- **Obsidian Mono** — quiet confidence, cream + deep-ink + terracotta accent. For executive briefings, architecture talks.
-- **Arctic Serif** — cool gray + navy, Noto Serif KR display. Built-in footnote rail for citations. For research presentations, policy briefings, academic defenses.
+### Tier 2 — Hand-crafted (quality ceiling)
 
-### Track 2 — Editorial
-- **Kinfolk Serif** — Noto Serif KR display + Pretendard body, cream paper + burgundy accent. For brand narratives, cultural/mission talks.
-- **Wired Grid** — high-contrast monochrome + electric orange, Pretendard 900 display + JetBrains Mono overlines, visible grid decoration. For conference keynotes, trend reports, cultural/tech criticism.
+**Minimalist Premium track**
+- **Obsidian Mono** — quiet confidence, cream + deep-ink + terracotta accent. Executive briefings, architecture talks.
+- **Arctic Serif** — cool gray + navy, Noto Serif KR display, footnote rail. Research, policy, academic defenses.
 
-Each theme ships as `DESIGN.md` (philosophy + tokens) + `.marp.css` (ready-to-use Marpit theme). Adding another theme = copy the pattern, change tokens, verify required layout classes.
+**Editorial track**
+- **Kinfolk Serif** — Noto Serif KR display + Pretendard body, cream paper + burgundy. Brand narratives, cultural talks.
+- **Wired Grid** — monochrome + electric orange, Pretendard 900 + JetBrains Mono, visible grid. Keynotes, trend reports.
+
+### Tier 3 — 59-brand registry (on-demand generation)
+
+Every brand listed in [`assets/design-systems/registry.json`](assets/design-systems/registry.json) — 59 total across AI/LLM, dev tools, backend, productivity, design, fintech, automotive, media, commerce.
+
+```bash
+# See everything available
+node scripts/forge-theme.mjs list
+
+# Generate any brand on first request — e.g.
+/slide-theme stripe        # on-demand forge → cached for next time
+/slide-theme linear.app
+/slide-theme tesla
+```
+
+Generated themes:
+- Land in `assets/design-systems/generated/<slug>.{design.md,marp.css}`
+- Pass the same validator as hand-crafted themes
+- Load Pretendard by default (Korean-ready)
+- Include brand attribution disclaimers
+- Regenerable — delete cache + re-request, or edit `registry.json` to tune
+
+Sample output already shipped: `stripe`, `linear-app`, `apple`, `notion`, `tesla` — rendered and validated end-to-end as proof of pipeline.
+
+### Adding your own brand
+- Curated (Tier 2): copy an existing theme pattern, edit tokens, move to `<track>/`
+- Registry (Tier 3): add an entry to `registry.json`, then `/slide-theme <your-brand>`
+- One-off custom: `theme-forger --custom <path-to-brand.json>`
 
 ## Korean-specific layouts (optional)
 
