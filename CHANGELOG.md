@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.6.1 — 2026-04-17
+
+### Added
+- `scripts/check-deps.sh` — single-command pre-flight dependency check (Node, npx, Chrome, Playwright, marp-cli cache, offline font bundle). Colored output, OS-aware Chrome path detection, exits 0 when ready / 1 when blocked, prints install hint per missing item.
+- `LICENSE` — MIT, copyright 2026 Min-Gul Kim. Required for GitHub License-badge auto-detection.
+- `.github/workflows/publish-gallery.yml` — auto-rebuild and deploy the theme gallery to GitHub Pages whenever theme CSS / registry / sampler / gallery template changes. Live at https://kimmingul.github.io/marp-slide-studio/
+- README **Prerequisites** section rewritten with `bash scripts/check-deps.sh` as the one-command verifier and OS-specific Chrome install commands.
+- README install snippets and `MARKETPLACE.md` URL placeholders replaced with the canonical `kimmingul/marp-slide-studio` GitHub path.
+
+### Changed
+- `.claude-plugin/plugin.json` — description rewritten to highlight 63 themes + multilingual CJK + Latin + autopilot. Added `homepage` and `repository` fields. Keywords expanded to include `cjk-typography`, `korean`, `japanese`, `chinese`, `multilingual`, `claude-code-plugin`.
+- `.claude-plugin/marketplace.json` — same description refresh; tags updated; `owner.name` and `plugins[0].author` set to "Min-Gul Kim".
+
+### Fixed
+- `.github/workflows/publish-gallery.yml` and `.github/workflows/slide-ci.yml` — removed `cache: "npm"` from `actions/setup-node` step. The plugin has no `package-lock.json` (dependencies are fetched on-demand via `npx`), so the cache option caused the workflow to fail in 16 seconds on first run.
+
+### Released as
+- GitHub release with `marp-slide-studio-v0.6.1.zip` attached as a custom-named asset for upload-style installers.
+
 ## 0.6.0 — 2026-04-17
 
 ### Added — multi-language support (KR / JA / ZH-Hans / ZH-Hant / Latin)
