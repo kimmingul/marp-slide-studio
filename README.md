@@ -2,6 +2,8 @@
 
 **Build Marp decks that don't look AI-generated.** A Claude Code plugin that grounds slide generation in real brand design systems, Korean-first typography, and a Playwright-powered visual review loop.
 
+**v0.2.0** — 4 themes (2 per track), 3 Korean-specific layouts (세로쓰기 · 한자 병기 · 방주), offline font bundle, GitHub Actions CI with per-slide screenshot diffs, marketplace manifest, second worked example.
+
 > Why this exists: PowerPoint and Keynote hand you a template and leave the design decisions to you. This plugin does the opposite — it injects opinionated design systems from awesome-design-md, enforces hard anti-patterns, and iteratively refines the output until it no longer smells of "generic AI."
 
 ## What you get
@@ -20,11 +22,22 @@ All commands are skills under `skills/`. Invoke with `/marp-slide-studio:<skill-
 
 ### Track 1 — Minimalist Premium
 - **Obsidian Mono** — quiet confidence, cream + deep-ink + terracotta accent. For executive briefings, architecture talks.
+- **Arctic Serif** — cool gray + navy, Noto Serif KR display. Built-in footnote rail for citations. For research presentations, policy briefings, academic defenses.
 
 ### Track 2 — Editorial
 - **Kinfolk Serif** — Noto Serif KR display + Pretendard body, cream paper + burgundy accent. For brand narratives, cultural/mission talks.
+- **Wired Grid** — high-contrast monochrome + electric orange, Pretendard 900 display + JetBrains Mono overlines, visible grid decoration. For conference keynotes, trend reports, cultural/tech criticism.
 
-Each theme ships as `DESIGN.md` (philosophy + tokens) + `.marp.css` (ready-to-use Marpit theme). Adding a third theme = copy the pattern, change tokens, verify required layout classes.
+Each theme ships as `DESIGN.md` (philosophy + tokens) + `.marp.css` (ready-to-use Marpit theme). Adding another theme = copy the pattern, change tokens, verify required layout classes.
+
+## Korean-specific layouts (optional)
+
+Beyond the 7 core layouts, three layouts exist for Korean-first typographic moments:
+- **vertical-writing** (세로쓰기) — reverent, for classical quotations
+- **hanja-ruby** (한자 병기) — `<ruby>` annotations for academic terminology
+- **banner-caption** (방주/협주) — main claim + side commentary on one slide
+
+These require the current theme to style the class (check `theme.css`). The core themes don't implement them by default — copy the CSS block from the layout doc into your theme as needed.
 
 ## Prerequisites
 

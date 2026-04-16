@@ -1,0 +1,31 @@
+{
+  "name": "marp-slide-studio",
+  "description": "Sophisticated Marp slide decks with AI — brand-grounded design systems, Korean-first typography, Playwright visual QA loop.",
+  "version": "0.2.0",
+  "owner": {
+    "name": "Marp Slide Studio Team",
+    "url": "https://github.com/your-org/marp-slide-studio"
+  },
+  "plugins": [
+    {
+      "name": "marp-slide-studio",
+      "source": "./",
+      "description": "Build Marp presentations that don't look AI-generated. 7 skills, 2 review agents, curated DESIGN.md themes, and a visual refinement loop.",
+      "version": "0.2.0",
+      "author": "Marp Slide Studio Team",
+      "category": "content-authoring",
+      "tags": [
+        "marp",
+        "slides",
+        "presentation",
+        "design-system",
+        "korean-typography",
+        "playwright",
+        "visual-qa",
+        "pptx",
+        "pdf"
+      ],
+      "strict": false
+    }
+  ]
+}

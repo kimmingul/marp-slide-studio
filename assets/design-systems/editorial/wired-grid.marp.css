@@ -1,0 +1,414 @@
+/* @theme wired-grid */
+/* Marp Slide Studio — Editorial Track, variant 2 */
+/* Requires: Pretendard Variable + JetBrains Mono */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #FFFFFF;
+  --bg-inv: #000000;
+  --fg: #000000;
+  --fg-inv: #FFFFFF;
+  --muted: #6B6B6B;
+  --rule: #000000;
+  --accent: #FF4500;
+  --accent-ink: #FFFFFF;
+
+  --font-body: 'Pretendard Variable', 'Pretendard', -apple-system,
+               BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  --font-display: 'Pretendard Variable', 'Pretendard', sans-serif;
+  --font-mono: 'JetBrains Mono', 'D2Coding', ui-monospace, monospace;
+
+  --fs-display: clamp(160px, 14vw, 280px);
+  --fs-headline: clamp(64px, 5.5vw, 96px);
+  --fs-subhead: clamp(28px, 2.2vw, 38px);
+  --fs-body-l: clamp(26px, 1.8vw, 32px);
+  --fs-body: clamp(22px, 1.5vw, 26px);
+  --fs-caption: clamp(14px, 0.9vw, 16px);
+  --fs-mono: clamp(12px, 0.85vw, 14px);
+
+  --lh-display: 0.95;
+  --lh-headline: 1.05;
+  --lh-body: 1.65;
+
+  --ls-display: -0.04em;
+  --ls-headline: -0.025em;
+  --ls-mono: 0.08em;
+}
+
+section {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  padding: 3.5rem 4.5rem;
+  font-feature-settings: "tnum" 1, "kern" 1;
+  /* Subtle grid suggestion via background */
+  background-image: linear-gradient(to right,
+    transparent calc((100% - 9rem) / 12 * 6),
+    rgba(0,0,0,0.03) calc((100% - 9rem) / 12 * 6 + 1px),
+    transparent calc((100% - 9rem) / 12 * 6 + 1px));
+  background-size: 100% 100%;
+}
+
+section h1, section h2, section h3 {
+  font-family: var(--font-display);
+  margin: 0 0 1rem;
+}
+section h1 {
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+  letter-spacing: var(--ls-headline);
+  font-weight: 900;
+}
+section h2 {
+  font-size: var(--fs-subhead);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+section h3 {
+  font-size: calc(var(--fs-subhead) * 0.75);
+  font-weight: 700;
+}
+
+section p { max-width: 36ch; margin: 0 0 1rem; }
+section strong { font-weight: 700; }
+section em { font-style: italic; }
+:lang(ko) em { font-style: normal; font-weight: 600; }
+
+section a { color: var(--accent); text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 1px; }
+section code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: #F0F0F0;
+  padding: 0.1em 0.35em;
+}
+section pre {
+  background: var(--fg);
+  color: var(--fg-inv);
+  padding: 1.5rem;
+  font-size: calc(var(--fs-body) * 0.8);
+  line-height: 1.5;
+  overflow: auto;
+}
+section blockquote { margin: 0; padding: 0; }
+section hr { border: none; border-top: 2px solid var(--rule); margin: 2rem 0; }
+
+section img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--fg);
+}
+
+/* Tables — heavy editorial */
+section table { border-collapse: collapse; width: 100%; font-feature-settings: "tnum" 1; }
+section th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-mono);
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  border-top: 3px solid var(--fg);
+  border-bottom: 1px solid var(--fg);
+}
+section td {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+section tbody tr:last-child td { border-bottom: 3px solid var(--fg); }
+
+/* Pagination — mono, bottom-left, with slash */
+section::after {
+  position: absolute;
+  left: 2rem;
+  bottom: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  color: var(--fg);
+  letter-spacing: var(--ls-mono);
+  font-weight: 500;
+}
+
+/* Meta strip utility */
+.mono-meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── Layout: hero ─────────────────────────────────────────────── */
+
+section.hero {
+  background: var(--bg-inv);
+  color: var(--fg-inv);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 3rem 4rem;
+  background-image: none;
+}
+section.hero::after { color: var(--fg-inv); }
+section.hero .overline,
+section.hero .mono-meta {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+section.hero h1 {
+  align-self: center;
+  font-size: clamp(96px, 8.5vw, 180px);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  font-weight: 900;
+  max-width: 20ch;
+  /* Bleed left into margin */
+  margin-left: -0.05em;
+}
+section.hero .support {
+  font-size: var(--fs-body-l);
+  max-width: 50ch;
+  opacity: 0.9;
+}
+
+/* ── Layout: monumental ────────────────────────────────────────── */
+
+section.monumental {
+  display: grid;
+  place-content: center start;
+  padding: 5rem;
+  background-image: none;
+}
+section.monumental h1 {
+  font-size: clamp(80px, 7vw, 140px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 900;
+  max-width: 20ch;
+}
+section.monumental h1 strong { color: var(--accent); }
+
+/* ── Layout: split ────────────────────────────────────────────── */
+
+section.split {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+  padding: 3rem 4rem;
+  background-image: none;
+  position: relative;
+}
+/* Grid rule between columns */
+section.split::before {
+  content: "";
+  position: absolute;
+  top: 3rem;
+  bottom: 3rem;
+  width: 1px;
+  background: var(--fg);
+}
+section.split-60-40 { grid-template-columns: 3fr 2fr; }
+section.split-60-40::before { left: calc(60% - 1rem); }
+section.split-55-45 { grid-template-columns: 11fr 9fr; }
+section.split-55-45::before { left: calc(55% - 1rem); }
+section.split-40-60 { grid-template-columns: 2fr 3fr; }
+section.split-40-60::before { left: calc(40% - 1rem); }
+
+section.split .col-main h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+  letter-spacing: var(--ls-headline);
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+}
+section.split .col-main p { max-width: 32ch; }
+
+/* ── Layout: metric ───────────────────────────────────────────── */
+
+section.metric {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 3rem 4rem;
+  background-image: none;
+}
+section.metric .metric-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+section.metric .metric-value {
+  font-family: var(--font-display);
+  font-size: clamp(220px, 20vw, 440px);
+  line-height: 0.85;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  align-self: center;
+  color: var(--fg);
+}
+section.metric .metric-value strong,
+section.metric .metric-value .accent { color: var(--accent); }
+section.metric .metric-value .unit {
+  font-size: 0.35em;
+  font-weight: 700;
+  vertical-align: 0.9em;
+}
+section.metric .metric-caption {
+  font-size: var(--fs-body-l);
+  line-height: 1.55;
+  max-width: 44ch;
+  font-weight: 500;
+}
+
+/* ── Layout: divider ──────────────────────────────────────────── */
+
+section.divider {
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  padding: 3rem 4rem;
+  background: var(--bg-inv);
+  color: var(--fg-inv);
+  background-image: none;
+}
+section.divider::after { color: var(--fg-inv); }
+section.divider .divider-number {
+  grid-row: 2;
+  font-family: var(--font-display);
+  font-size: clamp(160px, 14vw, 280px);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  align-self: end;
+}
+section.divider .divider-title {
+  grid-row: 3;
+  font-family: var(--font-display);
+  font-size: clamp(44px, 4vw, 68px);
+  font-weight: 900;
+  margin-top: 0.5rem;
+  letter-spacing: -0.02em;
+}
+section.divider .divider-subtitle {
+  grid-row: 4;
+  font-size: var(--fs-body-l);
+  color: var(--fg-inv);
+  opacity: 0.7;
+  max-width: 50ch;
+}
+
+/* ── Layout: quote ────────────────────────────────────────────── */
+
+section.quote {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 5rem 6rem;
+  gap: 2.5rem;
+  background-image: none;
+}
+section.quote blockquote {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 4.5vw, 86px);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 900;
+  margin: 0;
+  max-width: 20ch;
+  align-self: center;
+  text-indent: -0.45em;
+}
+section.quote blockquote::before { content: "\201C"; color: var(--accent); font-weight: 900; }
+section.quote blockquote::after { content: "\201D"; }
+section.quote .attribution {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+}
+section.quote .attribution::before {
+  content: "";
+  width: 2.5rem;
+  height: 2px;
+  background: var(--fg);
+}
+section.quote .attribution .name { font-weight: 700; }
+section.quote .attribution .role { color: var(--muted); }
+
+/* ── Layout: enumerated ───────────────────────────────────────── */
+
+section.enumerated {
+  padding: 3rem 4rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
+  background-image: none;
+}
+section.enumerated h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+  letter-spacing: var(--ls-headline);
+  max-width: 22ch;
+  font-weight: 900;
+}
+section.enumerated .enum {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  align-content: start;
+}
+section.enumerated .enum li {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 3px solid var(--fg);
+}
+section.enumerated .enum .num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+section.enumerated .enum h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-subhead);
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+section.enumerated .enum p {
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.overline {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  font-weight: 500;
+}

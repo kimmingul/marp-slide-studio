@@ -1,0 +1,152 @@
+name: slide-ci
+
+# Runs when any deck under slides/ changes on a PR.
+# - Renders each changed deck
+# - Captures per-slide PNGs via Playwright
+# - On PRs: diffs against the base branch's screenshots and posts the result
+# - Uploads rendered HTML + PDF + PPTX + screenshots as artifacts
+
+on:
+  pull_request:
+    paths:
+      - "slides/**/deck.md"
+      - "slides/**/theme.css"
+  push:
+    branches: [main]
+    paths:
+      - "slides/**/deck.md"
+      - "slides/**/theme.css"
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Specific deck slug to render (leave blank for all changed)"
+        required: false
+
+permissions:
+  contents: read
+  pull-requests: write  # for posting diff comment
+
+jobs:
+  render-and-diff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      # All user-controllable inputs go through env for injection safety.
+      INPUT_SLUG: ${{ inputs.slug }}
+      BASE_REF: ${{ github.base_ref }}
+      EVENT_NAME: ${{ github.event_name }}
+
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Playwright (chromium only)
+        run: |
+          npm init -y >/dev/null 2>&1 || true
+          npm i --save-dev playwright pixelmatch pngjs
+          npx playwright install --with-deps chromium
+
+      - name: Identify changed decks
+        id: decks
+        # Use env-indirected inputs; validate slug shape to block shell metacharacters.
+        run: |
+          set -euo pipefail
+          validate() {
+            # Accept only [a-zA-Z0-9._-] up to 64 chars per slug.
+            for s in $1; do
+              if ! [[ "$s" =~ ^[a-zA-Z0-9._-]{1,64}$ ]]; then
+                echo "::error::Rejected unsafe slug: $s"
+                exit 1
+              fi
+            done
+          }
+          if [[ -n "${INPUT_SLUG:-}" ]]; then
+            validate "$INPUT_SLUG"
+            echo "slugs=$INPUT_SLUG" >> "$GITHUB_OUTPUT"
+          elif [[ "$EVENT_NAME" == "pull_request" ]]; then
+            CHANGED=$(git diff --name-only "origin/${BASE_REF}"...HEAD -- 'slides/*/deck.md' 'slides/*/theme.css' \
+              | awk -F/ '{print $2}' | sort -u | paste -sd' ' -)
+            validate "$CHANGED"
+            echo "slugs=$CHANGED" >> "$GITHUB_OUTPUT"
+          else
+            CHANGED=$(ls -1 slides/ 2>/dev/null | paste -sd' ' -)
+            validate "$CHANGED"
+            echo "slugs=$CHANGED" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Changed decks: $CHANGED"
+
+      - name: Render changed decks
+        if: steps.decks.outputs.slugs != ''
+        env:
+          SLUGS: ${{ steps.decks.outputs.slugs }}
+        run: |
+          set -euo pipefail
+          for slug in $SLUGS; do
+            echo "::group::Rendering $slug"
+            bash scripts/render.sh "$slug"
+            node scripts/screenshot.mjs "$slug" 1920x1080
+            bash scripts/export-pdf.sh "$slug" || echo "::warning::PDF export failed for $slug"
+            echo "::endgroup::"
+          done
+
+      - name: Diff screenshots against base (PR only)
+        if: github.event_name == 'pull_request' && steps.decks.outputs.slugs != ''
+        id: diff
+        env:
+          SLUGS: ${{ steps.decks.outputs.slugs }}
+        run: |
+          set -euo pipefail
+          mkdir -p ci-output
+          git worktree add .base "origin/${BASE_REF}" 2>/dev/null || true
+          for slug in $SLUGS; do
+            HEAD_DIR="slides/$slug/out/screenshots"
+            BASE_DIR=".base/slides/$slug/out/screenshots"
+            if [[ ! -d "$BASE_DIR" ]]; then
+              echo "(new deck) $slug — no baseline to compare" >> ci-output/diff-report.md
+              continue
+            fi
+            node scripts/ci/screenshot-diff.mjs "$BASE_DIR" "$HEAD_DIR" "ci-output/$slug" "$slug" >> ci-output/diff-report.md
+          done
+          git worktree remove .base 2>/dev/null || true
+          cat ci-output/diff-report.md
+
+      - name: Upload artifacts
+        if: always() && steps.decks.outputs.slugs != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-decks-${{ github.sha }}
+          path: |
+            slides/*/out/deck.html
+            slides/*/out/deck.pdf
+            slides/*/out/deck.pptx
+            slides/*/out/screenshots/
+            ci-output/
+          retention-days: 14
+
+      - name: Comment PR with diff report
+        if: github.event_name == 'pull_request' && steps.decks.outputs.slugs != ''
+        uses: actions/github-script@v7
+        env:
+          DIFF_REPORT_PATH: ci-output/diff-report.md
+        with:
+          script: |
+            const fs = require('fs');
+            const path = process.env.DIFF_REPORT_PATH;
+            if (!fs.existsSync(path)) return;
+            const report = fs.readFileSync(path, 'utf8');
+            const body = `## 🎞 Slide render diff\n\n${report}\n\n*Artifacts: download the \`rendered-decks-*\` bundle from the Actions run for HTML/PDF/PNG.*`;
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });

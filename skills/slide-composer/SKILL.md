@@ -64,6 +64,8 @@ For each beat in brief.md beats table, generate a slide following this algorithm
 #### 4a. Select the layout
 
 Use the `layout` field from the beat. Map to a class directive:
+
+Core layouts (always available):
 - `hero-full-bleed` → `<!-- _class: hero -->`
 - `monumental-quote` → `<!-- _class: monumental -->`
 - `two-column-split` → `<!-- _class: split split-60-40 -->` (or 55-45 / 40-60)
@@ -72,6 +74,13 @@ Use the `layout` field from the beat. Map to a class directive:
 - `quote-attribution` → `<!-- _class: quote -->`
 - `list-numbered` → `<!-- _class: enumerated -->`
 - Plain prose slide → no class directive (uses base styling)
+
+Korean-only layouts (theme must opt in — check theme.css for the class):
+- `vertical-writing` → `<!-- _class: vertical -->` (세로쓰기; classical quotes)
+- `hanja-ruby` → `<!-- _class: ruby -->` (한자 병기; academic terms)
+- `banner-caption` → `<!-- _class: banner-caption -->` (방주; main claim + qualification)
+
+Before emitting a Korean-only class, grep `theme.css` for `section.<class>`. If the class is not styled, fall back to `quote` (for vertical-writing) or `split` (for banner-caption) with a note in `.qa-log.md`.
 
 #### 4b. Apply the layout's markdown template
 

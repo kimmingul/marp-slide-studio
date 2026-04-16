@@ -4,6 +4,8 @@ Reusable slide layouts. Each pattern is a Marp markdown snippet + minimal CSS re
 
 ## Pattern index
 
+### Core layouts (every theme implements these)
+
 | File | Purpose | When to use |
 |---|---|---|
 | `hero-full-bleed.md` | Opening / section break | Act transitions, first slide |
@@ -13,6 +15,16 @@ Reusable slide layouts. Each pattern is a Marp markdown snippet + minimal CSS re
 | `section-divider.md` | Visual pause between acts | Between Problem → Solution etc. |
 | `quote-attribution.md` | Testimonial, third-party voice | Proof act, social evidence |
 | `list-numbered.md` | 3-item rhythm (not 5+) | Detail act, steps or principles |
+
+### Korean-only layouts (optional, may not be implemented in every theme)
+
+| File | Purpose | When to use |
+|---|---|---|
+| `vertical-writing.md` | 세로쓰기 — ceremonial vertical text | Classical quotations, humanities, cultural reverence |
+| `hanja-ruby.md` | 한자 병기 — Hangul with Hanja annotations above | Legal/medical/academic terminology, pedagogical introduction |
+| `banner-caption.md` | 방주/협주 — main text + side commentary | "Rule + exception" patterns preserved on one slide |
+
+These Korean-specific layouts require explicit opt-in per theme. If a theme doesn't style these classes, the composer will fall back to default section styling (usually acceptable but suboptimal).
 
 ## Rhythm rule
 

@@ -54,14 +54,21 @@ For each candidate:
 
 ### Step 5 — Present candidates
 
-Show a concise comparison table, then ask user to pick via AskUserQuestion:
+Show a concise comparison table, then ask user to pick via AskUserQuestion.
 
-```
+Current theme catalog:
+
+**minimalist-premium track**
 | Theme | Mood | Palette | Best for |
 |-------|------|---------|----------|
-| Obsidian Mono | 조용한 자신감 | 크림/먹/주황 | 임원 브리핑, 아키텍처 |
-| Arctic Serif | 차분한 학술 | 차가운 회색/네이비 | 연구·교육 |
-```
+| Obsidian Mono | 조용한 자신감 | 크림/먹/주황 | 임원 브리핑, 아키텍처, 제품 발표 |
+| Arctic Serif | 차분한 학술 | 차가운 회색/네이비 | 연구 발표, 정책 브리핑, 논문 |
+
+**editorial track**
+| Theme | Mood | Palette | Best for |
+|-------|------|---------|----------|
+| Kinfolk Serif | 사려 깊고 문학적 | 크림/딥잉크/버건디 | 브랜드 내러티브, 미션, 문화 토크 |
+| Wired Grid | 명료하고 모더니스트 | 흰색/검정/오렌지 | 컨퍼런스 키노트, 트렌드 리포트, 문화 비평 |
 
 Only show themes in the chosen track. If track has only one theme, skip selection and note: "<theme> 단일 후보로 진행합니다."
 
