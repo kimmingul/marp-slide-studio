@@ -1,0 +1,351 @@
+/* Marp Slide Studio — Theme Gallery stylesheet */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+
+:root {
+  --bg: #0E0F12;
+  --surface: #17181C;
+  --surface-hover: #1E1F24;
+  --fg: #F4F5F8;
+  --fg-dim: #A0A3AB;
+  --fg-faint: #5A5D66;
+  --rule: #27282D;
+  --accent: #FF5B13;
+  --accent-ink: #FFFFFF;
+  --tier-curated: #A78BFA;
+  --tier-generated: #34D399;
+  --tier-ondemand: #64748B;
+
+  --font-body: 'Pretendard Variable', 'Pretendard', -apple-system,
+               BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --gap: 1.25rem;
+  --radius: 0;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+
+.site-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--rule);
+  position: sticky;
+  top: 0;
+  background: rgba(14, 15, 18, 0.92);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+.brand { display: flex; align-items: baseline; gap: 0.65rem; }
+.brand .mark { color: var(--accent); font-size: 1.3em; }
+.brand .name { font-weight: 700; letter-spacing: -0.02em; }
+.brand .sub { color: var(--fg-faint); font-size: 0.85em; font-family: var(--font-mono); }
+.stats { color: var(--fg-dim); font-family: var(--font-mono); font-size: 0.85em; }
+
+/* ── Filter bar ─────────────────────────────────────────────── */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+  align-items: center;
+}
+.filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.78em;
+  color: var(--fg-dim);
+}
+.filters label > span {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72em;
+}
+.filters select, .filters input {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--rule);
+  padding: 0.45rem 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.92em;
+  min-width: 12rem;
+}
+.filters .search input { min-width: 18rem; }
+.filters button {
+  background: transparent;
+  color: var(--fg-dim);
+  border: 1px solid var(--rule);
+  padding: 0.45rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  cursor: pointer;
+  align-self: end;
+}
+.filters button:hover { border-color: var(--fg); color: var(--fg); }
+
+/* ── Grid ───────────────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--gap);
+  padding: 1.5rem 2rem 4rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  overflow: hidden;
+  transition: border-color 120ms ease, transform 120ms ease;
+  cursor: pointer;
+  position: relative;
+}
+.card:hover {
+  border-color: var(--fg-dim);
+  background: var(--surface-hover);
+}
+.card[data-tier="curated"] { border-left: 3px solid var(--tier-curated); }
+.card[data-tier="generated"] { border-left: 3px solid var(--tier-generated); }
+.card[data-tier="on-demand"] { border-left: 3px solid var(--tier-ondemand); }
+
+.card .thumb {
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Palette swatches for on-demand cards (no render yet) */
+.card .swatches {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.card .swatches span {
+  flex: 1;
+  display: block;
+}
+
+.card .head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.9rem 1rem 0.3rem;
+  gap: 0.5rem;
+}
+.card .head h3 {
+  margin: 0;
+  font-size: 1.05em;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.card .head .tier {
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.card[data-tier="curated"] .head .tier { color: var(--tier-curated); }
+.card[data-tier="generated"] .head .tier { color: var(--tier-generated); }
+.card[data-tier="on-demand"] .head .tier { color: var(--tier-ondemand); }
+
+.card .meta {
+  padding: 0 1rem 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72em;
+}
+.card .meta .chip {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.15rem 0.5rem;
+  color: var(--fg-dim);
+  border: 1px solid var(--rule);
+}
+
+.card .desc {
+  padding: 0.25rem 1rem 0.9rem;
+  color: var(--fg-dim);
+  font-size: 0.86em;
+  line-height: 1.5;
+}
+
+.card .actions {
+  display: flex;
+  border-top: 1px solid var(--rule);
+}
+.card .actions button {
+  flex: 1;
+  background: transparent;
+  color: var(--fg);
+  border: none;
+  padding: 0.7rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.card .actions button:hover { background: rgba(255, 255, 255, 0.03); }
+.card .actions button + button { border-left: 1px solid var(--rule); }
+.card .actions .primary { color: var(--accent); }
+
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--fg-faint);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* ── Modal ──────────────────────────────────────────────────── */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal[aria-hidden="false"] { display: flex; }
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+}
+.modal-panel {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  max-width: 1080px;
+  width: calc(100% - 2rem);
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  padding: 0;
+}
+.modal-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--rule);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+.modal-panel header h2 { margin: 0; font-size: 1.3em; font-weight: 700; letter-spacing: -0.02em; }
+.modal-panel .close {
+  background: transparent;
+  color: var(--fg-dim);
+  border: 1px solid var(--rule);
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.3em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-meta {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  color: var(--fg-dim);
+  border-bottom: 1px solid var(--rule);
+}
+.modal-meta b { color: var(--fg); font-weight: 500; }
+.modal-slides {
+  padding: 1rem 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 0.75rem;
+}
+.modal-slides img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  background: #000;
+}
+.modal-panel footer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--rule);
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+}
+.modal-panel footer button,
+.modal-panel footer a {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--rule);
+  padding: 0.55rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.modal-panel footer button:hover,
+.modal-panel footer a:hover { border-color: var(--fg); }
+.modal-panel footer #copy-cmd.copied { color: var(--tier-generated); border-color: var(--tier-generated); }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+
+.site-foot {
+  border-top: 1px solid var(--rule);
+  padding: 1.5rem 2rem;
+  color: var(--fg-faint);
+  font-size: 0.78em;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.site-foot code {
+  font-family: var(--font-mono);
+  color: var(--fg-dim);
+  background: rgba(255,255,255,0.04);
+  padding: 0.1em 0.4em;
+}

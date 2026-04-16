@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marp Slide Studio · Theme Gallery</title>
+<link rel="stylesheet" href="gallery.css">
+<script>window.__GALLERY_DATA__ = /*GALLERY_DATA*/null/*END_GALLERY_DATA*/;</script>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="brand">
+    <span class="mark">◆</span>
+    <span class="name">Theme Gallery</span>
+    <span class="sub">marp-slide-studio</span>
+  </div>
+  <div class="stats">
+    <span id="visible-count">0</span> / <span id="total-count">0</span> themes
+  </div>
+</header>
+
+<nav class="filters" aria-label="Filters">
+  <label>
+    <span>Tier</span>
+    <select data-filter="tier">
+      <option value="">all</option>
+      <option value="curated">curated (Tier 2)</option>
+      <option value="generated">generated (Tier 3)</option>
+      <option value="on-demand">on-demand</option>
+    </select>
+  </label>
+  <label>
+    <span>Track</span>
+    <select data-filter="track">
+      <option value="">all</option>
+      <option value="minimalist-premium">minimalist-premium</option>
+      <option value="editorial">editorial</option>
+    </select>
+  </label>
+  <label>
+    <span>Category</span>
+    <select data-filter="category">
+      <option value="">all</option>
+    </select>
+  </label>
+  <label>
+    <span>Density</span>
+    <select data-filter="density">
+      <option value="">all</option>
+      <option value="sparse">sparse</option>
+      <option value="moderate">moderate</option>
+      <option value="dense">dense</option>
+    </select>
+  </label>
+  <label class="search">
+    <span>Search</span>
+    <input type="search" data-filter="q" placeholder="brand, mood, hallmark…">
+  </label>
+  <button type="button" id="reset-filters">reset</button>
+</nav>
+
+<main class="grid" id="grid"></main>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel" role="dialog" aria-modal="true">
+    <header>
+      <h2 id="modal-title"></h2>
+      <button type="button" class="close" data-close>×</button>
+    </header>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-slides" id="modal-slides"></div>
+    <footer>
+      <button type="button" id="copy-cmd">Copy /slide-theme command</button>
+      <a id="open-html" href="#" target="_blank" rel="noopener">Open full HTML ↗</a>
+    </footer>
+  </div>
+</div>
+
+<footer class="site-foot">
+  <div>
+    Gallery rebuilt from <code>scripts/build-gallery.mjs</code>.
+    Signature metadata in <code>assets/design-systems/registry.json</code>.
+  </div>
+  <div>
+    Inspired by publicly visible brand aesthetics. Not affiliated with any listed brand.
+  </div>
+</footer>
+
+<script src="gallery.js"></script>
+</body>
+</html>

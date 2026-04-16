@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.4.0 — 2026-04-16
+
+### Added — Theme Gallery (3-mode visual selection)
+
+- **Mode A: Mood Match** — 3-question quiz (surface / tone / intensity) scores all 63 themes and returns top 5–8 candidates in ~30 seconds. Always includes at least one Tier 2 curated theme as quality floor.
+- **Mode B: Full Gallery** — browser-based grid of all 63 themes (4 curated + 5 generated + 54 on-demand). Filters by tier, track, category, density; free-text search across brand/mood/hallmarks. Modal shows all 7 sampler slides per theme. On-demand cards show palette swatches + "⚡ Forge" call-to-action with the exact `/slide-theme <brand>` command.
+- **Mode C: Personal Preview** — render user's own deck against 5 candidate themes side-by-side with first-impression slides (1–3) per theme.
+- **Sampler deck** (`examples/gallery-sampler/deck.md`) — brand-neutral 7-slide deck using every layout class; rendered against each theme for fair comparison.
+- **Gallery builder** (`scripts/build-gallery.mjs`) — orchestrates rendering via marp-cli `--images png`, assembles filterable HTML with inlined metadata JSON. Outputs to `~/.marp-slide-studio/gallery/` (plugin repo stays clean).
+- **Gallery skill** (`skills/slide-theme-gallery/SKILL.md`) — the 3-mode router invoked by `/slide-gallery`.
+- **Curator routing** — `slide-theme-curator` now offers gallery modes as entry-point options before its existing track/brand flow.
+
+### Changed
+- `slide-theme-curator` adds Step 2.5 — gallery mode entry question for users who haven't scoped their request.
+- README documents the 3 gallery modes.
+
+### Security
+- `gallery/gallery.js` uses only safe DOM methods (`createElement`, `textContent`, attribute setters) — no `innerHTML` with dynamic content. Passes the plugin's XSS advisory hook.
+
+### Build verification
+- 9 cached themes rendered end-to-end (4 curated + 5 generated): `obsidian-mono`, `kinfolk-serif`, `arctic-serif`, `wired-grid`, `stripe`, `linear-app`, `apple`, `notion`, `tesla`.
+- 63 × 7 = 441 potential slide PNGs, 63 actually rendered (for cached themes), 54 on-demand cards use palette swatch fallback.
+- Gallery total size: 2.2MB. Build time: ~2 minutes for 9 themes.
+
 ## 0.3.0 — 2026-04-16
 
 ### Added — Theme-Foundry pipeline

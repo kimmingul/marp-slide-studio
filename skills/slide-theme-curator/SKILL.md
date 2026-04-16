@@ -32,6 +32,24 @@ Read `./slides/<slug>/brief.md` and extract:
 
 Abort with message if brief.md is missing.
 
+### Step 2.5 — Offer gallery entry (new in v0.4)
+
+If the user has NOT given a specific brand or track as `$2`, and their message doesn't already scope the choice (e.g., "Stripe처럼" or "editorial"), ask via AskUserQuestion:
+
+```
+"어떻게 테마를 고르시겠어요?"
+ ① 빠른 3문답으로 추천 받기 (Mood Match, ~30초) — Recommended
+ ② 브라우저로 전체 63개 갤러리 보기 (시각 비교)
+ ③ 내 덱을 후보 5개에 적용해서 비교 (Personal Preview, ~5분)
+ ④ 목록에서 바로 선택 (기존 방식)
+```
+
+If the user picks ①, ②, or ③ → delegate to `slide-theme-gallery` skill (Task tool with args). When the gallery-driven selection returns a brand slug, continue with Step 3 treating that slug as if the user had given it originally.
+
+If the user picks ④ → proceed to Step 3 as before.
+
+This step is additive. If the user's original request already named a brand or track, skip this and go straight to Step 3.
+
 ### Step 3 — Classify the request: track-based or brand-based?
 
 The `$2` argument (or the user's message) can be:

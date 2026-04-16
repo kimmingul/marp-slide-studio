@@ -1,6 +1,6 @@
 {
   "name": "marp-slide-studio",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Build sophisticated Marp presentations with AI — grounded in real brand design systems, Korean-first typography, and a Playwright-powered visual review loop.",
   "author": {
     "name": "Marp Slide Studio Team"

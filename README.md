@@ -2,6 +2,8 @@
 
 **Build Marp decks that don't look AI-generated.** A Claude Code plugin that grounds slide generation in real brand design systems, Korean-first typography, and a Playwright-powered visual review loop.
 
+**v0.4.0** — Theme Gallery: 3-mode visual selection (Mood Match quiz / Full Gallery in browser / Personal Preview with your own deck). Filterable grid over all 63 themes, lazy render via `marp-cli --images png`, on-demand forge buttons for the 54 un-forged brands. Output to `~/.marp-slide-studio/gallery/`.
+
 **v0.3.0** — Theme-Foundry: 59-brand registry + on-demand theme generation via `theme-forger` skill/agent, 5 sample generated themes (Stripe, Linear, Apple, Notion, Tesla), transform spec (web→slide), theme validator, slide-theme-curator now routes 3-tier (curated → cached → on-demand).
 
 **v0.2.0** — 4 curated themes (2 per track), 3 Korean-specific layouts (세로쓰기 · 한자 병기 · 방주), offline font bundle, GitHub Actions CI with per-slide screenshot diffs, marketplace manifest, second worked example.
