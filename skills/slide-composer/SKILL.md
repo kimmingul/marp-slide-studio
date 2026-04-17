@@ -86,7 +86,7 @@ Core layouts (always available):
 
 Korean-only layouts (theme must opt in — check theme.css for the class):
 - `vertical-writing` → `<!-- _class: vertical -->` (세로쓰기; classical quotes)
-- `hanja-ruby` → `<!-- _class: ruby -->` (한자 병기; academic terms)
+- `ruby-annotation` → `<!-- _class: ruby -->` (한자 병기 · 振り仮名 · 拼音; academic terms, works across CJK)
 - `banner-caption` → `<!-- _class: banner-caption -->` (방주; main claim + qualification)
 
 Before emitting a Korean-only class, grep `theme.css` for `section.<class>`. If the class is not styled, fall back to `quote` (for vertical-writing) or `split` (for banner-caption) with a note in `.qa-log.md`.

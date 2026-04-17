@@ -7,7 +7,7 @@ This directory holds themes produced by the **Theme-Foundry pipeline** — not h
 Pairs of `<slug>.design.md` + `<slug>.marp.css` for any brand from `../registry.json` that has been generated at least once. Each pair is:
 
 - **Structurally valid** — passes `scripts/validate-theme.mjs`
-- **Korean-first** — Pretendard loaded, line-height ≥ 1.7, no italic/uppercase traps
+- **CJK-first** — Pretendard / Noto Sans JP/SC/TC loaded via theme-foundation, line-height ≥ 1.7 on CJK, no italic/uppercase traps
 - **Attributed** — every file includes the "Inspired by <brand>, not affiliated" disclaimer
 - **Regenerable** — delete them and the next `/slide-theme <brand>` will forge them fresh
 

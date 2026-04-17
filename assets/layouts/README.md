@@ -21,7 +21,7 @@ Reusable slide layouts. Each pattern is a Marp markdown snippet + minimal CSS re
 | File | Purpose | When to use |
 |---|---|---|
 | `vertical-writing.md` | 세로쓰기 — ceremonial vertical text | Classical quotations, humanities, cultural reverence |
-| `hanja-ruby.md` | 한자 병기 — Hangul with Hanja annotations above | Legal/medical/academic terminology, pedagogical introduction |
+| `ruby-annotation.md` | 한자 병기 · 振り仮名 · 拼音 — phonetic overlay using HTML `<ruby>` | Legal/medical/academic terminology, pedagogical introduction; works across KR/JA/ZH |
 | `banner-caption.md` | 방주/협주 — main text + side commentary | "Rule + exception" patterns preserved on one slide |
 
 These Korean-specific layouts require explicit opt-in per theme. If a theme doesn't style these classes, the composer will fall back to default section styling (usually acceptable but suboptimal).

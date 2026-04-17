@@ -36,12 +36,15 @@ if (cmd === 'init') {
   const keys = [
     'topic', 'preset', 'audience', 'narrative_pattern', 'tone',
     'length', 'memory_sentence', 'track', 'theme',
+    'typography', 'language',
     'refine_iterations', 'export', 'pptx_editable',
   ];
   for (const k of keys) {
     const v = config[k];
     const display = Array.isArray(v) ? v.join(', ') : (typeof v === 'boolean' ? (v ? 'yes' : 'no') : (v ?? ''));
-    const source = (k === 'length' || k === 'memory_sentence' || k === 'theme' || k === 'topic') ? 'user' : 'preset';
+    // User-controllable fields (may come from CLI flags or questions); others come from preset
+    const userControlled = new Set(['length', 'memory_sentence', 'theme', 'topic', 'typography', 'language']);
+    const source = userControlled.has(k) ? 'user' : 'preset';
     rows.push(`| ${k} | ${display} | ${source} |`);
   }
 

@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.7.1 — 2026-04-17
+
+### Fixed — full-repo consistency audit after v0.7.0 pivot
+
+Systematic review of all docs + skills + agents surfaced 9 stale references left over from earlier releases. All corrected in one pass.
+
+**Broken/stale file-name references (3):**
+- `assets/layouts/README.md` — layout index table listed `hanja-ruby.md` (renamed to `ruby-annotation.md` in v0.6.0)
+- `skills/slide-composer/SKILL.md` — layout-name mapping said `hanja-ruby`; corrected to `ruby-annotation`
+- Theme count drift: `README.md` and `skills/slide-theme-gallery/SKILL.md` still said "63 themes" in two places — corrected to 65 (6 curated + 59 registry after v0.7.0 added kinfolk-sans + arctic-sans)
+
+**Stale "Korean-first" phrasing (4 files, rebranded to "CJK-first" since plugin is multi-language as of v0.6.0):**
+- `skills/cjk-typography/SKILL.md` — "Korean-first foundation" → "CJK-first foundation"
+- `skills/marp-theme-engineer/SKILL.md` — "Korean-first considerations" heading → "CJK-first considerations (Korean · Japanese · Chinese)"
+- `assets/design-systems/generated/README.md` — "Korean-first" feature bullet → "CJK-first" with explicit Noto Sans JP/SC/TC mention
+- `agents/theme-forger.md` — three spots: Rule 3 heading, font-stack section, DESIGN.md template reference all updated to mention multi-language CJK + Gothic-default framing
+
+**Gallery Mood-Match table stale post-v0.7.0 (1 file):**
+- `skills/slide-theme-gallery/SKILL.md` — Mood Match scoring table listed `kinfolk-serif` and `arctic-serif` as primary candidates for warm-paper / editorial / academic categories. Since v0.7.0 Gothic is the default, updated to list their sans variants (`kinfolk-sans`, `arctic-sans`) as primary. Added explicit "Editorial serif opt-in" subsection so users who explicitly mention serif/명조 still get the serif variants surfaced.
+
+**Theme-forger agent template drift (1 file):**
+- `agents/theme-forger.md` — Section 7 referenced `editorial/kinfolk-serif.design.md` as a template for generated DESIGN.md files. Since v0.7.0 generated themes default to Gothic, corrected to point at `editorial/kinfolk-sans.design.md` with explicit "avoid serif variants as templates" caution.
+
+**Autopilot log coverage (1 file):**
+- `scripts/autopilot/log.mjs` — `.auto-log.md` init table didn't track `typography` or `language` fields even though v0.6.0 added `language` and v0.7.0 added `typography` to the config. Added both to the logged keys list and marked them as user-controllable (via CLI flag or team setting).
+
+### Verified (no changes needed)
+
+- 11/11 themes validate (5 zero-warnings, 6 with benign "no attribution" warning for hand-crafted themes)
+- 59/59 registry brands have valid `suggested_track` (48 minimalist-premium / 11 editorial)
+- All 6 autopilot presets reference existing theme CSS files
+- Both presets with `theme_serif_variant` (team-narrative → kinfolk-serif, research-talk → arctic-serif) correctly reference existing files
+- All 11 themes implement the 7 required layout classes (hero, monumental, split, metric, divider, quote, enumerated)
+- SKILL.md YAML frontmatter contains no XML-like placeholder (validator-rejected since v0.6.2)
+- Versions consistent across plugin.json / marketplace.json / README
+
+### Released as
+- GitHub release `v0.7.1` with `marp-slide-studio-v0.7.1.zip` asset.
+
 ## 0.7.0 — 2026-04-17
 
 ### Changed — Gothic-first pivot (business/tech default)

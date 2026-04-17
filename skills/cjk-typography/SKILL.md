@@ -102,7 +102,7 @@ section.metric, section.data, section table {
 
 ## Quick reference CSS block
 
-For any new theme, paste this as the Korean-first foundation:
+For any new theme, paste this as the CJK-first foundation (via `assets/theme-foundation.css` — covers Korean / Japanese / Chinese / Latin with `:lang()` cascades):
 
 ```css
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');

@@ -137,7 +137,7 @@ All our themes declare tokens in `:root`. This lets the theme-curator swap token
 
 Missing any of these means the composer may emit a `_class: quote` that renders as the default layout — always broken. Validate by ensuring every layout file in `assets/layouts/` has a corresponding section rule.
 
-## Korean-first considerations
+## CJK-first considerations (Korean · Japanese · Chinese)
 
 - Always set `line-height` on `section` (base) at 1.7 or more for Korean body.
 - Never use `text-transform: uppercase` globally — Hangul has no case.

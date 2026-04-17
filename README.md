@@ -196,11 +196,11 @@ Claude asks 3 questions (preset, length, memory sentence), then runs the full pi
 /slide-gallery
 ```
 
-Opens a browser-based filterable grid of all 63 themes. Click any card to see all 7 sampler slides rendered in that theme. Copy the `/slide-theme <slug>` command back into Claude to apply.
+Opens a browser-based filterable grid of all 65 themes. Click any card to see all 7 sampler slides rendered in that theme. Copy the `/slide-theme <slug>` command back into Claude to apply.
 
 Three gallery modes:
 - **Mood Match** (default, ~30s) — 3 quiz questions → 5–8 recommendations
-- **Full Gallery** (browser) — all 63 themes
+- **Full Gallery** (browser) — all 65 themes
 - **Personal Preview** — your own deck rendered against 5 candidate themes
 
 ## Design systems

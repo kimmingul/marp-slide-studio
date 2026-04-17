@@ -1,6 +1,6 @@
 ---
 name: theme-forger
-description: Use PROACTIVELY when the theme-forger skill needs actual CSS + DESIGN.md files generated for a brand from the registry. Reads the forge brief (JSON), transform-prompt.md spec, korean-scale.md, a sample curated theme, and produces TWO files — <slug>.design.md and <slug>.marp.css — at the exact paths specified in the brief. Follows the transform rules literally, validates its own output mentally before writing. Examples — <example>theme-forger skill has loaded forge brief for "stripe" and dispatches this agent to generate the files → agent reads spec + sample, writes both files</example> <example>validation failed on previous attempt with specific errors → re-dispatched with error list, agent fixes only those issues</example>
+description: Use PROACTIVELY when the theme-forger skill needs actual CSS + DESIGN.md files generated for a brand from the registry. Reads the forge brief (JSON), transform-prompt.md spec, cjk-scale.md typography guide, a sample curated theme (Gothic-default), and produces TWO files at the exact paths specified in the brief. Follows the transform rules literally, validates its own output mentally before writing. Examples — <example>theme-forger skill has loaded forge brief for "stripe" and dispatches this agent to generate the files → agent reads spec + sample, writes both files</example> <example>validation failed on previous attempt with specific errors → re-dispatched with error list, agent fixes only those issues</example>
 tools: Read, Write, Edit, Glob, Bash
 model: sonnet
 color: purple
@@ -84,7 +84,7 @@ Example for Stripe (palette: white, navy, purple, cyan):
 --accent-ink: #FFFFFF
 ```
 
-### 4. Build the font stack (Rule 3 — Korean-first)
+### 4. Build the font stack (Rule 3 — Multi-language CJK + Latin, Gothic-default since v0.7.0)
 
 ```
 --font-body: 'Pretendard Variable', '<brand body font or fallback>', -apple-system, sans-serif;
@@ -170,12 +170,12 @@ Write via the Write tool to `output.marp_css`.
 
 ### 7. Write the `.design.md` file
 
-9 sections, following the structure in existing `minimalist-premium/obsidian-mono.design.md` or `editorial/kinfolk-serif.design.md`:
+9 sections, following the structure in existing `minimalist-premium/obsidian-mono.design.md` or `editorial/kinfolk-sans.design.md` (both Gothic-default). Avoid the serif variants (`kinfolk-serif`, `arctic-serif`) as templates — those are opt-in editorial variants. The default is Gothic.
 
 1. Header: `# <Brand Slug> — Design System` + one-paragraph description
 2. Visual Theme & Atmosphere (mood, density, philosophy — synthesize from `mood` and `hallmarks`)
 3. Color Palette & Roles (table of 8 slide tokens with hex values)
-4. Typography Rules (Korean-first scale with brand-inflected font names)
+4. Typography Rules (CJK-first scale with brand-inflected font names; see `assets/typography/cjk-scale.md` and `latin-scale.md`)
 5. Component Styling (brief — focused on slide context only)
 6. Layout Principles (how the brand uses grid/alignment based on `hallmarks`)
 7. Depth & Elevation (usually "none ever — flat composition")

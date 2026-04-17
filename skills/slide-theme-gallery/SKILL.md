@@ -1,6 +1,6 @@
 ---
 name: slide-theme-gallery
-description: Use when the user says "/slide-gallery", "테마 갤러리", "테마 비교해서 고르고 싶어", "테마 미리보기", or wants to browse themes visually before picking. Offers three modes — Mood Match quiz (3 questions → 5–8 recommendations), Full Gallery (browser opens with 63 themes grid), and Personal Preview (render the user's own deck against 5 candidate themes side-by-side).
+description: Use when the user says "/slide-gallery", "테마 갤러리", "테마 비교해서 고르고 싶어", "테마 미리보기", or wants to browse themes visually before picking. Offers three modes — Mood Match quiz (3 questions → 5–8 recommendations), Full Gallery (browser opens with 65 themes grid), and Personal Preview (render the user's own deck against 5 candidate themes side-by-side).
 argument-hint: "[--mood|--full|--preview SLUG] [--refresh|--forge-all]"
 allowed-tools: Read, Write, Glob, AskUserQuestion, Bash(node:*, bash:*, open:*, test:*, mkdir:*, cp:*), Task
 ---
@@ -73,15 +73,19 @@ Read `assets/design-systems/registry.json`. For each brand, compute a match scor
 |--------|----------------|-------------------|
 | Surface: bright | brands with `#FFF`/`#FAFAFA`/`#F5F5F7` as primary palette[0] | any with light primary |
 | Surface: dark | brands with `#000`/`#08*`/`#0A*`/`#0F*` as palette[0] — linear, vercel, x.ai, voltagent, supabase | any near-black |
-| Surface: warm paper | claude, notion, kinfolk-serif, sanity, clay | any with warm off-white |
+| Surface: warm paper | kinfolk-sans, claude, notion, sanity, clay | any with warm off-white |
 | Surface: blackout | apple (inverse), spacex, runwayml, ferrari, lamborghini | any with #000 in palette |
 | Tone: technical | stripe, vercel, linear, cursor, mistral, supabase, obsidian-mono | most minimalist-premium |
-| Tone: editorial | kinfolk-serif, notion, claude, sanity, clay | any editorial track |
+| Tone: editorial | kinfolk-sans, notion, claude, sanity, clay | any editorial track |
 | Tone: provocative | wired-grid, spotify, ferrari, lamborghini, runwayml, pinterest | any with vibrant accent |
-| Tone: academic | arctic-serif, ibm, mintlify, together.ai, cohere | any with subdued palette |
+| Tone: academic | arctic-sans, ibm, mintlify, together.ai, cohere | any with subdued palette |
 | Intensity: restrained | apple, vercel, linear, cal, x.ai, resend, obsidian-mono | density `sparse` |
 | Intensity: moderate | most brands | anything with `moderate` density |
 | Intensity: intense | ferrari, wired-grid, mistral, sentry, lamborghini, spotify | density `dense` or strong accent |
+
+### Editorial serif opt-in (v0.7.0+)
+
+When the user answers Surface=warm-paper AND Tone=editorial AND explicitly mentions serif / 명조 / editorial typography, add `kinfolk-serif` and `arctic-serif` to the recommendation list. These are opt-in variants — do NOT include them by default even for editorial-leaning answers, since Gothic is the plugin default.
 
 ### A.3 Filter + suggest
 
