@@ -1,8 +1,15 @@
 # Arctic Serif — Design System
 
+> **Opt-in editorial variant (v0.7.0+).** The plugin defaults to Gothic typography for business/tech contexts. This theme keeps the Arctic palette but pairs it with Noto Serif KR display — use explicitly for scholarly serif atmosphere. For the Gothic-default sans variant with the same palette + footnote rail, see [`arctic-sans`](./arctic-sans.design.md).
+>
+> **How to use explicitly:**
+> - `/slide-theme arctic-serif` — direct theme pick
+> - `/slide-auto "topic" --preset research-talk --typography editorial` — autopilot with serif override
+> - Team setting `default_typography: editorial` in `.claude/marp-slide-studio.local.md`
+
 A minimalist-premium theme for research, policy, and academic contexts. Cool gray palette, restrained serif display (Noto Serif KR), generous margins, navy-ink accent. Reads like a thoughtful white paper projected at full-bleed.
 
-Use when: research presentations, policy briefings, academic defenses, editorial strategy reviews. This is NOT for founder pitches or marketing — too quiet.
+Use when: research presentations, policy briefings, academic defenses, editorial strategy reviews — and **when you explicitly want serif headlines** (the plugin default is Gothic since v0.7.0). This is NOT for founder pitches or marketing — too quiet.
 
 ## 1. Visual Theme & Atmosphere
 

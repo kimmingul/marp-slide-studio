@@ -1,8 +1,15 @@
 # Kinfolk Serif — Design System
 
+> **Opt-in editorial variant (v0.7.0+).** The plugin defaults to Gothic typography for business/tech contexts. This theme keeps the Kinfolk palette but pairs it with Noto Serif KR display — use explicitly for editorial serif atmosphere. For the Gothic-default sans variant with the same palette, see [`kinfolk-sans`](./kinfolk-sans.design.md).
+>
+> **How to use explicitly:**
+> - `/slide-theme kinfolk-serif` — direct theme pick
+> - `/slide-auto "topic" --preset team-narrative --typography editorial` — autopilot with serif override
+> - Team setting `default_typography: editorial` in `.claude/marp-slide-studio.local.md`
+
 An editorial-first slide theme inspired by Kinfolk magazine, The New York Times Magazine, and Cereal. Warm neutral palette, serif display type, generous margins, editorial pacing. Korean body set in Pretendard; display set in Noto Serif KR for editorial gravitas.
 
-Use when: storytelling decks, brand narratives, cultural/mission-driven talks, long-form essays presented as slides.
+Use when: storytelling decks, brand narratives, cultural/mission-driven talks, long-form essays presented as slides — and **when you explicitly want serif display** (the plugin default is Gothic since v0.7.0).
 
 ## 1. Visual Theme & Atmosphere
 

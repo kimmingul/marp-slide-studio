@@ -1,7 +1,7 @@
 {
   "name": "marp-slide-studio",
-  "description": "Sophisticated Marp slide decks with AI — 63 brand-grounded design systems (4 curated + 59 on-demand), multilingual CJK + Latin typography, and a Playwright visual-QA loop. One-command autopilot from topic to PDF + PPTX.",
-  "version": "0.6.3",
+  "description": "Sophisticated Marp slide decks with AI — 65 brand-grounded design systems (6 curated + 59 on-demand), Gothic-by-default typography for Korean business/tech contexts, multilingual CJK + Latin support, and a Playwright visual-QA loop. One-command autopilot from topic to PDF + PPTX.",
+  "version": "0.7.0",
   "owner": {
     "name": "Min-Gul Kim",
     "url": "https://github.com/kimmingul/marp-slide-studio"
@@ -10,8 +10,8 @@
     {
       "name": "marp-slide-studio",
       "source": "./",
-      "description": "Build Marp presentations that don't look AI-generated. 8 skills, 3 agents, 63 themes (Stripe/Apple/Linear/Notion/Tesla/Figma/Spotify/IBM/BMW/Ferrari and more), multilingual typography (Korean/Japanese/Chinese/English), 6 autopilot presets, Playwright visual refinement loop.",
-      "version": "0.6.3",
+      "description": "Build Marp presentations that don't look AI-generated. 8 skills, 3 agents, 65 themes (Stripe/Apple/Linear/Notion/Tesla/Figma/Spotify/IBM/BMW/Ferrari and more), Gothic-by-default for Korean business decks, multilingual CJK + Latin typography, 6 autopilot presets, Playwright visual refinement loop.",
+      "version": "0.7.0",
       "author": "Min-Gul Kim",
       "category": "content-authoring",
       "tags": [

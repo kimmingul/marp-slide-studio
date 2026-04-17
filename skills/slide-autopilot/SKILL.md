@@ -1,7 +1,7 @@
 ---
 name: slide-autopilot
 description: Use when the user says "/slide-auto", "자동으로 덱 만들어줘", "전체 자동 진행", "autopilot", or wants the full pipeline (brainstorm → theme → compose → refine → export) to run without stepwise intervention. Collects ALL decisions upfront in either Express mode (3 questions, preset-driven) or Full mode (4 AskUserQuestion batches covering 16 fields), then runs the entire pipeline autonomously with no further prompts. Preserves partial artifacts on failure.
-argument-hint: "[topic] [--full] [--preset PRESET] [--lang ko|en|ja|zh-Hans|zh-Hant] [--no-refine]"
+argument-hint: "[topic] [--full] [--preset PRESET] [--lang ko|en|ja|zh-Hans|zh-Hant] [--typography gothic|editorial] [--no-refine]"
 allowed-tools: Read, Write, Edit, Glob, Bash(node:*, bash:*, npx:*, mkdir:*, test:*, cp:*, open:*, ls:*), AskUserQuestion, Task
 ---
 
@@ -28,6 +28,7 @@ Critical contract: after setup questions are answered, **NO user interaction** u
 - `--no-refine`: disable refine loop
 - `--force-theme <slug>`: override preset's theme with specific brand
 - `--lang <code>`: override preset's default_language. Accepted: `ko`, `en`, `ja`, `zh-Hans`, `zh-Hant`, `es`, `fr`, `de`, `pt`, `it`. Affects typography (line-height, font family, italic discipline) via theme-foundation.css.
+- `--typography gothic|editorial`: override the Gothic-first default (v0.7.0+). When set to `editorial`, presets that have a serif variant defined (`theme_serif_variant`) swap their default theme to that variant — e.g. `team-narrative` swaps `kinfolk-sans` → `kinfolk-serif`, `research-talk` swaps `arctic-sans` → `arctic-serif`. Presets without a serif variant stay on their Gothic theme regardless. Priority: CLI flag > team-setting `default_typography` > preset `typography` > `gothic`.
 
 If no topic given, ask once: "이번 덱의 한 문장 주제는?" (plain text).
 
@@ -51,13 +52,13 @@ If NOT `--full`, run Express setup. Batch all questions into a single AskUserQue
 
 **Q1 — Preset** (skip if `--preset` was passed)
 ```
-"어떤 종류의 덱인가요?"
-① Investor pitch     — stripe · 기술·단정·설득형 (Recommended for most cases)
-② Team narrative     — kinfolk-serif · 서정·내부 공유
-③ Research talk      — arctic-serif · 학술·증거 중심
-④ Launch keynote     — wired-grid · 도발적·매체적
-⑤ Executive brief    — obsidian-mono · 조용한 권위
-⑥ Product launch     — apple · 미니멀 프리미엄
+"어떤 종류의 덱인가요?" (모두 고딕 기본 · --typography editorial로 명조 전환 가능)
+① Investor pitch     — stripe · 고딕 · 기술·단정·설득형 (Recommended for most cases)
+② Team narrative     — kinfolk-sans · 고딕 · 서사·팀 공유 (serif option: kinfolk-serif)
+③ Research talk      — arctic-sans · 고딕 · 학술·증거 중심 (serif option: arctic-serif)
+④ Launch keynote     — wired-grid · 고딕 900 · 도발·매체적
+⑤ Executive brief    — obsidian-mono · 고딕 · 조용한 권위
+⑥ Product launch     — apple · 고딕 · 미니멀 프리미엄
 ```
 
 **Q2 — Length**

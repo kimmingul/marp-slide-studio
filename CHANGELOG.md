@@ -1,5 +1,56 @@
 # Changelog
 
+## 0.7.0 — 2026-04-17
+
+### Changed — Gothic-first pivot (business/tech default)
+
+The plugin originally launched with an editorial-first posture (kinfolk-serif, arctic-serif as peer-level defaults). Korean business and tech slide conventions consistently expect Gothic (sans-serif) as the baseline — serif is an editorial signal, not a default. This release re-positions the plugin accordingly **without removing editorial capability**.
+
+**Behavior change (not breaking any API)**:
+- `team-narrative` preset default theme: `kinfolk-serif` → **`kinfolk-sans`**
+- `research-talk` preset default theme: `arctic-serif` → **`arctic-sans`**
+- All 6 presets carry explicit `typography: "gothic"` field
+- Existing `kinfolk-serif` and `arctic-serif` themes remain available as opt-in
+
+### Added
+
+- **Two new hand-crafted themes**:
+  - **Kinfolk Sans** (`assets/design-systems/editorial/kinfolk-sans.*`) — Kinfolk palette (cream paper + burgundy) with Pretendard everywhere. Preserves editorial warmth via color + paragraph-flow + drop-cap, not serif forms.
+  - **Arctic Sans** (`assets/design-systems/minimalist-premium/arctic-sans.*`) — Arctic palette (cool gray + navy + deep blue) with Pretendard. Footnote rail preserved for research contexts.
+- **`--typography gothic|editorial` CLI flag** on `/slide-auto`. When `editorial`, presets that declare a `theme_serif_variant` swap their default theme (e.g., `kinfolk-sans` → `kinfolk-serif`).
+- **`default_typography` team setting** in `.claude/marp-slide-studio.local.md`. Priority: CLI flag > team setting > preset default > `gothic`.
+- **Preset serif variants** field `theme_serif_variant` on `team-narrative` and `research-talk` so `--typography editorial` knows where to swap.
+- **"Opt-in" banners** at top of `kinfolk-serif.design.md` and `arctic-serif.design.md` explaining how to invoke them explicitly.
+
+### Changed — documentation + registry
+
+- **README reframed** across 5 sections: hero paragraph mentions Gothic default, "Key features" adds Gothic-by-default bullet, "Design systems" restructured into "Default themes (Gothic)" + "Editorial themes (opt-in)" tables, "Autopilot presets" table adds serif-variant column, "Typography" section leads with the Gothic default.
+- **`assets/transform-prompt.md` Rule 3** rewritten to instruct theme-forger: default to sans display; use serif display ONLY when brand aesthetic clearly demands it (Claude/literary, Notion/optional-serif, NYT/editorial). Majority of brand registry → Gothic default for generated themes.
+- **Registry reassignment** — 8 brands moved from `editorial` to `minimalist-premium` suggested track (reflecting their actual tech/SaaS aesthetic, not editorial):
+  - cohere, lovable, posthog, airtable, framer, miro, intercom, spacex
+  - 11 brands stay editorial (truly narrative/cinematic/literary): claude, runwayml, sanity, clay, notion, figma, ferrari, lamborghini, pinterest, spotify, airbnb
+  - Final distribution: 48 minimalist-premium / 11 editorial (was 40 / 19)
+- **`examples/marp-slide-studio.local.md`** expanded with `default_typography` and `default_language` fields + per-deck override examples.
+- **`slide-autopilot` SKILL.md Q1 labels** explicitly annotate "고딕" vs "serif option" so users know the default is Gothic and which presets have serif variants available.
+
+### Theme catalog (post-0.7.0)
+
+| Track directory | Theme | Typography | Role |
+|---|---|---|---|
+| minimalist-premium | obsidian-mono | Gothic | default |
+| minimalist-premium | **arctic-sans** | Gothic | default (was arctic-serif for research-talk) |
+| minimalist-premium | arctic-serif | Serif | opt-in |
+| editorial | **kinfolk-sans** | Gothic | default (was kinfolk-serif for team-narrative) |
+| editorial | kinfolk-serif | Serif | opt-in |
+| editorial | wired-grid | Gothic 900 | default |
+
+### Semver reasoning
+
+Minor bump (not patch) because default behavior changes — users who invoked `team-narrative` or `research-talk` will now get Gothic output by default rather than serif headlines. No API is removed or renamed.
+
+### Released as
+- GitHub release `v0.7.0` with `marp-slide-studio-v0.7.0.zip` asset.
+
 ## 0.6.3 — 2026-04-17
 
 ### Fixed — Korean / CJK text missing in exported PDF

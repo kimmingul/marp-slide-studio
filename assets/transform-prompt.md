@@ -58,7 +58,16 @@ How to collapse:
 - Inverse (the brand's "dark mode" base or black/near-black) → `--bg-inv`
 - If the brand has multiple signature colors (e.g., Figma's multi-color), pick the ONE most recognizable and note the rest in the DESIGN.md prose but do not put them in tokens. Scarcity makes accent powerful.
 
-### Rule 3 — Multi-language typography injection
+### Rule 3 — Multi-language typography injection (Gothic-default since v0.7.0)
+
+**Default to sans display unless the brand signature explicitly demands serif.**
+
+The plugin defaults to Gothic (sans-serif) typography for both body and display across all generated themes — this matches the Korean business/tech convention where Gothic is the expected default. Use serif display (Noto Serif KR, Noto Serif JP, etc.) ONLY when the brand's publicly visible aesthetic is clearly editorial/literary. Examples:
+- **Serif-appropriate brands** (rare, explicit): Claude (literary/manuscript warmth), NYT (editorial journalism), Sanity (editorial CMS), Clay (warm-boutique illustration), Notion (optional serif-headline mode)
+- **Gothic brands** (default, majority): Stripe, Linear, Apple, Vercel, Linear, Tesla, most tech/SaaS/fintech
+
+When in doubt, choose Gothic. The palette and layout rhythm carry brand character; serif is a specific editorial signal, not a default.
+
 
 Every generated theme MUST:
 - Import `assets/theme-foundation.css` at the top via `@import url('../../theme-foundation.css');`

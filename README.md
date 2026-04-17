@@ -2,7 +2,9 @@
 
 **Build Marp decks that don't look AI-generated.**
 
-A Claude Code plugin that grounds slide generation in real brand design systems, multilingual CJK + Latin typography, and a Playwright-powered visual review loop. Ships with 63 themes — 4 hand-crafted, plus on-demand generation for 59 brands from a curated registry (Stripe, Apple, Linear, Notion, Tesla, Figma, Spotify, IBM, BMW, Ferrari, and more).
+A Claude Code plugin that grounds slide generation in real brand design systems, **Gothic (sans-serif) typography by default** for Korean business/tech contexts, and a Playwright-powered visual review loop. Multilingual CJK + Latin support (Korean, Japanese, Chinese, English). Ships with **65 themes** — 6 hand-crafted (4 Gothic + 2 editorial serif variants) plus on-demand generation for 59 brands from a curated registry (Stripe, Apple, Linear, Notion, Tesla, Figma, Spotify, IBM, BMW, Ferrari, and more).
+
+> **v0.7.0 typography pivot**: the plugin now defaults to Gothic/sans-serif — matching Korean business and tech slide conventions. Editorial serif themes (`kinfolk-serif`, `arctic-serif`) remain available as opt-in via `--typography editorial` or direct theme pick. See [Design systems](#design-systems) below.
 
 ## Why this exists
 
@@ -20,8 +22,9 @@ Slide tools have not meaningfully changed in 20 years. PowerPoint (1987) and Key
 ## Key features
 
 - **One-command pipeline** (`/slide-auto`) — brief → theme → compose → refine → export, no mid-flight prompts
-- **63 themes** — 4 hand-crafted + 59 brand registry with on-demand generation
-- **Multi-language support** — KR / JP / ZH-Hans / ZH-Hant / EN + other Latin scripts
+- **Gothic-by-default typography** — sans-serif everywhere unless you explicitly request editorial serif. Matches Korean business/tech slide conventions.
+- **65 themes** — 6 hand-crafted (4 Gothic + 2 editorial opt-in serif variants) + 59 brand registry with on-demand generation
+- **Multilingual CJK + Latin** — KR / JP / ZH-Hans / ZH-Hant / EN via `:lang()` selectors
 - **Interactive gallery** (`/slide-gallery`) — browser-based visual selection with filters
 - **Mood Match quiz** — 3 questions → 5–8 theme recommendations
 - **Playwright refine loop** — N rounds of auto-critique and diff application
@@ -202,15 +205,38 @@ Three gallery modes:
 
 ## Design systems
 
-### Hand-crafted themes (Tier 2, quality ceiling)
+### Default themes (Gothic, business/tech-first)
 
-**Minimalist Premium track**
-- **Obsidian Mono** — quiet confidence, cream + deep ink + terracotta. Executive briefings, architecture talks.
-- **Arctic Serif** — cool gray + navy, Noto Serif display, built-in footnote rail. Research, policy, academic.
+These are the primary themes used by all autopilot presets in default mode. **All sans-serif, Pretendard-based**, calibrated for Korean/CJK business slides.
 
-**Editorial track**
-- **Kinfolk Serif** — cream paper + burgundy, serif display + sans body. Brand narratives, cultural talks.
-- **Wired Grid** — monochrome + electric orange, visible grid decoration, mono overlines. Keynotes, trend reports.
+| Theme | Palette | Use case |
+|---|---|---|
+| **Obsidian Mono** | cream + deep ink + terracotta | Executive briefings, architecture talks |
+| **Arctic Sans** (new in 0.7) | cool gray + navy + deep blue | Research presentations, policy briefings with footnote rail |
+| **Kinfolk Sans** (new in 0.7) | warm cream + burgundy | Team narratives, brand storytelling in warm palette |
+| **Wired Grid** | monochrome + electric orange, Pretendard 900 display | Keynotes, trend reports, cultural criticism |
+
+### Editorial themes (opt-in, serif display)
+
+For explicit editorial atmosphere — classical quotations, literary narratives, academic publications where serif carries meaning. Same palettes as the Gothic variants above, paired with Noto Serif KR / JP / SC / TC display.
+
+| Theme | Gothic variant | Use case |
+|---|---|---|
+| **Kinfolk Serif** | kinfolk-sans | Editorial brand narratives, cultural/mission talks with serif gravitas |
+| **Arctic Serif** | arctic-sans | Scholarly publications with serif journal aesthetic |
+
+How to opt in:
+```bash
+# Direct theme pick
+/slide-theme kinfolk-serif
+/slide-theme arctic-serif
+
+# Autopilot override (preset auto-swaps to serif variant)
+/slide-auto "팀 공유" --preset team-narrative --typography editorial
+
+# Team-wide default (in .claude/marp-slide-studio.local.md)
+default_typography: editorial
+```
 
 ### Brand registry (Tier 3, 59 themes on-demand)
 
@@ -247,20 +273,27 @@ Acknowledgement: brand metadata is synthesized from publicly visible aesthetics,
 
 ## Autopilot presets
 
-Six presets cover 80% of deck types. Each pins all 16 downstream decisions (audience, narrative pattern, tone, track, theme, accent policy, refine count, export formats, language, composition hints).
+Six presets cover 80% of deck types. **All presets default to Gothic typography** (v0.7.0+). Two presets have defined serif variants that swap in when `--typography editorial`.
 
-| Preset | Theme | Narrative pattern | Default language | Refine | Export |
-|---|---|---|---|---|---|
-| `investor-pitch` | stripe | problem-insight-solution-ask | en | 3 | PDF + editable PPTX |
-| `team-narrative` | kinfolk-serif | five-beats | ko | 2 | PDF |
-| `research-talk` | arctic-serif | question-exploration-answer | en | 3 | PDF + editable PPTX |
-| `launch-keynote` | wired-grid | five-beats (provocative) | en | 4 | PDF + PPTX |
-| `executive-brief` | obsidian-mono | situation-complication-resolution | en | 3 | PDF + editable PPTX |
-| `product-launch` | apple | hero-support-detail-proof-cta | en | 3 | PDF + editable PPTX |
+| Preset | Default theme (Gothic) | Serif variant (opt-in) | Narrative pattern | Lang | Refine | Export |
+|---|---|---|---|---|---|---|
+| `investor-pitch` | stripe | — | problem-insight-solution-ask | en | 3 | PDF + editable PPTX |
+| `team-narrative` | **kinfolk-sans** | kinfolk-serif | five-beats | ko | 2 | PDF |
+| `research-talk` | **arctic-sans** | arctic-serif | question-exploration-answer | en | 3 | PDF + editable PPTX |
+| `launch-keynote` | wired-grid | — | five-beats (provocative) | en | 4 | PDF + PPTX |
+| `executive-brief` | obsidian-mono | — | situation-complication-resolution | en | 3 | PDF + editable PPTX |
+| `product-launch` | apple | — | hero-support-detail-proof-cta | en | 3 | PDF + editable PPTX |
 
 Override any field at invocation:
 
 ```bash
+# Default (Gothic)
+/slide-auto "Topic" --preset team-narrative              # → kinfolk-sans
+
+# Explicit serif override
+/slide-auto "Topic" --preset team-narrative --typography editorial    # → kinfolk-serif
+
+# Other flags combine
 /slide-auto "Topic" --preset investor-pitch --lang ja --force-theme notion
 ```
 
@@ -294,6 +327,10 @@ slides/*/.auto-log.md
 ```
 
 ## Typography
+
+**Default: Gothic (sans-serif)** — `Pretendard Variable` across all default themes, all languages. Matches the Korean business/tech slide convention where serif is an editorial opt-in, not a baseline.
+
+**Editorial serif**: opt-in via `--typography editorial` CLI flag, `default_typography: editorial` in team settings, or direct `kinfolk-serif` / `arctic-serif` theme pick.
 
 Two authoritative references:
 

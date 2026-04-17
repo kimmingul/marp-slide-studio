@@ -79,8 +79,19 @@ const config = {
   // Language — CLI --lang overrides preset default
   language: args.lang || preset.default_language || 'en',
 
+  // Typography — v0.7.0+ Gothic-first pivot.
+  // Priority: CLI --typography > team setting default_typography > preset.typography > 'gothic'
+  typography: args.typography || args['default-typography'] || preset.typography || 'gothic',
+
   created: new Date().toISOString(),
 };
+
+// If user explicitly chose editorial typography AND the preset has a serif variant,
+// swap the theme for the serif variant (kinfolk-sans → kinfolk-serif, arctic-sans → arctic-serif).
+// This preserves palette consistency while switching typography family.
+if (config.typography === 'editorial' && preset.theme_serif_variant) {
+  config.theme = args.forceTheme || preset.theme_serif_variant;
+}
 
 // Full-mode override JSON (optional)
 if (args['config-json']) {

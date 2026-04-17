@@ -1,17 +1,18 @@
 {
-  "$schema_version": "1",
-  "$readme": "Preset definitions for /slide-auto Express mode. Each preset carries ALL downstream decisions so the user only needs to pick a preset + length + memory sentence. When autopilot runs in Full mode, these presets serve as defaults that the user can override per field.",
+  "$schema_version": "2",
+  "$readme": "Preset definitions for /slide-auto Express mode. v0.7.0+: all presets default to typography=gothic (sans-serif). Editorial serif variants available via --typography editorial or team-setting default_typography: editorial.",
 
   "presets": {
     "investor-pitch": {
       "label": "Investor pitch",
-      "description": "설득형 기술 덱. Stripe 계열 미니멀 프리미엄, 단정한 톤, 증거 중심.",
+      "description": "설득형 기술 덱. Stripe 팔레트, 고딕, 단정한 톤.",
       "audience": "투자자·의사결정자",
       "narrative_pattern": "problem-insight-solution-ask",
       "tone": "단정·선언·설득",
       "differentiation_against": "평범한 SaaS 랜딩처럼 읽히면 안 됨. 엔지니어링 정제 + 금융적 자신감.",
       "track": "minimalist-premium",
       "theme": "stripe",
+      "typography": "gothic",
       "theme_customization": {
         "accent_policy": "2-per-10 slides; hero + one metric callout",
         "duotone_moment": "reserve 1 slide only"
@@ -30,13 +31,15 @@
 
     "team-narrative": {
       "label": "Team narrative",
-      "description": "팀 내부 공유·회고·미션 공유. Kinfolk-serif 에디토리얼, 서사 중심.",
+      "description": "팀 내부 공유·회고·미션. Kinfolk 크림 팔레트, 고딕(sans) 기본. 에디토리얼 서사 감성을 여백·컬러로 구현.",
       "audience": "팀 내부 구성원",
       "narrative_pattern": "five-beats",
-      "tone": "사려·서정·내부 공유",
+      "tone": "사려·서사·내부 공유",
       "differentiation_against": "컨설팅 덱처럼 정중하고 담담한 톤",
       "track": "editorial",
-      "theme": "kinfolk-serif",
+      "theme": "kinfolk-sans",
+      "theme_serif_variant": "kinfolk-serif",
+      "typography": "gothic",
       "theme_customization": {
         "accent_policy": "3-per-10 slides; use on pivot moments",
         "drop_cap_allowed": true
@@ -55,13 +58,15 @@
 
     "research-talk": {
       "label": "Research talk",
-      "description": "학술·정책 브리핑. Arctic-serif, 증거·각주 중심.",
+      "description": "학술·정책 브리핑. Arctic 네이비+딥블루 팔레트, 고딕(sans) + footnote rail.",
       "audience": "학술 컨퍼런스·정책 회의",
       "narrative_pattern": "question-exploration-answer",
       "tone": "학술·증거 중심·정제",
       "differentiation_against": "마케팅 브로슈어처럼 읽히면 안 됨. 증거와 방법론이 핵심.",
       "track": "minimalist-premium",
-      "theme": "arctic-serif",
+      "theme": "arctic-sans",
+      "theme_serif_variant": "arctic-serif",
+      "typography": "gothic",
       "theme_customization": {
         "accent_policy": "3-per-10 slides; reserved for data callouts",
         "footnote_rail_enabled": true
@@ -71,7 +76,7 @@
         "close_preference": "answer + implications, not 'thank you / questions'",
         "data_density": "dense — tables and metrics OK",
         "citation_style": "inline [1] → footnote rail",
-        "avoid": ["stock business illustrations", "gradients", "sans-serif display"]
+        "avoid": ["stock business illustrations", "gradients", "decorative flourishes"]
       },
       "refine_iterations": 3,
       "export": ["pdf", "pptx"],
@@ -81,13 +86,14 @@
 
     "launch-keynote": {
       "label": "Launch keynote",
-      "description": "컨퍼런스 키노트·제품 런치·트렌드 리포트. Wired-grid, 도발적·매체적.",
+      "description": "컨퍼런스 키노트·제품 런치·트렌드 리포트. Wired-grid, 고딕 900 디스플레이.",
       "audience": "컨퍼런스 청중·일반 대중",
       "narrative_pattern": "five-beats",
       "tone": "도발적·선언적·매체적",
       "differentiation_against": "컨설팅 덱처럼 담담하거나 교과서처럼 설명적이면 안 됨",
       "track": "editorial",
       "theme": "wired-grid",
+      "typography": "gothic",
       "theme_customization": {
         "accent_policy": "2-per-10 slides; electric-orange punctuation only",
         "mono_overline_enabled": true,
@@ -107,13 +113,14 @@
 
     "executive-brief": {
       "label": "Executive briefing",
-      "description": "임원·의사결정자 브리핑. Obsidian-mono, 조용한 권위.",
+      "description": "임원·의사결정자 브리핑. Obsidian-mono, 고딕·조용한 권위.",
       "audience": "임원·C-level",
       "narrative_pattern": "situation-complication-resolution",
       "tone": "정제·조용·자신감",
       "differentiation_against": "마케팅·화려함 일체 배제. 엔지니어링 브리프 같은 밀도.",
       "track": "minimalist-premium",
       "theme": "obsidian-mono",
+      "typography": "gothic",
       "theme_customization": {
         "accent_policy": "2-per-10 slides; reserved for recommendation callout",
         "header_chrome": "minimal — no logo, no page number on hero/divider"
@@ -132,13 +139,14 @@
 
     "product-launch": {
       "label": "Product launch",
-      "description": "제품 발표·외부 런치. Apple 테마, 캐시드럴 미니멀 프리미엄.",
+      "description": "제품 발표·외부 런치. Apple 팔레트, 고딕·캐시드럴 미니멀.",
       "audience": "일반 대중·고객",
       "narrative_pattern": "hero-support-detail-proof-cta",
       "tone": "단정·프리미엄·inevitable",
       "differentiation_against": "SaaS 스타트업 랜딩 클리셰 일체 배제",
       "track": "minimalist-premium",
       "theme": "apple",
+      "typography": "gothic",
       "theme_customization": {
         "accent_policy": "monochrome discipline — accent collapses to fg",
         "whitespace_target": "40% max pixel coverage",
