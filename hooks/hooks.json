@@ -1,6 +1,4 @@
 {
-  "$schema_version": "1",
-  "$readme": "Marp Slide Studio — lifecycle hooks. Currently: log skill usage via PreToolUse on Task tool invocations. Logs written to ${CLAUDE_PLUGIN_DATA:-~/.marp-slide-studio}/usage.jsonl for later aggregation by scripts/usage-report.mjs.",
   "PreToolUse": [
     {
       "matcher": "Task",
