@@ -5,6 +5,16 @@
 slides/*/out/
 slides/*/.qa-log.md
 
+# Downloaded fonts (installed on-demand by scripts/install-fonts.sh)
+assets/fonts/**/*.woff2
+assets/fonts/**/*.ttf
+assets/fonts/**/*.otf
+assets/fonts/**/*.ttc
+assets/fonts/**/*.zip
+assets/fonts/**/LICENSE
+assets/fonts/**/_faces.css
+assets/fonts/offline.css
+
 # Node
 node_modules/
 .npm/

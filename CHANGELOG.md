@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.8.2 — 2026-04-18
+
+### Changed — on-demand font installation instead of bundling
+
+v0.8.1 bundled all CJK + Latin fonts in the plugin (~42 MB zip). This made the plugin too large.
+v0.8.2 reverses that: fonts are downloaded and installed to the system on-demand when rendering.
+
+- New `scripts/install-fonts.sh` — cross-platform font installer (macOS + Linux)
+  - Linux/Cowork: `apt install fonts-noto-cjk` for CJK + GitHub downloads for Pretendard/Inter/JBMono
+  - macOS: uses built-in CJK fonts (Hiragino, PingFang, Apple SD Gothic Neo) + downloads Pretendard/Inter/JBMono
+  - Idempotent, graceful on network failures (warns but doesn't crash)
+- `render.sh` / `export-pdf.sh` auto-detect missing fonts and run `install-fonts.sh` before rendering
+- `theme-foundation.css` restored to `local()` + Google Fonts CDN fallback approach
+  - System-installed fonts found via `local()` (works offline / in Cowork)
+  - Google Fonts @import provides online fallback (ignored silently if blocked)
+- Removed `scripts/fetch-fonts.sh` (replaced by `install-fonts.sh`)
+- Removed all bundled font files from git — plugin zip back to ~250 KB
+- `.gitignore` updated to exclude font binaries
+
+### Fixed — Cowork HTML sandbox errors
+
+- `SecurityError: Failed to execute 'replaceState' on 'History'` — Marp's bespoke.js uses History API which is blocked in Cowork's iframe sandbox (`about:srcdoc` origin)
+- `NotAllowedError: Failed to execute 'request' on 'WakeLock'` — permissions policy restriction
+- Fix: `render.sh` now injects a sandbox compatibility script into generated HTML that wraps `history.replaceState`, `history.pushState`, and `navigator.wakeLock.request` in try-catch blocks
+- Harmless on non-sandboxed environments, fixes errors in Cowork
+
 ## 0.8.1 — 2026-04-17
 
 ### Fixed — Korean/CJK PDF rendering in sandboxed environments

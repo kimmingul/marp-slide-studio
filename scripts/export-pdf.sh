@@ -23,6 +23,24 @@ fi
 
 mkdir -p "$OUT_DIR"
 
+# ── Auto-install fonts if missing ────────────────────────────────
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_FONTS="$HERE/install-fonts.sh"
+if [[ -x "$INSTALL_FONTS" ]]; then
+  needs_install=false
+  if [[ "$(uname)" == "Darwin" ]]; then
+    ls "$HOME/Library/Fonts/"*Pretendard* 2>/dev/null | head -1 | grep -q . 2>/dev/null || needs_install=true
+  elif command -v fc-list >/dev/null 2>&1; then
+    fc-list 2>/dev/null | grep -qi "Pretendard" || needs_install=true
+  else
+    needs_install=true
+  fi
+  if [[ "$needs_install" == "true" ]]; then
+    echo "▸ Fonts not found — installing automatically..."
+    bash "$INSTALL_FONTS"
+  fi
+fi
+
 MARP_BIN="${MARP_BIN:-npx --yes @marp-team/marp-cli@latest}"
 
 THEME_ARGS=()
