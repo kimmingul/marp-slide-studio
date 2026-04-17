@@ -279,6 +279,19 @@ Do NOT ask "is this good?" or "shall I do anything else?" — the autopilot cont
 
 Any failure above "abort" still produces something usable. The log records everything.
 
+## File safety invariants during pipeline (v0.8.0+)
+
+While autopilot is executing Steps 6–11 (brief generation through export), treat these files as read-only unless a specific step explicitly edits them:
+
+- `./slides/<slug>/brief.md` — created in Step 7, read-only thereafter
+- `./slides/<slug>/theme.css` — resolved in Step 8, read-only thereafter
+- `./slides/<slug>/deck.md` — **created** by composer (Step 9), **edited** by refine loop (Step 10), but **never deleted or truncated** between steps
+- `./slides/<slug>/.auto-config.json` — created in Step 5, read-only thereafter (reference for downstream skills)
+
+If a step requires resetting a file (rare — only on render failure retry), rename to `<file>.bak` instead of deleting. This preserves partial artifacts on crash and enables manual recovery.
+
+Future enhancement (not yet implemented): register a session-scoped `PreToolUse` hook that intercepts `rm`, `truncate`, and `Write` to these paths during pipeline execution. Thariq describes this on-demand-hook pattern in "How We Use Skills" — currently we rely on this documented invariant instead.
+
 ## What NOT to do
 
 - **Do NOT ask the user anything after Step 4.** Not even "should I continue?" The contract forbids this.
@@ -287,6 +300,16 @@ Any failure above "abort" still produces something usable. The log records every
 - **Do NOT attempt to call `slide-theme-curator` skill** — it's interactive. Autopilot resolves theme directly.
 - **Do not re-prompt for preset** if `--preset` arg was given.
 - **Do not skip export of formats in config.export** unless the underlying tool fails.
+
+## Gotchas
+
+- **`--typography editorial` silently no-ops on presets without `theme_serif_variant`**: only team-narrative and research-talk have serif variants. If user passes `--typography editorial --preset investor-pitch`, state explicitly: "investor-pitch has no serif variant; staying on Gothic stripe theme."
+- **Setup cannot be resumed mid-pipeline**: if the user Ctrl-C's after Setup but before completion, running `/slide-auto` again starts a fresh setup (even though `.auto-config.json` exists). No resume flag yet.
+- **`.auto-log.md` is append-only within a run**: failed intermediate steps stay in the log. Final `Status: partial | success | failed` line tells overall outcome. Grep for `✗` to find failed steps.
+- **Forge fallback loses preset intent**: if preset's theme forge fails twice and falls back to `track`'s Tier 2 curated, the user effectively got a different theme than they chose. Log prominently: `⚠ theme forge failed — fell back to obsidian-mono (was: notion). Regenerate with /slide-theme notion --force for exact match.`
+- **File safety invariants** (see section above): `brief.md`, `theme.css`, `deck.md` are read-only between steps except where explicitly edited. Never delete them.
+- **Playwright missing → refine silently skipped**: logged to `.auto-log.md` as `⚠ refine skipped` but the pipeline continues to export. User may get a Playwright-less PDF thinking refine ran. Display a banner in the final report when this happens.
+- **Chrome missing → PDF skipped, PPTX may also fail**: autopilot still produces HTML + logs. Don't treat as success.
 
 ## Reference files
 

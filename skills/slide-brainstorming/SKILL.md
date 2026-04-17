@@ -162,6 +162,17 @@ Tell the user:
 
 Do NOT start composing. Composition is a separate skill. Stop here.
 
+## Gotchas
+
+Real failure modes observed during development + known edge cases.
+
+- **User says "그냥 알아서 해줘" / "just do it"**: push back ONCE. "5개 질문만 받아도 덱 품질이 결정됩니다. 2분이면 됩니다." If they still refuse, use sensible defaults but write a `**brief synthesis note**` at top of brief.md saying "user declined questions — these defaults were inferred from the topic string alone; results may not match intent."
+- **User lists 15 topics as beats**: each beat MUST be a ONE-sentence message. If the user gives many, split into multiple slides with distinct messages OR drop the weakest. Never cram two ideas per beat.
+- **User picks narrative pattern that doesn't fit content**: e.g., "Five Beats" for an analytical metrics report. Propose a better fit ("Situation-Complication-Resolution suits this better") and explain in one line. Respect user override.
+- **Empty memory sentence**: Q6 is text input — if user submits empty/whitespace, re-ask with "한 문장이 없으면 덱의 마지막 슬라이드가 약해집니다. 한 줄만 써주세요." Do not proceed without it.
+- **Slug collision**: `./slides/<slug>/` already exists non-empty. Append `-2`, `-3` until free. NEVER overwrite user's existing work.
+- **Reference brand in Q7 not in registry**: User says "Stripe 홈처럼" but doesn't actually need the theme forged — this is brainstorming, just note the aesthetic reference in brief. Theme resolution happens later in `/slide-theme`.
+
 ## Reference files
 
 - `${CLAUDE_PLUGIN_ROOT}/assets/narrative-patterns.md`

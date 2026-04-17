@@ -72,22 +72,25 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/forge-theme.mjs check "$2"
 ```
 Exit 0 means brand exists.
 
-### Step 3a — BRAND mode
+### Step 3a — BRAND mode (v0.8.0+ three-location cache lookup)
 
 If the request is brand-specific:
 
-1. Check cache first:
-   Look for `${CLAUDE_PLUGIN_ROOT}/assets/design-systems/generated/<brand>.marp.css`. If exists, proceed to Step 6 with that CSS.
+1. Check cache in three locations (priority order):
+   a. **User cache** — `${CLAUDE_PLUGIN_DATA:-~/.marp-slide-studio}/themes/<brand>.marp.css` (persists across upgrades)
+   b. **Seed** — `${CLAUDE_PLUGIN_ROOT}/examples/seed-themes/<brand>.marp.css` (shipped with plugin)
+   c. **Legacy** — `${CLAUDE_PLUGIN_ROOT}/assets/design-systems/generated/<brand>.marp.css` (pre-v0.8.0 backward compat)
 
-2. Not cached: delegate to theme-forger:
-   ```
-   Use Task tool to invoke the theme-forger skill:
+   The helper `node ${CLAUDE_PLUGIN_ROOT}/scripts/forge-theme.mjs paths <brand>` prints both the canonical output path and the currently-cached path (with source) for a given brand.
+
+2. If any cache is found, proceed to Step 6 using that CSS (no forge needed).
+
+3. Not cached: delegate to theme-forger via Task tool:
    - Pass brand slug
-   - Expect generation into assets/design-systems/generated/<slug>.{design.md, marp.css}
+   - Expect generation into `${CLAUDE_PLUGIN_DATA}/themes/<slug>.{design.md, marp.css}` (primary output location)
    - Wait for completion
-   ```
 
-3. When theme-forger returns success, proceed to Step 6.
+4. When theme-forger returns success, proceed to Step 6.
 
 Skip Steps 4–5 (which are for track-based curated selection).
 
@@ -141,10 +144,12 @@ Source path depends on mode:
      ./slides/<slug>/theme.css
   ```
 
-- BRAND mode (Tier 3, generated or cached):
+- BRAND mode (Tier 3, generated or cached — use path resolved in Step 3a):
   ```bash
-  cp ${CLAUDE_PLUGIN_ROOT}/assets/design-systems/generated/<brand>.marp.css \
-     ./slides/<slug>/theme.css
+  # <CACHED_PATH> is the path returned by forge-theme.mjs paths <brand>
+  # which could be ${CLAUDE_PLUGIN_DATA}/themes/, examples/seed-themes/, or
+  # (legacy) assets/design-systems/generated/
+  cp <CACHED_PATH> ./slides/<slug>/theme.css
   ```
 
 ### Step 7 — Offer brand token customization
@@ -215,6 +220,20 @@ Common name aliases to handle:
 
 If the user says a brand NOT in registry (e.g., "Slack", "Google"), respond:
 "[brand]는 현재 registry에 없습니다. 가장 유사한 것: <suggest 2 similar mood brands>. 아니면 `theme-forger --custom`로 사용자 정의 브랜드를 추가할 수 있습니다."
+
+## Gotchas
+
+- **Brand name aliases**: natural-language input rarely uses canonical registry keys. Common aliases to resolve:
+  - "Linear" → `linear.app`
+  - "Mistral" / "Mistral AI" → `mistral.ai`
+  - "Twitter" / "X" → `x.ai`
+  - "Together" / "Together AI" → `together.ai`
+  - "Opencode" → `opencode.ai`
+  - If multiple brands match the input substring, ask user which one.
+- **Brand NOT in 59-registry**: common requests like "Slack", "Google", "Discord" are NOT present. Respond with: "현재 registry에 없습니다. 가장 유사한 것: <2 similar-mood brands>. 또는 `theme-forger --custom`으로 사용자 정의 브랜드 추가." Do NOT silently pick a random nearby brand.
+- **`--typography editorial` has no effect on preset without `theme_serif_variant`**: only `team-narrative` (→ kinfolk-serif) and `research-talk` (→ arctic-serif) swap. Other presets ignore the flag. State this explicitly when user passes `--typography editorial` with a non-swap preset.
+- **Cache path changed in v0.8.0**: three-location lookup (user-cache → seed → legacy). Old installs may have themes in `assets/design-systems/generated/` (legacy). New forges go to `${CLAUDE_PLUGIN_DATA}/themes/`. Prefer the user-cache when present.
+- **Accent customization via brand hex input**: validate that input is exactly `#` + 6 hex chars. Reject 3-char hex, rgb(), hsl(). Be strict — a broken hex in theme CSS silently falls back to browser default.
 
 ## Reference files
 

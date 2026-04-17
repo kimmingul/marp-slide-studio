@@ -192,6 +192,15 @@ User sends back a slug. Swap the main deck's `theme.css` to that theme's CSS. Cl
 - Personal Preview forges missing candidates silently — can take 30s × unforged count before rendering starts.
 - Gallery is browser-based; can't be viewed inside the Claude Code terminal directly.
 
+## Gotchas
+
+- **65 cards shown, only 11 have real render thumbnails** (6 curated + 5 seed). The other 54 show palette swatch cards with a "⚡ Forge" call-to-action. This is by design — pre-rendering all 59 registry brands would take ~15 minutes and most are never used. Make the distinction clear when suggesting candidates.
+- **Mood Match serif-opt-in nuance** (v0.7.0+): `kinfolk-serif` and `arctic-serif` are NOT primary candidates for warm-paper / editorial / academic categories by default. Include them ONLY when the user explicitly mentions serif / 명조 / editorial typography. Gothic variants (`kinfolk-sans`, `arctic-sans`) are the defaults.
+- **`--forge-all` is slow**: 54 × ~30s theme-forger dispatch = ~25 minutes for first full gallery. Warn user, confirm before proceeding.
+- **Gallery cache lives at `~/.marp-slide-studio/gallery/`** (or `$CLAUDE_PLUGIN_DATA/gallery/`), NOT in the plugin directory. User can delete safely to force full rebuild.
+- **PNG rendering uses marp-cli `--images png` with `CHROME_PATH`**, not Playwright. This avoids Playwright's per-section screenshot timing issues with bespoke.js slide-switching.
+- **Personal Preview mode (`--preview <slug>`) requires Playwright**. Without it, falls back to "list 5 candidates as text" without visual comparison — document this degradation clearly.
+
 ## Reference files
 
 - `${CLAUDE_PLUGIN_ROOT}/scripts/build-gallery.mjs`

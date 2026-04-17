@@ -133,6 +133,16 @@ section h1 {
 section :lang(ko) em { font-style: normal; font-weight: 500; }
 ```
 
+## Gotchas
+
+- **`font-display: swap` kills CJK in PDF**: headless Chrome snapshots before fonts load → Korean disappears. ALWAYS use `font-display: block`. Fixed in v0.6.3 theme-foundation.css; verify when authoring new themes.
+- **Pretendard CDN subset loading unreliable in sandboxed runners**: the `pretendardvariable.min.css` file uses unicode-range subsetting across multiple woff2 files. Any subset failing to load → missing glyphs. Prefer the single `PretendardVariable.woff2` direct URL (which theme-foundation.css already uses since v0.6.3).
+- **System CJK font fallback absent in Puppeteer's bundled Chrome**: `--font-family: 'Pretendard', sans-serif` assumes sans-serif has a CJK-capable variant. In headless Chrome contexts, it often doesn't. Always load your CJK font explicitly rather than trusting fallback.
+- **Never mix Pretendard + Inter via simple fallback**: `font-family: 'Pretendard', 'Inter', sans-serif` makes Pretendard win for everything and Inter never appears. If you genuinely want Inter's Latin look, use `unicode-range` on the Inter `@font-face` to constrain it to Latin Basic only.
+- **`line-height: 1.5` is NOT enough for Korean body**: CJK blocks stack denser than Latin. Use 1.65–1.75. Plugin default is 1.7 for CJK in theme-foundation.css.
+- **Italicized Hangul / Kana / Kanji looks broken**: synthesized slant on non-Latin scripts is almost always ugly. The `:lang(ko) em { font-style: normal; font-weight: 500; }` rule in theme-foundation.css handles this — if you override theme CSS, don't undo it.
+- **`text-transform: uppercase` on mixed CJK+Latin** silently uppercases only the Latin fragments, producing a jarring visual seam. Reserve uppercase for Latin-only labels.
+
 ## Debugging checklist
 
 If Korean slides look "off", work through this:

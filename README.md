@@ -447,6 +447,35 @@ The `/slide-refine` loop requires Playwright. If it isn't installed, the loop lo
 npm i -D playwright && npx playwright install chromium
 ```
 
+### Skill-specific gotchas (v0.8.0+)
+
+Every SKILL.md file has a `## Gotchas` section listing real failure modes observed during development. When debugging a specific step, read the relevant skill's gotchas first:
+
+| Issue | Skill |
+|---|---|
+| "markdown inside `<div>` not bolding" | [slide-composer](skills/slide-composer/SKILL.md#gotchas) |
+| "Korean disappeared in PDF" | [cjk-typography](skills/cjk-typography/SKILL.md#gotchas) |
+| "--typography editorial did nothing" | [slide-theme-curator](skills/slide-theme-curator/SKILL.md#gotchas) |
+| "Playwright installed but refine still skipped" | [slide-visual-qa](skills/slide-visual-qa/SKILL.md#gotchas) |
+| "brand not in registry" | [theme-forger](skills/theme-forger/SKILL.md#gotchas) |
+| "PDF only 50KB, something's wrong" | [slide-export](skills/slide-export/SKILL.md#gotchas) |
+| "gallery shows 65 but only 11 renders" | [slide-theme-gallery](skills/slide-theme-gallery/SKILL.md#gotchas) |
+| "theme CSS imports fail silently" | [marp-theme-engineer](skills/marp-theme-engineer/SKILL.md#gotchas) |
+| "autopilot setup can't be resumed" | [slide-autopilot](skills/slide-autopilot/SKILL.md#gotchas) |
+| "brief assumes defaults I don't want" | [slide-brainstorming](skills/slide-brainstorming/SKILL.md#gotchas) |
+
+### Usage measurement (v0.8.0+)
+
+The plugin ships with a `PreToolUse` hook that appends one JSONL line per `Task` tool invocation to `${CLAUDE_PLUGIN_DATA:-~/.marp-slide-studio}/usage.jsonl`. Aggregate with:
+
+```bash
+node scripts/usage-report.mjs              # all time summary
+node scripts/usage-report.mjs --days 7     # last 7 days
+node scripts/usage-report.mjs --raw        # sample + log path
+```
+
+Helps identify which skills are popular vs under-triggering. Log is silent on failure — never blocks a session.
+
 ## Limitations
 
 - **PPTX non-editable mode renders as images.** Editable mode preserves text but sacrifices some CSS fidelity. Decide per deck.

@@ -174,6 +174,31 @@ After drafting the deck, run through this:
 - [ ] Quotes use correct Korean punctuation
 - [ ] No anglicized em-dashes where 줄표 (—) or quotes are expected
 
+## Gotchas
+
+- **Markdown inside HTML blocks doesn't render** — `<div class="col-main">` followed immediately by `**bold text**` produces literal asterisks in output. Solution: blank line between `<div>` and content, OR use `<strong>` / `<em>` tags directly.
+  ```markdown
+  <!-- WRONG: bold not processed -->
+  <div class="col-main">
+  **This stays as **asterisks**.
+  </div>
+
+  <!-- RIGHT: blank lines let markdown process -->
+  <div class="col-main">
+
+  **This becomes bold.**
+
+  </div>
+  ```
+- **Missing `lang:` front matter**: without `lang: ko` (or ja/zh/en), `theme-foundation.css`'s `:lang()` cascade doesn't fire — Korean slides end up with Latin line-height (1.55 instead of 1.7). ALWAYS emit `lang:` from brief.md's `language` field.
+- **`_class` directive case-sensitive + underscore matters**:
+  - `<!-- _class: hero -->` → THIS slide only (single-slide scope)
+  - `<!-- class: hero -->` → from here onward (deck-wide scope from this slide)
+  - Prefer `_class` for every slide in autopilot output. Use `class` (no underscore) only for the first slide if EVERY slide uses one layout (rare).
+- **CJK-only layout classes require theme opt-in**: `vertical-writing`, `ruby-annotation`, `banner-caption` are optional. Before emitting `<!-- _class: vertical -->`, grep `theme.css` for `section.vertical`. If absent, fall back to `quote` or `split` and log the downgrade to `.qa-log.md`.
+- **Marp front matter `theme:` MUST match `/* @theme xxx */` in theme.css**: if mismatched, Marp silently falls back to default theme (no error, broken look). Extract theme name from first line of theme.css when emitting front matter.
+- **Anti-pattern #10 "Thank You / Questions?" finale**: refuse to produce this even if the user's brief.md beats table explicitly asks for it. Replace with the one-sentence memory from brief.md.
+
 ## Reference files
 
 - `${CLAUDE_PLUGIN_ROOT}/assets/layouts/*.md`

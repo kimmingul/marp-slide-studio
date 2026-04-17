@@ -27,11 +27,19 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/forge-theme.mjs check "$1"
 ```
 If exit non-zero, show the list and abort.
 
-### Step 2 — Check cache
+### Step 2 — Check cache (v0.8.0+ three-location lookup)
 
-Look for `${CLAUDE_PLUGIN_ROOT}/assets/design-systems/generated/<slug>.marp.css`.
+Look in order:
 
-If found AND the user didn't pass `--force`, skip regeneration — just copy the cached pair to the target location and proceed to step 7. Note in the log: "cache hit".
+1. **User cache** — `${CLAUDE_PLUGIN_DATA:-~/.marp-slide-studio}/themes/<slug>.marp.css` (primary; persists across plugin upgrades)
+2. **Seed** — `${CLAUDE_PLUGIN_ROOT}/examples/seed-themes/<slug>.marp.css` (shipped with plugin, read-only)
+3. **Legacy** — `${CLAUDE_PLUGIN_ROOT}/assets/design-systems/generated/<slug>.marp.css` (backward compat, pre-v0.8.0 installs)
+
+`node scripts/forge-theme.mjs paths <brand>` prints the canonical output path AND the currently-cached path (if any) with its source.
+
+If found AND the user didn't pass `--force`, skip regeneration — use the cached pair and proceed to step 7. Note in the log: "cache hit (source: user/seed/legacy)".
+
+If found at a non-primary source (seed or legacy) AND the user passed `--force`, generate fresh to the primary user-cache location.
 
 ### Step 3 — Generate forge brief
 
@@ -126,6 +134,16 @@ Generated themes are not identical to hand-crafted ones. They are:
 For a production-critical deck, run `/slide-refine` after composing — the visual QA loop will catch the edge cases.
 
 For the team's most-used brands, consider promoting a generated theme to Tier 2 by hand-editing `generated/<slug>.{design,marp.css}.md` and moving it to `<track>/`.
+
+## Gotchas
+
+- **Brand must exist in registry.json**: arbitrary strings rejected. `forge-theme.mjs check <brand>` returns non-zero for unknown. Do NOT attempt to forge for brands not listed — the registry signature metadata is what drives quality.
+- **`--force` regenerates even when cached**: use when transform-prompt.md or theme-foundation.css has been updated. Normal users don't need it.
+- **Validator rejects frontmatter XML-tags** (since v0.6.2): if generated SKILL.md description contains `<slug>`, `<path>`, etc. placeholder markers, validator fails. Use UPPERCASE or natural language.
+- **Validator comment-regex fragility** (fixed v0.6.3): comments with `{ko,ja,zh-hans,zh-hant}` curly braces used to break `:root { ... }` balance-matching. Current validator strips comments first — safe to use braces, but avoid if possible.
+- **Attribution footer is mandatory**: every generated DESIGN.md MUST end with the "Inspired by <brand>. Not affiliated." disclaimer from Rule 8 of transform-prompt.md. Skipping this is a legal+ethical failure, not just a validation warning.
+- **Retry budget is 2**: on validator FAIL, re-dispatch once more with specific errors. If that also fails, abort and recommend fallback to a curated theme in the same track. Do NOT infinite-loop retries.
+- **Output path migrated in v0.8.0**: writes go to `${CLAUDE_PLUGIN_DATA}/themes/<slug>.*`, not `assets/design-systems/generated/`. Parent dir may not exist — create with `mkdir -p` before writing.
 
 ## Reference files
 

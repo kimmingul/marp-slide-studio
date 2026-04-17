@@ -89,19 +89,25 @@ for (const [track, dir] of CURATED_DIRS) {
   }
 }
 
-const genDir = join(PLUGIN_ROOT, 'assets', 'design-systems', 'generated');
-const generatedSlugs = new Set();
-if (existsSync(genDir)) {
-  for (const f of readdirSync(genDir)) {
-    if (!f.endsWith('.marp.css')) continue;
-    generatedSlugs.add(f.replace(/\.marp\.css$/, ''));
+// v0.8.0+: multi-location theme cache lookup.
+// Priority: user-cache (persists across upgrades) > seed themes (shipped) > legacy (backward compat)
+const DATA_DIR = process.env.CLAUDE_PLUGIN_DATA || join(homedir(), '.marp-slide-studio');
+const userCacheDir = join(DATA_DIR, 'themes');
+const seedDir = join(PLUGIN_ROOT, 'examples', 'seed-themes');
+const legacyDir = join(PLUGIN_ROOT, 'assets', 'design-systems', 'generated');
+
+function findCachedTheme(slug) {
+  for (const dir of [userCacheDir, seedDir, legacyDir]) {
+    const p = join(dir, slug + '.marp.css');
+    if (existsSync(p)) return { path: p, source: dir === userCacheDir ? 'user' : dir === seedDir ? 'seed' : 'legacy' };
   }
+  return null;
 }
 
 const fromRegistry = [];
 for (const [brand, meta] of Object.entries(registry.brands)) {
   const slug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  const cached = generatedSlugs.has(slug);
+  const cached = findCachedTheme(slug);
   fromRegistry.push({
     slug,
     name: brand,
@@ -112,7 +118,8 @@ for (const [brand, meta] of Object.entries(registry.brands)) {
     mood: meta.mood,
     palette: meta.signature.palette,
     hallmarks: meta.signature.hallmarks,
-    cssPath: cached ? join(genDir, slug + '.marp.css') : null,
+    cssPath: cached ? cached.path : null,
+    cacheSource: cached ? cached.source : null,
   });
 }
 
@@ -121,7 +128,10 @@ const targetThemes = ONLY
   ? allThemes.filter(t => ONLY.includes(t.slug))
   : allThemes;
 
-log(`themes total: ${allThemes.length} (curated ${curated.length}, generated ${[...generatedSlugs].length}, on-demand ${fromRegistry.filter(t => t.tier === 'on-demand').length})`);
+const cachedCount = fromRegistry.filter(t => t.tier === 'generated').length;
+log(`themes total: ${allThemes.length} (curated ${curated.length}, cached ${cachedCount}, on-demand ${fromRegistry.length - cachedCount})`);
+log(`  user cache: ${userCacheDir}`);
+log(`  seed dir:   ${seedDir}`);
 log(`output: ${OUT_DIR}`);
 
 // ── Render each renderable theme ────────────────────────────────

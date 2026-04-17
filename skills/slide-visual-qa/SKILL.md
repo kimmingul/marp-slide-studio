@@ -125,6 +125,39 @@ If render errors, roll back the last iteration's edits (use git or the .qa-log.m
 
 If the latest iteration had zero blocker and zero high findings, stop early. Note "converged at iteration <i>" in .qa-log.md.
 
+### Step 4i — Programmatic assertions (v0.8.0+ verification strengthening)
+
+After Claude-driven review but before emitting the final report, run the deterministic assertion suite:
+
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/scripts/ci/slide-assertions.mjs <slug>
+```
+
+Checks (all run in one pass, exit 0 if all PASS):
+
+| # | Assertion | FAIL action |
+|---|-----------|-------------|
+| 1 | Slide count within ±2 of `brief.md` `length_target` | blocker |
+| 2 | `<html lang="…">` attribute set and matches deck front matter | warning (strict mode: fail) |
+| 3 | Every `<section>` non-empty (≥3 visible chars) | warning |
+| 4 | No 3 consecutive same-class sections (layout rhythm) | warning |
+| 5 | Accent color appears on ≤40% of slides (loose cap) | warning |
+| 6 | `--fs-body` floor ≥ 22px for CJK, ≥ 20px for Latin | blocker |
+| 7 | No italicized native CJK without `:lang()` guard | blocker |
+| 8 | Every `<img>` has valid `src` | blocker |
+
+Parse the JSON-ish output into `.qa-log.md` iteration summary. If assertions FAIL, they override Claude's "converged" judgement — continue to next iteration even if slide-director and marp-design-critic reported 0 blockers.
+
+### Step 4j — Video recording (optional)
+
+If the user requested `--record` on the `/slide-refine` call, produce a preview video:
+
+```bash
+node ${CLAUDE_PLUGIN_ROOT}/scripts/record-deck.mjs <slug> --seconds 2
+```
+
+Outputs `./slides/<slug>/out/deck.webm` — useful for sharing with stakeholders who don't have Marp installed.
+
 ### Step 5 — Final report
 
 After loop ends, write a summary section to `.qa-log.md`:
@@ -166,6 +199,19 @@ Their review becomes structural-only; visual nuance is lost. Note this in the lo
 - Max 5 edits per iteration.
 - Do NOT delete slides without explicit user approval (a deletion is always a structural change, requires user confirm).
 - Do NOT change the narrative pattern or beat count — those are fixed at /slide-new and /slide-compose time.
+
+## Gotchas
+
+- **Playwright install has TWO steps**: users often run `npm i -D playwright` and stop. The chromium browser binary is a separate download: `npx playwright install chromium`. Check both — our `scripts/check-deps.sh` distinguishes between "Playwright installed" and "Playwright + chromium cached".
+- **Chromium cache location varies by OS**:
+  - macOS: `~/Library/Caches/ms-playwright/chromium-*`
+  - Linux: `~/.cache/ms-playwright/chromium-*`
+  - Windows: `%LOCALAPPDATA%\ms-playwright\chromium-*`
+- **Refine loop edits `deck.md` in place** — user must not have uncommitted edits to that file when calling /slide-refine. Instruct them to commit (or `.bak`) first.
+- **Hard limits**: max 5 iterations, max 5 edits per iteration. These are SAFETY caps — do not raise them to "finish faster".
+- **Programmatic assertions override Claude judgement**: even if both agents report 0 blockers, if `slide-assertions.mjs` fails on body-font-size or italic-CJK, that's a hard fail — continue the loop.
+- **Convergence signal**: 0 blockers + 0 high from BOTH agents AND assertions PASS. Any low-severity findings don't block convergence.
+- **Silent mode** (`--silent`) skips Playwright-missing prompt — it logs the warning and proceeds as no-op. Do NOT block the autopilot pipeline.
 
 ## Reference files
 

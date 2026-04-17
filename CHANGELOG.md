@@ -1,5 +1,110 @@
 # Changelog
 
+## 0.8.0 — 2026-04-17
+
+### Added — best-practices reflection (Thariq "How We Use Skills" + "Seeing like an Agent")
+
+Adopts Anthropic's internal best practices for skill authoring, harness design, and plugin data handling. Three parallel tracks (A / B / C) delivered together.
+
+### Added — Tier A: Gotchas sections on every skill
+
+Thariq's guidance: *"The highest-signal content in any skill is the Gotchas section."* Previously we had only a "Common pitfalls" heading on marp-theme-engineer. Now **every SKILL.md has `## Gotchas`** with real failure modes observed during development:
+
+- `slide-autopilot` — typography-editorial no-op, setup resume absent, forge fallback loses preset intent
+- `slide-brainstorming` — "그냥 알아서 해줘" pushback, slug collision handling, reference-brand in Q7 is aesthetic-only
+- `slide-composer` — markdown-inside-`<div>` bold bug, `lang:` missing breaks cascade, `_class` vs `class` semantics, anti-pattern #10 override refusal
+- `slide-export` — PPTX editable vs image-mode tradeoffs, CHROME_PATH override, size sanity check
+- `slide-theme-curator` — brand aliases (Linear→linear.app, etc.), registry-miss response, `--typography` no-op presets, v0.8.0 cache migration
+- `slide-theme-gallery` — 65 cards / 11 renders asymmetry, serif-opt-in Mood Match nuance, `--forge-all` 25-min warning
+- `slide-visual-qa` — two-step Playwright install, OS-specific cache paths, assertion vs judgement hierarchy
+- `theme-forger` — registry membership required, validator comment-regex trap, attribution-footer mandatory, v0.8.0 output path
+- `cjk-typography` — `font-display: swap` PDF bug, Pretendard subset loading, Pretendard+Inter fallback trap, line-height minimum, italic-Hangul ban
+- `marp-theme-engineer` — renamed "Common pitfalls" → "Gotchas", added `@import` ordering rule, `var(--undefined)` silent fail warning, comment-brace regex fix history
+
+README **Troubleshooting** section gains a cross-link table pointing each common symptom to the relevant skill's gotcha.
+
+### Added — Tier B: `${CLAUDE_PLUGIN_DATA}` migration + usage measurement
+
+Thariq: *"Data stored in the skill directory may be deleted when you upgrade the skill. Use `${CLAUDE_PLUGIN_DATA}` as a stable folder per plugin."* Previously, user-generated themes were written into `assets/design-systems/generated/` — the plugin directory — at risk of being overwritten on upgrade.
+
+**Theme cache migrated to stable location**:
+- New user-generated themes: `${CLAUDE_PLUGIN_DATA:-~/.marp-slide-studio}/themes/<slug>.{design.md,marp.css}`
+- Seed themes (5 examples shipped with plugin) moved to `examples/seed-themes/`
+- Legacy location (`assets/design-systems/generated/`) retained as read-only fallback for backward compatibility
+- Lookup priority: user-cache → seed → legacy
+
+Affected files:
+- `scripts/forge-theme.mjs` — output paths, `findThemePath()` helper for 3-location lookup
+- `scripts/build-gallery.mjs` — gallery sources themes from all 3 locations
+- `skills/theme-forger/SKILL.md` — Step 2 cache-lookup procedure updated
+- `skills/slide-theme-curator/SKILL.md` — Step 3a BRAND mode docs 3-location lookup
+- New `assets/design-systems/generated/README.md` explains migration
+- New `examples/seed-themes/README.md` explains seed role
+
+**Skill usage measurement**:
+- New `hooks/hooks.json` registers `PreToolUse` hook on `Task` tool
+- New `hooks/log-skill-usage.sh` appends JSONL line `{ts, tool, session, cwd}` to `${CLAUDE_PLUGIN_DATA}/usage.jsonl` on every Task invocation
+- New `scripts/usage-report.mjs` prints aggregated report with `--days N`, `--raw` options
+- Logging is silent on failure — never blocks the session
+
+### Added — Tier C: Verification strengthening + on-demand safety
+
+Thariq: *"Verification skills are extremely useful for ensuring Claude's output is correct. It can be worth having an engineer spend a week just making your verification skills excellent."*
+
+**Programmatic slide assertions** (`scripts/ci/slide-assertions.mjs`):
+1. Slide count within ±2 of brief.md `length_target`
+2. `<html lang="…">` set and matches deck front matter
+3. Every `<section>` non-empty
+4. No 3 consecutive same-class sections (layout rhythm)
+5. Accent color ≤40% of slides
+6. `--fs-body` floor ≥22px for CJK, ≥20px for Latin
+7. No italicized native CJK without `:lang()` guard
+8. Every `<img>` has valid `src`
+
+Integrated into `slide-visual-qa` Step 4i. When assertions fail, override Claude-judgement convergence and continue refine loop.
+
+**Video recording** (`scripts/record-deck.mjs`):
+- Uses Playwright's `recordVideo` to navigate slides and produce a WebM
+- Configurable per-slide duration (`--seconds N`)
+- Output: `slides/<slug>/out/deck.webm`
+- Useful for sharing with stakeholders without Marp installed
+
+**File safety invariants in autopilot**:
+- `slide-autopilot` SKILL.md documents: brief.md, theme.css, deck.md are read-only between pipeline steps except where explicitly edited
+- Renames to `<file>.bak` instead of deletion on render-failure retry
+- Documents future on-demand PreToolUse hook pattern (not yet implemented — Claude Code API for session-scoped hooks still maturing)
+
+### Changed
+
+- `.claude-plugin/plugin.json` + `marketplace.json` → v0.8.0, descriptions unchanged
+- README Troubleshooting expanded with skill-gotcha cross-links + usage-report docs
+
+### File shuffle summary
+
+| File | Change |
+|---|---|
+| `assets/design-systems/generated/{apple,linear-app,notion,stripe,tesla}.{design.md,marp.css}` | **moved to** `examples/seed-themes/` |
+| `assets/design-systems/generated/README.md` | **rewritten** as migration explanation + lookup order |
+| `examples/seed-themes/README.md` | **new** — explains seed role, regeneration procedure |
+| `scripts/forge-theme.mjs` | output path to `${CLAUDE_PLUGIN_DATA}/themes/`; `findThemePath()` helper; updated `list`/`paths` commands |
+| `scripts/build-gallery.mjs` | 3-location theme lookup |
+| `scripts/usage-report.mjs` | **new** — aggregate JSONL usage log |
+| `scripts/record-deck.mjs` | **new** — Playwright video recorder |
+| `scripts/ci/slide-assertions.mjs` | **new** — 8 deterministic assertions on rendered deck |
+| `hooks/hooks.json` | **new** — PreToolUse on Task |
+| `hooks/log-skill-usage.sh` | **new** — JSONL logger |
+| 10× `skills/*/SKILL.md` | `## Gotchas` section added |
+| `skills/slide-visual-qa/SKILL.md` | new Step 4i (assertions) + Step 4j (video recording) |
+| `skills/slide-autopilot/SKILL.md` | new "File safety invariants" section |
+| `README.md` | Troubleshooting skill-gotcha cross-links + usage-measurement docs |
+
+### Released as
+- GitHub release `v0.8.0` with `marp-slide-studio-v0.8.0.zip` asset.
+
+### Semver reasoning
+
+Minor bump — additive changes (new scripts, hooks, assertions, docs, seed-theme relocation with backward compat). No removed APIs, no breaking behavior for existing installs thanks to 3-location lookup fallback.
+
 ## 0.7.1 — 2026-04-17
 
 ### Fixed — full-repo consistency audit after v0.7.0 pivot

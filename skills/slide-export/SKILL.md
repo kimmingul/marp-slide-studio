@@ -80,6 +80,18 @@ Report file sizes. If PDF < 100KB, likely a render error — warn user.
 - **Font not loaded in PDF**: Pretendard/Noto Serif KR come via CDN. If user is offline, fonts won't load. Suggest packaging fonts locally (outside this skill's scope).
 - **PPTX image-mode blurry**: increase `--image-scale 2` in the script if needed. Note: only affects image-mode export.
 
+## Gotchas
+
+- **PPTX has two modes**:
+  - Default (image-based): slides rendered as images → perfect CSS fidelity but NOT editable in PowerPoint
+  - `--editable`: text-editable in PowerPoint but loses some CSS effects (complex gradients, pseudo-elements)
+  - Pick per audience: internal team that will tweak → editable. External final distribution → image mode.
+- **PDF export requires Chrome separately from Playwright's Chromium**: `marp-cli` uses Puppeteer-bundled Chrome OR the system Chrome (via `CHROME_PATH`). Playwright's Chromium is a different binary and won't be used.
+- **`CHROME_PATH` env var** lets you point at a custom Chrome install. Common need on Linux servers: `CHROME_PATH=/usr/bin/google-chrome`.
+- **Fonts require internet at render time** (or the offline bundle via `scripts/fetch-fonts.sh`). If exporting on an air-gapped machine without bundle, Pretendard falls back to system fonts — Korean may disappear (see README Troubleshooting).
+- **Size sanity check**: a v0.7.0+ 10-slide PDF is typically 800 KB – 2 MB. < 100 KB indicates a render error (blank slides, failed font load, etc.). Warn the user.
+- **Do NOT run export while `render.sh --watch` is active**: port conflict on the Marp dev server. Stop the watcher first.
+
 ## What NOT to do
 
 - Do NOT run export while a `--watch` render is active (port conflict).

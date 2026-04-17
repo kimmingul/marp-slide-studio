@@ -1,36 +1,35 @@
-# Generated Themes (Tier 3 Cache)
+# Generated themes — moved (v0.8.0+)
 
-This directory holds themes produced by the **Theme-Foundry pipeline** — not hand-crafted, but machine-generated from the 59-brand registry via the `theme-forger` skill and agent.
+Starting with v0.8.0, user-generated themes are cached in a stable, upgrade-safe location outside the plugin directory:
 
-## What lives here
-
-Pairs of `<slug>.design.md` + `<slug>.marp.css` for any brand from `../registry.json` that has been generated at least once. Each pair is:
-
-- **Structurally valid** — passes `scripts/validate-theme.mjs`
-- **CJK-first** — Pretendard / Noto Sans JP/SC/TC loaded via theme-foundation, line-height ≥ 1.7 on CJK, no italic/uppercase traps
-- **Attributed** — every file includes the "Inspired by <brand>, not affiliated" disclaimer
-- **Regenerable** — delete them and the next `/slide-theme <brand>` will forge them fresh
-
-## Not committed to team repos by default
-
-Your team can decide per project whether to commit the generated cache:
-
-**Commit** (team-wide consistency): team members get the same generated output without running the forger themselves. Good for production decks.
-
-**Gitignore** (always fresh from registry): lighter repos, but each member runs the forger once per brand. Good for exploratory use.
-
-See `.gitignore` at plugin root — currently these are tracked so the default examples work out of the box.
-
-## Relation to hand-crafted themes
-
-Tier 2 (hand-crafted) themes live in sibling directories: `minimalist-premium/` and `editorial/`. They represent "what this plugin can achieve at its best" — a quality ceiling for machine generation.
-
-Tier 3 (generated) themes here are calibrated to be 80–90% as good, at zero hand-crafting cost. If the team ends up using a generated theme heavily, consider **promoting** it to Tier 2 by hand-editing and moving it to the appropriate track directory.
-
-## Adding new brands
-
-Edit `../registry.json` to add a new entry following the schema. Then run:
 ```
-node scripts/forge-theme.mjs brief <new-brand>
+${CLAUDE_PLUGIN_DATA:-~/.marp-slide-studio}/themes/<slug>.{design.md,marp.css}
 ```
-And invoke the `theme-forger` skill with that brand.
+
+This directory used to hold the first 5 generated sample themes (`apple`, `linear-app`, `notion`, `stripe`, `tesla`). Those five have moved to **[`examples/seed-themes/`](../../../examples/seed-themes/)** where they serve as seed data (read-only reference examples shipped with the plugin).
+
+## Lookup order
+
+When `slide-theme-curator` or `build-gallery.mjs` looks for a theme's CSS, they check in this order:
+
+1. **Curated (Tier 2)** — `assets/design-systems/{minimalist-premium,editorial}/<slug>.marp.css`
+2. **User cache (Tier 3 — forged)** — `${DATA_DIR}/themes/<slug>.marp.css` *(survives plugin upgrades)*
+3. **Seed examples** — `examples/seed-themes/<slug>.marp.css` *(static, shipped with plugin)*
+
+## Why this moved
+
+Thariq's guidance ("Lessons from Building Claude Code: How We Use Skills"):
+
+> Data stored in the skill directory may be deleted when you upgrade the skill. Use `${CLAUDE_PLUGIN_DATA}` as a stable folder per plugin.
+
+Previously, forging a new theme wrote into this `generated/` directory. A plugin upgrade would overwrite or delete those user-generated files. The new location persists across upgrades.
+
+## For future forges
+
+When you run `/slide-theme <brand>` and the brand requires forging:
+
+```
+${DATA_DIR:-~/.marp-slide-studio}/themes/<brand>.{design.md,marp.css}
+```
+
+The `--force` flag regenerates even if cached. The curator looks in all three locations above.

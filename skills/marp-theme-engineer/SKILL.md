@@ -161,7 +161,7 @@ For offline/team distribution, replace with `@font-face` declarations pointing t
 
 This is a future enhancement, not required for MVP.
 
-## Common pitfalls
+## Gotchas (common pitfalls when authoring Marp themes)
 
 ### 1. HTML inside markdown not rendering
 Marp core by default strips HTML for safety. To use `<div class="...">` blocks, enable in front matter:
@@ -184,6 +184,15 @@ Marp's built-in paginator is positioned bottom-right. If your layout has a botto
 
 ### 5. Theme not loading
 If `theme: my-theme` in front matter doesn't match the `@theme` comment in the CSS, Marp silently falls back to default. Always verify the match.
+
+### 6. Comment curly-brace regex trap (fixed v0.6.3)
+Comments like `/* supports {ko,ja,zh-hans,zh-hant} */` inside `:root { ... }` used to break the validator's brace-matching regex. Current validator strips comments first. Still: avoid `{ }` inside CSS comments when possible — some tooling doesn't handle it.
+
+### 7. CDN `@import` order sensitivity
+`@import` statements MUST come before any other CSS rule, per CSS spec. Marp tolerates violations but some browsers silently ignore misplaced `@import`. Put all `@import url(...)` at the TOP, before any `:root` or selector.
+
+### 8. `var(--undefined)` silently fails
+If you reference `var(--font-body-ko)` but foundation isn't imported, CSS falls back to the second arg (`sans-serif` if specified) or initial. No error logged. Always import theme-foundation.css first in themes using `var(--font-body-*)`.
 
 ## How to build a new theme
 

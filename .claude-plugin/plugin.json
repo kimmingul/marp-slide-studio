@@ -1,6 +1,6 @@
 {
   "name": "marp-slide-studio",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Build sophisticated Marp presentations with AI — 65 themes grounded in real brand design systems, Gothic (sans-serif) typography by default for Korean business/tech contexts, multilingual CJK + Latin support (Korean, Japanese, Chinese, English), Playwright-powered visual review loop. Ships with an autopilot that runs brief → theme → compose → refine → export from a single command. Editorial serif variants available via --typography editorial.",
   "author": {
     "name": "Min-Gul Kim"
