@@ -4,7 +4,9 @@
 
 A Claude Code plugin that grounds slide generation in real brand design systems, **Gothic (sans-serif) typography by default** for Korean business/tech contexts, and a Playwright-powered visual review loop. Multilingual CJK + Latin support (Korean, Japanese, Chinese, English). Ships with **65 themes** — 6 hand-crafted (4 Gothic + 2 editorial serif variants) plus on-demand generation for 59 brands from a curated registry (Stripe, Apple, Linear, Notion, Tesla, Figma, Spotify, IBM, BMW, Ferrari, and more).
 
-> **v0.7.0 typography pivot**: the plugin now defaults to Gothic/sans-serif — matching Korean business and tech slide conventions. Editorial serif themes (`kinfolk-serif`, `arctic-serif`) remain available as opt-in via `--typography editorial` or direct theme pick. See [Design systems](#design-systems) below.
+> **v0.8.0 (best-practices reflection)**: every skill now ships with a `## Gotchas` section, user-generated themes cache in `${CLAUDE_PLUGIN_DATA}` (survives plugin upgrades), plus programmatic slide assertions + Playwright video recording for verification. [CHANGELOG.md](CHANGELOG.md#080--2026-04-17)
+>
+> **v0.7.0 typography pivot**: the plugin defaults to Gothic/sans-serif — matching Korean business and tech slide conventions. Editorial serif themes (`kinfolk-serif`, `arctic-serif`) remain available as opt-in via `--typography editorial` or direct theme pick. See [Design systems](#design-systems) below.
 
 ## Why this exists
 
@@ -29,7 +31,11 @@ Slide tools have not meaningfully changed in 20 years. PowerPoint (1987) and Key
 - **Mood Match quiz** — 3 questions → 5–8 theme recommendations
 - **Playwright refine loop** — N rounds of auto-critique and diff application
 - **PDF + PPTX export** — editable PowerPoint mode optional
+- **Video recording** — `scripts/record-deck.mjs` produces a WebM of slide transitions (v0.8.0+)
+- **Programmatic verification** — `scripts/ci/slide-assertions.mjs` runs 8 deterministic checks (slide count, lang, rhythm, accent, body font-size floor, italic CJK, img src, layout) on every rendered deck (v0.8.0+)
+- **Usage measurement** — `PreToolUse` hook logs JSONL to `${CLAUDE_PLUGIN_DATA}/usage.jsonl`; aggregate via `scripts/usage-report.mjs` (v0.8.0+)
 - **GitHub Actions CI** — auto-render changed decks on PR with pixel-diff screenshots
+- **Gotchas sections** on every skill documenting real failure modes observed during development (v0.8.0+)
 
 ## Supported languages
 
@@ -262,12 +268,18 @@ node scripts/forge-theme.mjs list
 /slide-theme tesla --force    # regenerate even if cached
 ```
 
-Generated themes:
-- Land in `assets/design-systems/generated/<slug>.{design.md,marp.css}`
+Generated themes (v0.8.0+ cache location):
+- Written to **`${CLAUDE_PLUGIN_DATA:-~/.marp-slide-studio}/themes/<slug>.{design.md,marp.css}`** — stable location that survives plugin upgrades
 - Pass the same structural validator as hand-crafted themes
 - Load Pretendard + all CJK + Inter via `theme-foundation.css`
 - Include "Inspired by <brand>. Not affiliated." disclaimers
 - Regenerable — delete cache and re-request to pick up upstream changes
+
+Lookup priority when resolving a theme name:
+1. `assets/design-systems/{minimalist-premium,editorial}/` — hand-crafted Tier 2
+2. `${CLAUDE_PLUGIN_DATA}/themes/` — user-forged cache
+3. `examples/seed-themes/` — five shipped reference samples (stripe, linear-app, apple, notion, tesla)
+4. `assets/design-systems/generated/` — legacy fallback for pre-v0.8.0 installs
 
 Acknowledgement: brand metadata is synthesized from publicly visible aesthetics, inspired by [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) (MIT) and [getdesign.md](https://getdesign.md). No proprietary content is redistributed.
 
@@ -357,6 +369,29 @@ Every theme imports [`assets/theme-foundation.css`](assets/theme-foundation.css)
 6. Uploads HTML + PDF + PPTX + PNG as workflow artifacts
 
 Security: all user-controllable inputs (`inputs.slug`, git-discovered directory names) are validated against `[a-zA-Z0-9._-]{1,64}` and routed through `env:` blocks to prevent workflow injection.
+
+Separate workflow `.github/workflows/publish-gallery.yml` auto-deploys the theme gallery to GitHub Pages whenever theme CSS / registry / sampler / template changes. Live at `https://<owner>.github.io/<repo>/`.
+
+## Verification utilities (v0.8.0+)
+
+Run these manually outside the CI workflow or from slide-visual-qa:
+
+```bash
+# 8 deterministic assertions on a rendered deck.html
+node scripts/ci/slide-assertions.mjs <slug>
+node scripts/ci/slide-assertions.mjs <slug> --strict   # turn warnings into failures
+
+# Record a navigable WebM video of the deck (Playwright required)
+node scripts/record-deck.mjs <slug>
+node scripts/record-deck.mjs <slug> --seconds 3        # 3s per slide
+
+# Pre-flight check for all plugin dependencies
+bash scripts/check-deps.sh
+
+# Aggregated skill usage report (from PreToolUse hook log)
+node scripts/usage-report.mjs
+node scripts/usage-report.mjs --days 7
+```
 
 ## Extending
 
