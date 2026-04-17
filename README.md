@@ -367,6 +367,49 @@ Edit [`assets/narrative-patterns.md`](assets/narrative-patterns.md) with the new
 | **Narrative patterns** | 5 | Documented in [`assets/narrative-patterns.md`](assets/narrative-patterns.md) |
 | **Autopilot presets** | 6 | `investor-pitch`, `team-narrative`, `research-talk`, `launch-keynote`, `executive-brief`, `product-launch` |
 
+## Troubleshooting
+
+### Korean / Japanese / Chinese text missing in the exported PDF
+
+Symptom: PDF rendered on another machine (especially via Cowork, Docker, CI, or a sandboxed Claude Desktop) shows Latin text correctly but CJK characters appear missing or replaced with rectangles.
+
+Root cause (v0.6.2 and earlier): the font stylesheet was loaded via CDN `@import` with `font-display: swap`. Headless Chrome would snapshot the PDF using a fallback font before the real CJK font finished loading. On runners whose bundled Chromium lacks CJK system fallbacks, glyphs disappeared entirely.
+
+**Fix**: upgrade to v0.6.3+. `assets/theme-foundation.css` now declares Pretendard via a direct `@font-face` with `font-display: block` (forcing Chrome to wait up to 3 seconds for the font file) and points at a single non-subsetted woff2 URL so there are no unicode-range subset timing holes. All Google Fonts imports switched to `display=block`.
+
+If upgrading isn't an option, or if the issue persists on a particularly locked-down environment:
+
+1. **Bundle fonts locally** — on the affected machine:
+   ```bash
+   bash scripts/fetch-fonts.sh
+   ```
+   Downloads Pretendard, Noto Sans JP/SC/TC, JetBrains Mono into `assets/fonts/`. The v0.6.3+ `@font-face` declarations try these local files before reaching the CDN, so once bundled no internet is required for rendering.
+
+2. **Install the primary font on the system** — Chrome's `local()` source lookup will then win over any network fetch:
+   - Korean: [Pretendard](https://github.com/orioncactus/pretendard/releases)
+   - Japanese: Hiragino Sans (macOS preinstalled), Noto Sans JP from [Google Fonts](https://fonts.google.com/noto/specimen/Noto+Sans+JP)
+   - Chinese (Simplified): PingFang SC (macOS preinstalled), Noto Sans SC
+   - Chinese (Traditional): PingFang TC, Noto Sans TC
+
+3. **Point marp-cli at user's Chrome** instead of the Puppeteer-bundled Chromium — the user's Chrome usually has full OS font access:
+   ```bash
+   CHROME_PATH=/usr/bin/google-chrome bash scripts/export-pdf.sh YOUR_SLUG
+   ```
+   (Also settable in the autopilot: `/slide-auto "topic"` reads `$CHROME_PATH` from the environment.)
+
+4. **Diagnose** — run `bash scripts/check-deps.sh` to confirm Chrome presence and suggest installs.
+
+### PDF export "Chrome not found"
+
+`CHROME_PATH` env var lets you point at any Chromium-family binary. On macOS this is typically `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`; on Linux `/usr/bin/google-chrome` or `/usr/bin/chromium`. The `check-deps.sh` script prints the correct path for your OS.
+
+### Refine loop silently skipped
+
+The `/slide-refine` loop requires Playwright. If it isn't installed, the loop logs a warning and continues. Install with:
+```bash
+npm i -D playwright && npx playwright install chromium
+```
+
 ## Limitations
 
 - **PPTX non-editable mode renders as images.** Editable mode preserves text but sacrifices some CSS fidelity. Decide per deck.

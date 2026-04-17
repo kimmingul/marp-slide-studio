@@ -23,7 +23,7 @@ Themes detect `:lang(en)` / `:lang(es)` / `:lang(fr)` / etc. and apply Latin typ
 **Inter** — modern neutral sans, exceptional hinting at slide scale.
 
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=block');
 
 section:lang(en) {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -130,7 +130,7 @@ section.divider .divider-subtitle {
 ## Quick reference CSS for any Latin theme
 
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=block');
 
 :root {
   --font-body-latin: 'Inter', -apple-system, sans-serif;

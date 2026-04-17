@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.6.3 — 2026-04-17
+
+### Fixed — Korean / CJK text missing in exported PDF
+
+Reported by users who installed via Claude Desktop on sandboxed runners (Cowork, Docker, corporate-firewalled machines): PDFs rendered fine in Latin but CJK characters disappeared or showed as empty rectangles.
+
+**Root cause**: `assets/theme-foundation.css` loaded fonts via `@import` pointing at CDN stylesheets that internally set `font-display: swap`. Headless Chrome rendered the PDF with a fallback font before the real Pretendard / Noto subsets finished downloading. On sandboxed runners whose bundled Chromium lacks CJK system fallbacks, the glyphs were replaced with tofu / missing-glyph rectangles.
+
+**Fix**:
+- `assets/theme-foundation.css` now declares Pretendard as a direct `@font-face` with:
+  - `font-display: block` — forces Chrome to wait up to 3 seconds for the font file before rendering
+  - `src: local() → fonts/pretendard/*.woff2 → jsdelivr direct URL` — three-layer fallback (system-installed → offline bundle → CDN)
+  - Single unsubsetted `PretendardVariable.woff2` URL — eliminates unicode-range subset timing holes
+- Google Fonts imports for Noto Sans JP/SC/TC, Inter, JetBrains Mono, Noto Serif KR/JP/SC/TC all switched from `display=swap` to `display=block`.
+- README gains a **Troubleshooting** section with concrete fixes (bundle fonts, install system font, point at user's Chrome via `CHROME_PATH`).
+
+**Affected files** (9 CSS files updated):
+- `assets/theme-foundation.css`
+- `assets/design-systems/minimalist-premium/{obsidian-mono,arctic-serif}.marp.css`
+- `assets/design-systems/editorial/{kinfolk-serif,wired-grid}.marp.css`
+- `assets/design-systems/generated/{stripe,linear-app,apple,notion,tesla}.marp.css`
+- `assets/typography/{cjk-scale,latin-scale}.md` (doc examples)
+
+All 9 themes re-validated; 5 pass with zero warnings, 4 curated pass with only the expected "no attribution" informational warning.
+
+### Released as
+- GitHub release `v0.6.3` with `marp-slide-studio-v0.6.3.zip` asset.
+
 ## 0.6.2 — 2026-04-17
 
 ### Fixed — Claude Desktop plugin validator compatibility

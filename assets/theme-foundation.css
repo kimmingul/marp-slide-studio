@@ -2,15 +2,48 @@
 /* Imported by every theme to provide per-language font stacks,
    line-height calibration, and italic/uppercase safeguards. */
 
-/* ── Font imports (CDN) ────────────────────────────────────── */
+/* ── Font loading strategy (v0.6.3) ────────────────────────────
+   Every @font-face uses font-display: block so Chrome waits for
+   the glyph file before rendering. This fixes a PDF-export failure
+   mode where CJK text disappeared on sandboxed runners whose
+   bundled headless Chrome lacks CJK fallback fonts.
 
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+   Each family tries three sources in order:
+     1. local()  — system-installed font (fastest)
+     2. url('fonts/…')  — offline bundle from scripts/fetch-fonts.sh
+     3. url('https://…')  — public CDN (fallback for online users)
+
+   Earlier versions imported jsdelivr / Google Fonts CSS files which
+   set font-display: swap internally — Chrome would snapshot the PDF
+   with fallback glyphs before the real font loaded. Replaced with
+   direct @font-face we fully control.
+   ──────────────────────────────────────────────────────────── */
+
+/* Pretendard (Korean primary). Single unsubsetted woff2 so there's
+   no unicode-range subset timing to go wrong. */
+@font-face {
+  font-family: 'Pretendard Variable';
+  src: local('Pretendard Variable'),
+       local('Pretendard'),
+       url('fonts/pretendard/PretendardVariable.woff2') format('woff2-variations'),
+       url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/public/variable/PretendardVariable.woff2') format('woff2-variations');
+  font-weight: 45 920;
+  font-display: block;
+  font-style: normal;
+}
+
+/* Japanese / Chinese — Google Fonts with display=block (not swap).
+   CJK families use the official Google Fonts CSS which internally
+   handles subsetting; display=block still forces the wait. */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=block');
+
+/* Latin (Inter) — Google Fonts with display=block. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=block');
 
 /* Editorial / serif display fonts imported per-theme as needed:
    - Noto Serif KR, Noto Serif JP, Noto Serif SC, Noto Serif TC
    - Lyon, GT Super, Canela, etc.
-   Themes add these to their own @import blocks. */
+   Themes add these to their own @import blocks (prefer display=block). */
 
 /* ── Per-language font families ────────────────────────────── */
 
