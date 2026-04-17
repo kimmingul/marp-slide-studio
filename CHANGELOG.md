@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.8.1 — 2026-04-17
+
+### Fixed — Korean/CJK PDF rendering in sandboxed environments
+
+User report: Korean text rendered as tofu boxes in PDF exports produced in Claude Cowork. Root cause: Cowork's Chromium sandbox had (a) no CJK system fonts, (b) blocked CDN access to jsdelivr/Google Fonts, (c) empty `assets/fonts/` bundle location in v0.8.0 plugin zip.
+
+### Changed — plugin is now fully self-contained for font rendering
+
+- `scripts/fetch-fonts.sh` extended to download all primary CJK + Latin fonts from @fontsource-variable jsdelivr mirror:
+  - Pretendard Variable (Korean) — unchanged
+  - Inter Variable (Latin) — new, 7 unicode-range subsets
+  - Noto Sans JP/SC/TC Variable — new, ~330 unicode-range subsets
+  - Noto Serif KR/JP/SC/TC Variable — new (replaces 4 static weights for KR)
+  - JetBrains Mono — unchanged
+- All 833 font files committed under `assets/fonts/<family>/` (bundled with plugin, ~42 MB)
+- `assets/fonts/offline.css` generated with 798 `@font-face` declarations, all using `font-display: block` for PDF-safe rendering
+- `assets/theme-foundation.css` rewritten: all `@import url('https://fonts.googleapis.com/...')` replaced with local `@import url('fonts/offline.css')` — fully offline
+- Theme CSS files (`kinfolk-serif`, `wired-grid`, `arctic-serif`) cleaned of redundant Google Fonts @imports now covered by foundation
+- zip size: 254 KB -> ~42 MB (one-time cost, complete offline capability gained)
+
+### Released as
+- GitHub release `v0.8.1` with `marp-slide-studio-v0.8.1.zip` asset
+
 ## 0.8.0 — 2026-04-17
 
 ### Added — best-practices reflection (Thariq "How We Use Skills" + "Seeing like an Agent")

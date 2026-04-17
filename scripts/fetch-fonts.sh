@@ -1,22 +1,32 @@
 #!/usr/bin/env bash
-# Download Pretendard, Noto Serif KR, JetBrains Mono for offline use.
-# Generates assets/fonts/offline.css with @font-face declarations.
+# Download all fonts for fully offline, self-contained rendering.
 #
-# Idempotent: skips files that already exist.
+# Fonts bundled (all SIL OFL 1.1):
+#   Pretendard Variable    — Korean primary sans
+#   Inter Variable         — Latin primary sans
+#   Noto Sans JP/SC/TC     — CJK sans (body text)
+#   Noto Serif KR/JP/SC/TC — CJK serif (editorial themes)
+#   JetBrains Mono         — Code / monospace
+#
+# CJK fonts are unicode-range subsets from @fontsource-variable (jsdelivr).
+# Generates assets/fonts/offline.css with all @font-face declarations.
+#
+# Idempotent: skips directories that already contain woff2 files.
+# Re-run with --force to re-download everything.
 
 set -euo pipefail
 
 HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(dirname "$HERE")"
 FONTS="$ROOT/assets/fonts"
-
-mkdir -p "$FONTS/pretendard" "$FONTS/noto-serif-kr" "$FONTS/jetbrains-mono"
+FORCE=false
+[[ "${1:-}" == "--force" ]] && FORCE=true
 
 fetch() {
   local url="$1"
   local dest="$2"
-  if [[ -f "$dest" ]]; then
-    echo "  (exists) $dest"
+  if [[ "$FORCE" == "false" && -f "$dest" ]]; then
+    echo "  (exists) $(basename "$dest")"
     return
   fi
   if command -v curl >/dev/null 2>&1; then
@@ -24,95 +34,163 @@ fetch() {
   else
     wget -q -O "$dest" "$url"
   fi
-  echo "  fetched  $dest"
+  echo "  fetched  $(basename "$dest")"
 }
 
-echo "▸ Pretendard Variable"
+# Fetch a @fontsource-variable package via npm pack.
+# Extracts woff2 files and CSS, transforms font-family names and paths.
+# Args: $1=npm-package-name $2=target-dir-name $3=desired-font-family-name
+fetch_fontsource() {
+  local pkg="$1"
+  local dir_name="$2"
+  local font_family="$3"
+  local dest_dir="$FONTS/$dir_name"
+
+  # Skip if already populated (unless --force)
+  if [[ "$FORCE" == "false" ]] && ls "$dest_dir"/*.woff2 >/dev/null 2>&1; then
+    local count
+    count=$(ls "$dest_dir"/*.woff2 2>/dev/null | wc -l | tr -d ' ')
+    echo "  (exists) $dir_name/ — $count woff2 files"
+    return
+  fi
+
+  mkdir -p "$dest_dir"
+  local tmpdir
+  tmpdir=$(mktemp -d)
+
+  echo "  downloading @fontsource-variable/$pkg..."
+  (cd "$tmpdir" && npm pack "@fontsource-variable/$pkg" --silent 2>/dev/null)
+  tar -xzf "$tmpdir"/fontsource-variable-*.tgz -C "$tmpdir"
+
+  # Copy woff2 files
+  cp "$tmpdir"/package/files/*.woff2 "$dest_dir/"
+  local count
+  count=$(ls "$dest_dir"/*.woff2 | wc -l | tr -d ' ')
+
+  # Extract and transform CSS
+  local src_family
+  src_family=$(grep -m1 "font-family:" "$tmpdir/package/index.css" | sed "s/.*font-family: '//;s/'.*//" || true)
+  sed \
+    -e "s|font-family: '$src_family'|font-family: '$font_family'|g" \
+    -e "s|font-display: swap|font-display: block|g" \
+    -e "s|url(./files/|url('$dir_name/|g" \
+    -e "s|) format|') format|g" \
+    "$tmpdir/package/index.css" > "$dest_dir/_faces.css"
+
+  # Copy license
+  cp "$tmpdir/package/LICENSE" "$dest_dir/LICENSE" 2>/dev/null || true
+
+  rm -rf "$tmpdir"
+  echo "  fetched  $dir_name/ — $count woff2 files"
+}
+
+echo "▸ Pretendard Variable (Korean)"
+mkdir -p "$FONTS/pretendard"
 PRETENDARD_BASE="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/public/variable"
 fetch "$PRETENDARD_BASE/PretendardVariable.woff2" "$FONTS/pretendard/PretendardVariable.woff2"
 fetch "https://raw.githubusercontent.com/orioncactus/pretendard/v1.3.9/LICENSE" "$FONTS/pretendard/LICENSE"
 
-echo "▸ Noto Serif KR"
-# Google Fonts doesn't serve direct woff2 URLs stably; use the raw github repo.
-NOTO_BASE="https://raw.githubusercontent.com/notofonts/noto-cjk/main/Serif/Variable/TTF/Subset"
-# Static weights (simpler for @font-face than variable TTFs in CSS)
-NOTO_GOOGLE="https://fonts.gstatic.com/s/notoserifkr"
-# We use the Google-hosted static woff2 because it's reliable.
-fetch "$NOTO_GOOGLE/v34/3Jn7SDn90Gmq2mr3blnHaTZXduZp1ODBPnnDGxuhhYaOKwqBf9Z9.woff2" "$FONTS/noto-serif-kr/NotoSerifKR-Light.woff2"
-fetch "$NOTO_GOOGLE/v34/3Jn7SDn90Gmq2mr3blnHaTZXduZp1ODBPnnDGxuhhYaO6QuBf9Z9.woff2" "$FONTS/noto-serif-kr/NotoSerifKR-Medium.woff2"
-fetch "$NOTO_GOOGLE/v34/3Jn7SDn90Gmq2mr3blnHaTZXduZp1ODBPnnDGxuhhYaOJAyBf9Z9.woff2" "$FONTS/noto-serif-kr/NotoSerifKR-SemiBold.woff2"
-fetch "$NOTO_GOOGLE/v34/3Jn7SDn90Gmq2mr3blnHaTZXduZp1ODBPnnDGxuhhYaODAuBf9Z9.woff2" "$FONTS/noto-serif-kr/NotoSerifKR-Bold.woff2"
+echo "▸ Inter Variable (Latin)"
+fetch_fontsource "inter" "inter" "Inter"
+
+echo "▸ Noto Sans JP (Japanese)"
+fetch_fontsource "noto-sans-jp" "noto-sans-jp" "Noto Sans JP"
+
+echo "▸ Noto Sans SC (Chinese Simplified)"
+fetch_fontsource "noto-sans-sc" "noto-sans-sc" "Noto Sans SC"
+
+echo "▸ Noto Sans TC (Chinese Traditional)"
+fetch_fontsource "noto-sans-tc" "noto-sans-tc" "Noto Sans TC"
+
+echo "▸ Noto Serif KR (Korean)"
+fetch_fontsource "noto-serif-kr" "noto-serif-kr" "Noto Serif KR"
+
+echo "▸ Noto Serif JP (Japanese)"
+fetch_fontsource "noto-serif-jp" "noto-serif-jp" "Noto Serif JP"
+
+echo "▸ Noto Serif SC (Chinese Simplified)"
+fetch_fontsource "noto-serif-sc" "noto-serif-sc" "Noto Serif SC"
+
+echo "▸ Noto Serif TC (Chinese Traditional)"
+fetch_fontsource "noto-serif-tc" "noto-serif-tc" "Noto Serif TC"
 
 echo "▸ JetBrains Mono"
+mkdir -p "$FONTS/jetbrains-mono"
 JBM_BASE="https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono@v2.304/fonts/webfonts"
 fetch "$JBM_BASE/JetBrainsMono-Regular.woff2" "$FONTS/jetbrains-mono/JetBrainsMono-Regular.woff2"
 fetch "$JBM_BASE/JetBrainsMono-Medium.woff2" "$FONTS/jetbrains-mono/JetBrainsMono-Medium.woff2"
 fetch "$JBM_BASE/JetBrainsMono-Bold.woff2" "$FONTS/jetbrains-mono/JetBrainsMono-Bold.woff2"
 fetch "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/v2.304/OFL.txt" "$FONTS/jetbrains-mono/OFL.txt"
 
+echo ""
 echo "▸ Generating offline.css"
-cat > "$FONTS/offline.css" <<'CSS'
-/* Generated by scripts/fetch-fonts.sh — do not edit by hand */
 
-/* Pretendard Variable — SIL OFL 1.1 */
+cat > "$FONTS/offline.css" <<'HEADER'
+/* Generated by scripts/fetch-fonts.sh — do not edit by hand.
+   All fonts: SIL OFL 1.1. font-display: block for PDF-safe rendering.
+   Imported by theme-foundation.css for fully self-contained offline use. */
+
+/* ── Pretendard Variable (Korean primary) ────────────────────── */
+
 @font-face {
   font-family: 'Pretendard Variable';
-  src: url('pretendard/PretendardVariable.woff2') format('woff2-variations');
+  src: local('Pretendard Variable'),
+       local('Pretendard'),
+       url('pretendard/PretendardVariable.woff2') format('woff2-variations'),
+       url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/public/variable/PretendardVariable.woff2') format('woff2-variations');
   font-weight: 45 920;
   font-display: block;
   font-style: normal;
 }
 
-/* Noto Serif KR — SIL OFL 1.1 */
-@font-face {
-  font-family: 'Noto Serif KR';
-  src: url('noto-serif-kr/NotoSerifKR-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-display: block;
-}
-@font-face {
-  font-family: 'Noto Serif KR';
-  src: url('noto-serif-kr/NotoSerifKR-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-display: block;
-}
-@font-face {
-  font-family: 'Noto Serif KR';
-  src: url('noto-serif-kr/NotoSerifKR-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-display: block;
-}
-@font-face {
-  font-family: 'Noto Serif KR';
-  src: url('noto-serif-kr/NotoSerifKR-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-display: block;
-}
+/* ── JetBrains Mono (Code / Monospace) ───────────────────────── */
 
-/* JetBrains Mono — SIL OFL 1.1 */
 @font-face {
   font-family: 'JetBrains Mono';
-  src: url('jetbrains-mono/JetBrainsMono-Regular.woff2') format('woff2');
+  src: local('JetBrains Mono'),
+       url('jetbrains-mono/JetBrainsMono-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono@v2.304/fonts/webfonts/JetBrainsMono-Regular.woff2') format('woff2');
   font-weight: 400;
   font-display: block;
 }
 @font-face {
   font-family: 'JetBrains Mono';
-  src: url('jetbrains-mono/JetBrainsMono-Medium.woff2') format('woff2');
+  src: local('JetBrains Mono Medium'),
+       url('jetbrains-mono/JetBrainsMono-Medium.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono@v2.304/fonts/webfonts/JetBrainsMono-Medium.woff2') format('woff2');
   font-weight: 500;
   font-display: block;
 }
 @font-face {
   font-family: 'JetBrains Mono';
-  src: url('jetbrains-mono/JetBrainsMono-Bold.woff2') format('woff2');
+  src: local('JetBrains Mono Bold'),
+       url('jetbrains-mono/JetBrainsMono-Bold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono@v2.304/fonts/webfonts/JetBrainsMono-Bold.woff2') format('woff2');
   font-weight: 700;
   font-display: block;
 }
-CSS
+HEADER
+
+# Append CJK + Latin subset CSS from @fontsource packages
+for dir_name in inter noto-sans-jp noto-sans-sc noto-sans-tc \
+                noto-serif-kr noto-serif-jp noto-serif-sc noto-serif-tc; do
+  css_file="$FONTS/$dir_name/_faces.css"
+  if [[ -f "$css_file" ]]; then
+    {
+      echo ""
+      echo "/* ── $(head -1 "$css_file" | sed 's|/\* ||;s| \*/||') … ─── */"
+      echo ""
+      cat "$css_file"
+    } >> "$FONTS/offline.css"
+  fi
+done
 
 echo "✓ Fonts bundled → $FONTS"
 echo "  Total size:"
 du -sh "$FONTS" 2>/dev/null || true
 echo ""
-echo "To use in a theme, replace the CDN @import lines with:"
-echo "  @import url('../../fonts/offline.css');"
+echo "  File count:"
+find "$FONTS" -name "*.woff2" | wc -l | xargs echo "  woff2 files:"
+echo ""
+echo "  offline.css @font-face count:"
+grep -c "@font-face" "$FONTS/offline.css" | xargs echo "  @font-face declarations:"
