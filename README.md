@@ -137,7 +137,7 @@ claude --plugin-dir /absolute/path/to/marp-slide-studio
 ```
 # In Claude Code
 /plugin marketplace add https://github.com/kimmingul/marp-slide-studio
-/plugin install marp-slide-studio
+/plugin install marp-slide-studio@nanumspace-marketplace
 ```
 
 ### Option 3 — Team marketplace entry

@@ -14,12 +14,12 @@ claude --plugin-dir /absolute/path/to/marp-slide-studio
 
 ## Option B — Single-plugin marketplace
 
-`.claude-plugin/marketplace.json` at the repo root makes this repo discoverable as a marketplace. Users add it once:
+`.claude-plugin/marketplace.json` at the repo root makes this repo discoverable as a marketplace (registered as `nanumspace-marketplace`). Users add it once:
 
 ```bash
 # In Claude Code
 /plugin marketplace add https://github.com/kimmingul/marp-slide-studio
-/plugin install marp-slide-studio
+/plugin install marp-slide-studio@nanumspace-marketplace
 ```
 
 The `source: "./"` entry in `marketplace.json` tells the installer the plugin lives at the marketplace root.

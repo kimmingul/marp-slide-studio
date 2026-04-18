@@ -2,6 +2,12 @@
 
 ## 0.8.2 — 2026-04-18
 
+### Changed — marketplace rebranded to `nanumspace-marketplace`
+
+- `.claude-plugin/marketplace.json` `name` field renamed from `marp-slide-studio` to `nanumspace-marketplace` to distinguish marketplace identity from plugin identity (nanumspace org convention).
+- Maintainer email `mgkim@nanumspace.com` added to `marketplace.json` `owner` and `plugin.json` `author`.
+- Install command updated: `/plugin install marp-slide-studio@nanumspace-marketplace` (was `/plugin install marp-slide-studio`).
+
 ### Changed — on-demand font installation instead of bundling
 
 v0.8.1 bundled all CJK + Latin fonts in the plugin (~42 MB zip). This made the plugin too large.
